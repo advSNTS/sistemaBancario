@@ -1,3 +1,29 @@
+package com.javeriana.sistema.util;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class DBConnection {
+    private static final String URL = "jdbc:h2:~/sistema_db;AUTO_SERVER=TRUE";
+    private static final String USER = "sa";
+    private static final String PASSWORD = "";
+
+    private static Connection conexion;
+
+    public static Connection getInstance() {
+        if (conexion == null) {
+            try {
+                conexion = DriverManager.getConnection(URL, USER, PASSWORD);
+                System.out.println("✅ Conexión a la BD establecida en " + URL);
+            } catch (SQLException e) {
+                e.printStackTrace();
+                System.out.println("❌ Error al conectar a la BD.");
+            }
+        }
+        return conexion;
+    }
+}
 /*
 package com.javeriana.bancosoft.util;
 

@@ -1,4 +1,4 @@
-package com.javeriana.bancosoft.model;
+package com.javeriana.sistema.model;
 
 public class Usuario {
     private int id;
@@ -6,10 +6,6 @@ public class Usuario {
     private String correo;
     private String clave;
 
-    // Constructor vacío (obligatorio para JDBC)
-    public Usuario() {}
-
-    // Constructor con parámetros
     public Usuario(int id, String nombre, String correo, String clave) {
         this.id = id;
         this.nombre = nombre;
@@ -29,4 +25,9 @@ public class Usuario {
 
     public String getClave() { return clave; }
     public void setClave(String clave) { this.clave = clave; }
+
+    @Override
+    public String toString() {
+        return "Usuario{id=" + id + ", nombre='" + nombre + "', correo='" + correo + "'}";
+    }
 }
