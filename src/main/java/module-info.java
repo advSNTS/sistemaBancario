@@ -7,4 +7,5 @@ module com.javeriana.sistema {
 
     opens com.javeriana.sistema to javafx.fxml;
     exports com.javeriana.sistema;
+    exports com.javeriana.sistema.controllers to javafx.fxml;
 }

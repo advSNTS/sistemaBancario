@@ -3,7 +3,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
 <BorderPane fx:id="contenedor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javeriana.sistema.HelloController">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
@@ -15,7 +14,7 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Cuentas">
             <items>
-              <MenuItem mnemonicParsing="false" text="Iniciar Sesion" />
+              <MenuItem mnemonicParsing="false" onAction="#inicioSesion" text="Iniciar Sesion" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
