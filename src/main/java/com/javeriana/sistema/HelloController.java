@@ -24,7 +24,12 @@ public class HelloController {
 
     @FXML
     protected void registro() throws Exception {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("registro-view.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("registro-view.fxml"));
+        AnchorPane pane = loader.load();
+
+        RegistroController controller = loader.getController();
+        controller.setContenedorPrincipal(contenedor); // <-- Pasamos el BorderPane
+
         contenedor.setCenter(pane);
     }
 }

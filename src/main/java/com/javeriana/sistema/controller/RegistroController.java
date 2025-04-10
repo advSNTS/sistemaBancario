@@ -16,7 +16,13 @@ public class RegistroController {
     @FXML
     private TextField txtcontrasena;
     @FXML
-    private BorderPane contenedor;
+    private AnchorPane contenedor;
+    @FXML
+    private BorderPane contenedorPrincipal;
+
+    public void setContenedorPrincipal(BorderPane contenedorPrincipal) {
+        this.contenedorPrincipal = contenedorPrincipal;
+    }
 
     public void registrar() {
         String cedula = txtcedula.getText();
@@ -37,7 +43,7 @@ public class RegistroController {
     public void regresar() {
         try {
             AnchorPane pane = FXMLLoader.load(getClass().getResource("/com/javeriana/sistema/hello-content.fxml"));
-            contenedor.setCenter(pane);
+            contenedorPrincipal.setCenter(pane);
         } catch (Exception e) {
             e.printStackTrace();
         }
