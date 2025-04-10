@@ -11,10 +11,10 @@
             <Font size="22.0" />
          </font>
       </Label>
-      <TextField fx:id="txtCorreo" layoutX="200.0" layoutY="134.0" />
+      <TextField fx:id="txtCedula" layoutX="200.0" layoutY="134.0" />
       <PasswordField fx:id="txtClave" layoutX="200.0" layoutY="200.0" />
       <Label layoutX="112.0" layoutY="138.0" text="Correo" />
       <Label layoutX="117.0" layoutY="204.0" text="Contrasena" />
-      <Button fx:id="btnLogin" layoutX="332.0" layoutY="292.0" mnemonicParsing="false" text="Iniciar Sesión" />
+      <Button fx:id="btnLogin" layoutX="332.0" layoutY="292.0" mnemonicParsing="false" onAction="#iniciarSesion" text="Iniciar Sesión" />
    </children>
 </AnchorPane>

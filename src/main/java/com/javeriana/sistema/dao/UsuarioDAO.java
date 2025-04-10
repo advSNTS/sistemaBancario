@@ -5,6 +5,7 @@ import com.javeriana.sistema.util.DBConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UsuarioDAO {
@@ -28,5 +29,25 @@ public class UsuarioDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+    public Usuario buscarPorCedulaYContrasena(String cedula, String contrasena) {
+        String sql = "SELECT * FROM usuarios WHERE cedula = ? AND contrasena = ?";
+        try (Connection conn = DBConnection.conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, cedula);
+            stmt.setString(2, contrasena);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Usuario(
+                        rs.getString("cedula"),
+                        rs.getString("nombre"),
+                        rs.getString("apellido"),
+                        rs.getString("contrasena")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null; // No encontrado
     }
 }

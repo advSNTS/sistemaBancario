@@ -11,4 +11,7 @@ public class UsuarioService {
         usuarioDAO.guardar(usuario);
         System.out.println("✅ Usuario registrado correctamente.");
     }
+    public Usuario iniciarSesion(String cedula, String contrasena) {
+        return usuarioDAO.buscarPorCedulaYContrasena(cedula, contrasena);
+    }
 }
