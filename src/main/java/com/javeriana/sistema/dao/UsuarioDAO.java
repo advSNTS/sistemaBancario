@@ -11,7 +11,6 @@ import java.sql.SQLException;
 public class UsuarioDAO {
 
     public UsuarioDAO() {
-        // Crear tabla si no existe
         DBConnection.crearTablaUsuarios();
     }
 
@@ -50,4 +49,17 @@ public class UsuarioDAO {
         }
         return null; // No encontrado
     }
+    public boolean existeUsuarioPorCedula(String cedula) {
+        String sql = "SELECT 1 FROM usuarios WHERE cedula = ?";
+        try (Connection conn = DBConnection.conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, cedula);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next(); // true si hay algún resultado
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }

@@ -14,4 +14,7 @@ public class UsuarioService {
     public Usuario iniciarSesion(String cedula, String contrasena) {
         return usuarioDAO.buscarPorCedulaYContrasena(cedula, contrasena);
     }
+    public boolean existeUsuario(String cedula) {
+        return usuarioDAO.existeUsuarioPorCedula(cedula);
+    }
 }

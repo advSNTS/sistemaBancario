@@ -3,6 +3,7 @@ package com.javeriana.sistema.controller;
 import com.javeriana.sistema.services.UsuarioService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -21,6 +22,9 @@ public class RegistroController {
     @FXML
     private BorderPane contenedorPrincipal;
 
+    @FXML
+    private Label texto;
+
     private UsuarioService usuarioService = new UsuarioService();
 
     public void setContenedorPrincipal(BorderPane contenedorPrincipal) {
@@ -32,10 +36,13 @@ public class RegistroController {
         String nombre = txtnombre.getText();
         String apellido = txtapellido.getText();
         String contrasenia = txtcontrasena.getText();
+        if (usuarioService.existeUsuario(cedula)) {
+            texto.setText("Ya existe un usuario con esa cédula.");
+            return;
+        }
         limpiarCampos();
         usuarioService.registrarUsuario(cedula, nombre, apellido, contrasenia);
         System.out.println(cedula + nombre + apellido + contrasenia);
-
     }
 
     public void limpiarCampos() {
