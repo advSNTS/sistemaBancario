@@ -1,57 +1,42 @@
 package com.javeriana.sistema.util;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DBConnection {
-    private static final String URL = "jdbc:h2:~/sistema_db;AUTO_SERVER=TRUE";
-    private static final String USER = "sa";
-    private static final String PASSWORD = "";
+    private static final String JDBC_URL = "jdbc:h2:~/test"; // Crea archivo en el home
+    private static final String USUARIO = "sa";
+    private static final String CONTRASENA = "";
 
-    private static Connection conexion;
-
-    public static Connection getInstance() {
-        if (conexion == null) {
-            try {
-                Class.forName("org.h2.Driver");  // Cargar el driver
-                conexion = DriverManager.getConnection(URL, USER, PASSWORD);
-                System.out.println("✅ Conexión a la BD establecida en " + URL);
-                ejecutarScriptSQL(conexion);
-            } catch (ClassNotFoundException | SQLException e) {
-                e.printStackTrace();
-                System.out.println("❌ Error al conectar a la BD.");
-            }
-        }
-        return conexion;
-    }
-
-    private static void ejecutarScriptSQL(Connection conexion) {
+    public static Connection conectar() {
         try {
-            InputStream inputStream = DBConnection.class.getClassLoader().getResourceAsStream("schema.sql");
-            if (inputStream == null) {
-                System.out.println("⚠️ No se encontró el archivo schema.sql");
-                return;
-            }
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-            StringBuilder sql = new StringBuilder();
-            String linea;
-            while ((linea = reader.readLine()) != null) {
-                sql.append(linea).append("\n");
-            }
-            reader.close();
-
-            Statement stmt = conexion.createStatement();
-            stmt.execute(sql.toString());
-            System.out.println("✅ Tablas creadas exitosamente.");
-        } catch (Exception e) {
+            return DriverManager.getConnection(JDBC_URL, USUARIO, CONTRASENA);
+        } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("❌ Error al ejecutar el script SQL.");
+            return null;
         }
     }
+
+    public static void crearTablaUsuarios() {
+        String sql = """
+            CREATE TABLE IF NOT EXISTS usuarios (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                cedula VARCHAR(20),
+                nombre VARCHAR(50),
+                apellido VARCHAR(50),
+                contrasena VARCHAR(100)
+            );
+            """;
+
+        try (Connection conn = conectar();
+             Statement stmt = conn.createStatement()) {
+            stmt.execute(sql);
+            System.out.println("Tabla 'usuarios' creada o ya existe.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

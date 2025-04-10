@@ -11,16 +11,8 @@ public class LoginController {
     @FXML private PasswordField txtClave;
     @FXML private Button btnLogin;
 
-    @FXML
-    private void handleLogin() {
-        String correo = txtCorreo.getText();
-        String clave = txtClave.getText();
+    public void iniciarSesion(){
 
-        // Aquí deberíamos validar con la base de datos
-        if (correo.equals("admin@mail.com") && clave.equals("1234")) {
-            System.out.println("✅ Inicio de sesión exitoso.");
-        } else {
-            System.out.println("❌ Credenciales incorrectas.");
-        }
     }
+
 }
