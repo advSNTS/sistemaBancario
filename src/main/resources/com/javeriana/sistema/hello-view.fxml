@@ -12,7 +12,7 @@
               <MenuItem mnemonicParsing="false" onAction="#salir" text="Salir" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Cuentas">
+          <Menu mnemonicParsing="false" text="Accounts">
             <items>
               <MenuItem mnemonicParsing="false" onAction="#inicioSesion" text="Iniciar Sesion" />
             </items>
