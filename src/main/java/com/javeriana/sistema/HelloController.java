@@ -2,13 +2,14 @@ package com.javeriana.sistema;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 
 public class HelloController {
     @FXML
-    private Label welcomeText;
+    private BorderPane contenedor;
 
     @FXML
-    protected void onHelloButtonClick() {
-        welcomeText.setText("Welcome to JavaFX Application!");
+    protected void salir(){
+        System.exit(0);
     }
 }
