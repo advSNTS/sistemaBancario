@@ -1,4 +1,4 @@
-package com.javeriana.bancosoft.model;
+package com.javeriana.sistema.model;
 
 public class Transaccion {
     

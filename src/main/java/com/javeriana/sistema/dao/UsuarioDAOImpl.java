@@ -1,22 +1,17 @@
-/*
-package com.javeriana.bancosoft.dao;
+package com.javeriana.sistema.dao;
 
-import com.javeriana.bancosoft.model.Usuario;
-import com.javeriana.bancosoft.util.DBConnection;
+import com.javeriana.sistema.model.Usuario;
+import com.javeriana.sistema.util.DBConnection;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UsuarioDAOImpl implements UsuarioDAO {
-    private Connection conexion;
-
-    // Constructor: obtiene la conexión desde DBConnection
-    public UsuarioDAOImpl() {
-        this.conexion = DBConnection.getInstance();
-    }
+    private Connection conexion = DBConnection.getInstance();
 
     @Override
-    public void crearUsuario(Usuario usuario) {
+    public void guardar(Usuario usuario) {
         String sql = "INSERT INTO usuarios (nombre, correo, clave) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setString(1, usuario.getNombre());
@@ -29,38 +24,17 @@ public class UsuarioDAOImpl implements UsuarioDAO {
     }
 
     @Override
-    public Usuario obtenerPorCorreoYClave(String correo, String clave) {
-        String sql = "SELECT * FROM usuarios WHERE correo = ? AND clave = ?";
-        try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
-            stmt.setString(1, correo);
-            stmt.setString(2, clave);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return new Usuario(
-                    rs.getInt("id"),
-                    rs.getString("nombre"),
-                    rs.getString("correo"),
-                    rs.getString("clave")
-                );
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;  // Retorna null si no encuentra usuario
-    }
-
-    @Override
-    public Usuario obtenerPorId(int id) {
+    public Usuario buscarPorId(int id) {
         String sql = "SELECT * FROM usuarios WHERE id = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return new Usuario(
-                    rs.getInt("id"),
-                    rs.getString("nombre"),
-                    rs.getString("correo"),
-                    rs.getString("clave")
+                        rs.getInt("id"),
+                        rs.getString("nombre"),
+                        rs.getString("correo"),
+                        rs.getString("clave")
                 );
             }
         } catch (SQLException e) {
@@ -70,17 +44,17 @@ public class UsuarioDAOImpl implements UsuarioDAO {
     }
 
     @Override
-    public List<Usuario> obtenerTodos() {
+    public List<Usuario> listarTodos() {
         List<Usuario> usuarios = new ArrayList<>();
         String sql = "SELECT * FROM usuarios";
-        try (PreparedStatement stmt = conexion.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+        try (Statement stmt = conexion.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 usuarios.add(new Usuario(
-                    rs.getInt("id"),
-                    rs.getString("nombre"),
-                    rs.getString("correo"),
-                    rs.getString("clave")
+                        rs.getInt("id"),
+                        rs.getString("nombre"),
+                        rs.getString("correo"),
+                        rs.getString("clave")
                 ));
             }
         } catch (SQLException e) {
@@ -88,5 +62,29 @@ public class UsuarioDAOImpl implements UsuarioDAO {
         }
         return usuarios;
     }
+
+    @Override
+    public void actualizar(Usuario usuario) {
+        String sql = "UPDATE usuarios SET nombre=?, correo=?, clave=? WHERE id=?";
+        try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
+            stmt.setString(1, usuario.getNombre());
+            stmt.setString(2, usuario.getCorreo());
+            stmt.setString(3, usuario.getClave());
+            stmt.setInt(4, usuario.getId());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void eliminar(int id) {
+        String sql = "DELETE FROM usuarios WHERE id=?";
+        try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
-*/

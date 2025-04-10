@@ -1,6 +1,6 @@
-package com.javeriana.bancosoft;
+package com.javeriana.sistema;
 
-import com.javeriana.bancosoft.util.DBConnection;
+import com.javeriana.sistema.util.DBConnection;
 import java.sql.Connection;
 
 public class TestConexion {

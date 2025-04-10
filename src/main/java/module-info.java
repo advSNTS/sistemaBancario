@@ -1,11 +1,14 @@
 module com.javeriana.sistema {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.sql;
 
-    requires org.controlsfx.controls;
-    requires com.dlsc.formsfx;
+    opens com.javeriana.sistema.ui to javafx.fxml;
+    exports com.javeriana.sistema.ui;
 
-    opens com.javeriana.sistema to javafx.fxml;
-    exports com.javeriana.sistema;
-    exports com.javeriana.sistema.controller to javafx.fxml;
+    opens com.javeriana.sistema.controller to javafx.fxml;
+    exports com.javeriana.sistema.controller;
+
+    opens com.javeriana.sistema.dao to java.sql;
+    exports com.javeriana.sistema.dao;
 }
