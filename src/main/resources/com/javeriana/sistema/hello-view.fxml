@@ -12,9 +12,10 @@
               <MenuItem mnemonicParsing="false" onAction="#salir" text="Salir" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Accounts">
+          <Menu mnemonicParsing="false" text="Cuentas">
             <items>
               <MenuItem mnemonicParsing="false" onAction="#inicioSesion" text="Iniciar Sesion" />
+                  <MenuItem mnemonicParsing="false" onAction="#registro" text="Registro" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
