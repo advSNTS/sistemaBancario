@@ -24,7 +24,7 @@ public class LoginController {
 
         // Aquí deberías validar contra la BD, pero por ahora va un ejemplo fijo
         if (correo.equals("admin@mail.com") && clave.equals("1234")) {
-            System.out.println("Inicio de sesión exitoso.");
+            System.out.println("Inicio de sesion exitoso.");
         } else {
             System.out.println("Credenciales incorrectas.");
         }

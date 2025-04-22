@@ -16,7 +16,7 @@ public class WelcomeController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/ui/LoginView.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 600, 400);
             Stage stage = new Stage();
-            stage.setTitle("Iniciar Sesión");
+            stage.setTitle("Iniciar Sesion");
             stage.setScene(scene);
             stage.show();
 
