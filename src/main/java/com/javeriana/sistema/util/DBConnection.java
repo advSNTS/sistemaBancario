@@ -20,11 +20,11 @@ public class DBConnection {
             try {
                 Class.forName("org.h2.Driver");  // Cargar el driver
                 conexion = DriverManager.getConnection(URL, USER, PASSWORD);
-                System.out.println("✅ Conexión a la BD establecida en " + URL);
+                System.out.println("Conexión a la BD establecida en " + URL);
                 ejecutarScriptSQL(conexion);
             } catch (ClassNotFoundException | SQLException e) {
                 e.printStackTrace();
-                System.out.println("❌ Error al conectar a la BD.");
+                System.out.println("Error al conectar a la BD.");
             }
         }
         return conexion;
@@ -34,7 +34,7 @@ public class DBConnection {
         try {
             InputStream inputStream = DBConnection.class.getClassLoader().getResourceAsStream("schema.sql");
             if (inputStream == null) {
-                System.out.println("⚠️ No se encontró el archivo schema.sql");
+                System.out.println("No se encontró el archivo schema.sql");
                 return;
             }
 
@@ -48,10 +48,10 @@ public class DBConnection {
 
             Statement stmt = conexion.createStatement();
             stmt.execute(sql.toString());
-            System.out.println("✅ Tablas creadas exitosamente.");
+            System.out.println("Tablas creadas exitosamente.");
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("❌ Error al ejecutar el script SQL.");
+            System.out.println("Error al ejecutar el script SQL.");
         }
     }
 }

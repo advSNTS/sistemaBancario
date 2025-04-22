@@ -2,7 +2,7 @@ package com.javeriana.sistema;
 
 import com.javeriana.sistema.services.PrestamoService;
 
-public class TestPrestamo {
+public class  TestPrestamo {
     public static void main(String[] args) {
         PrestamoService prestamoService = new PrestamoService();
 

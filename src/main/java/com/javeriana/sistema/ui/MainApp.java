@@ -11,12 +11,13 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("LoginView.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/ui/WelcomeView.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);
-        stage.setTitle("Sistema Bancario - Login");
+        stage.setTitle("Sistema Bancario");
         stage.setScene(scene);
         stage.show();
     }
+
 
     public static void main(String[] args) {
         launch();
