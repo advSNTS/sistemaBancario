@@ -18,9 +18,11 @@ public class DBConnection {
     public static Connection getInstance() {
         if (conexion == null) {
             try {
-                Class.forName("org.h2.Driver");  // Cargar el driver
+                Class.forName("org.h2.Driver");
                 conexion = DriverManager.getConnection(URL, USER, PASSWORD);
                 System.out.println("Conexión a la BD establecida en " + URL);
+
+                // Ya no se abre la consola H2 desde aquí
                 ejecutarScriptSQL(conexion);
             } catch (ClassNotFoundException | SQLException e) {
                 e.printStackTrace();

@@ -8,6 +8,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.event.ActionEvent;
+import com.javeriana.sistema.model.Usuario;
+import com.javeriana.sistema.services.UsuarioService;
+
+
 
 import java.io.IOException;
 
@@ -22,13 +27,18 @@ public class LoginController {
         String correo = txtCorreo.getText();
         String clave = txtClave.getText();
 
-        // Aquí deberías validar contra la BD, pero por ahora va un ejemplo fijo
-        if (correo.equals("admin@mail.com") && clave.equals("1234")) {
-            System.out.println("Inicio de sesion exitoso.");
+        UsuarioService service = new UsuarioService();
+        Usuario usuario = service.autenticarUsuario(correo, clave);
+
+        if (usuario != null) {
+            System.out.println("Inicio de sesion exitoso para: " + usuario.getNombre());
+
+            // Aquí puedes redirigir a otra vista si quieres
         } else {
             System.out.println("Credenciales incorrectas.");
         }
     }
+
 
     @FXML
     private void abrirVentanaRegistro() {
@@ -39,6 +49,20 @@ public class LoginController {
             stage.setScene(new Scene(root));
         } catch (IOException e) {
             System.out.println("Error al cargar RegistroView.fxml: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    private void mostrarUsuarios(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/ui/UsuariosView.fxml"));
+            Scene scene = new Scene(loader.load());
+            Stage stage = new Stage();
+            stage.setTitle("Lista de Usuarios");
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

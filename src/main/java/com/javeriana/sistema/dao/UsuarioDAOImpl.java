@@ -87,4 +87,12 @@ public class UsuarioDAOImpl implements UsuarioDAO {
             e.printStackTrace();
         }
     }
+
+    public interface UsuarioDAO {
+        void guardar(Usuario usuario);
+        Usuario buscarPorId(int id);
+        List<Usuario> listarTodos();
+        void actualizar(Usuario usuario);
+        void eliminar(int id);
+    }
 }
