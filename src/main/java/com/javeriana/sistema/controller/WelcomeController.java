@@ -28,6 +28,11 @@ public class WelcomeController {
     }
 
     @FXML
+    private void cerrarAplicacion() {
+        javafx.application.Platform.exit();
+    }
+
+    @FXML
     private void abrirRegistro(ActionEvent event) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/ui/RegistroView.fxml"));
