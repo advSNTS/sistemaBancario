@@ -9,11 +9,13 @@ import java.util.List;
 public class CuentaBancariaService {
     private CuentaBancariaDAO cuentaDAO = new CuentaBancariaDAOImpl();
 
-    public void crearCuenta(int usuarioId, String tipo, double saldoInicial) {
-        CuentaBancaria cuenta = new CuentaBancaria(0, usuarioId, tipo, saldoInicial);
+
+    // Método adicional que recibe el objeto CuentaBancaria directamente
+    public void crearCuenta(CuentaBancaria cuenta) {
         cuentaDAO.guardar(cuenta);
-        System.out.println("✅ Cuenta creada correctamente.");
+        System.out.println("Cuenta creada correctamente.");
     }
+
 
     public List<CuentaBancaria> obtenerCuentasDeUsuario(int usuarioId) {
         return cuentaDAO.listarPorUsuario(usuarioId);
@@ -24,7 +26,10 @@ public class CuentaBancariaService {
         if (cuenta != null) {
             cuenta.setSaldo(nuevoSaldo);
             cuentaDAO.actualizar(cuenta);
-            System.out.println("✅ Saldo actualizado correctamente.");
+            System.out.println("Saldo actualizado correctamente.");
         }
     }
+
+
+
 }

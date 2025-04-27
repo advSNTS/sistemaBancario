@@ -12,8 +12,6 @@ import javafx.event.ActionEvent;
 import com.javeriana.sistema.model.Usuario;
 import com.javeriana.sistema.services.UsuarioService;
 
-
-
 import java.io.IOException;
 
 public class LoginController {
@@ -21,6 +19,8 @@ public class LoginController {
     @FXML private TextField txtCorreo;
     @FXML private PasswordField txtClave;
     @FXML private Button btnLogin;
+
+    private Usuario usuarioAutenticado; //  Usuario logueado
 
     @FXML
     private void handleLogin() {
@@ -31,9 +31,25 @@ public class LoginController {
         Usuario usuario = service.autenticarUsuario(correo, clave);
 
         if (usuario != null) {
-            System.out.println("Inicio de sesion exitoso para: " + usuario.getNombre());
+            System.out.println("Inicio de sesión exitoso para: " + usuario.getNombre());
 
-            // Aquí puedes redirigir a otra vista si quieres
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/ui/DashboardView.fxml"));
+                Parent root = loader.load();
+
+                DashboardController controller = loader.getController();
+                controller.setUsuarioAutenticado(usuario); // Pasamos el usuario al dashboard
+
+                Stage stage = (Stage) txtCorreo.getScene().getWindow();
+                stage.setScene(new Scene(root));
+                stage.setTitle("Bienvenido, " + usuario.getNombre());
+                stage.show();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Error al cargar DashboardView.fxml");
+            }
+
         } else {
             System.out.println("Credenciales incorrectas.");
         }
@@ -60,6 +76,24 @@ public class LoginController {
             Stage stage = new Stage();
             stage.setTitle("Lista de Usuarios");
             stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void abrirCrearCuenta() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/ui/CrearCuentaView.fxml"));
+            Parent root = loader.load();
+
+            CrearCuentaController controller = loader.getController();
+            controller.setUsuarioId(usuarioAutenticado.getId()); // usuario logueado
+
+            Stage stage = new Stage();
+            stage.setTitle("Crear Cuenta");
+            stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

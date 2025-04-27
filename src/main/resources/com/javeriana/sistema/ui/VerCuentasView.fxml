@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.javeriana.sistema.controller.VerCuentasController" spacing="10" alignment="CENTER" style="-fx-padding: 20;">
+    <TableView fx:id="tablaCuentas">
+        <columns>
+            <TableColumn fx:id="colTipo" text="Tipo de Cuenta" prefWidth="150"/>
+            <TableColumn fx:id="colSaldo" text="Saldo" prefWidth="100"/>
+        </columns>
+    </TableView>
+</VBox>

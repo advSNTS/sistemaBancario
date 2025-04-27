@@ -7,7 +7,7 @@ public class TestCuentaBancaria {
         CuentaBancariaService cuentaService = new CuentaBancariaService();
 
         // Crear una cuenta para el usuario con ID 1
-        cuentaService.crearCuenta(1, "Ahorro", 5000.0);
+        //cuentaService.crearCuenta(1, "Ahorro", 5000.0);
 
         // Listar cuentas del usuario 1
         System.out.println(cuentaService.obtenerCuentasDeUsuario(1));

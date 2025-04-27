@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.javeriana.sistema.controller.DashboardController"
+      spacing="20" alignment="CENTER" style="-fx-background-color: #e3f2fd; -fx-padding: 20;">
+
+    <Text text="¡Bienvenido al Sistema Bancario!" style="-fx-font-size: 18px;"/>
+
+    <Button text="Crear Nueva Cuenta Bancaria" onAction="#abrirCrearCuenta" />
+    <Button text="Ver Mis Cuentas" onAction="#verCuentas" />
+    <Button fx:id="cerrarSesionButton" text="Cerrar Sesión" onAction="#cerrarSesion" />
+
+</VBox>
