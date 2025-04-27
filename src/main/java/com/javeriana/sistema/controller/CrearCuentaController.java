@@ -22,7 +22,7 @@ public class CrearCuentaController {
 
     @FXML
     public void initialize() {
-        comboTipoCuenta.getItems().addAll("Ahorros", "Corriente");
+        comboTipoCuenta.getItems().addAll("Ahorro", "Corriente");
     }
 
     @FXML

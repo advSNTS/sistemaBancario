@@ -7,15 +7,14 @@ import com.javeriana.sistema.model.CuentaBancaria;
 import java.util.List;
 
 public class CuentaBancariaService {
+
     private CuentaBancariaDAO cuentaDAO = new CuentaBancariaDAOImpl();
 
-
-    // Método adicional que recibe el objeto CuentaBancaria directamente
+    // Metodo adicional que recibe el objeto CuentaBancaria directamente
     public void crearCuenta(CuentaBancaria cuenta) {
         cuentaDAO.guardar(cuenta);
         System.out.println("Cuenta creada correctamente.");
     }
-
 
     public List<CuentaBancaria> obtenerCuentasDeUsuario(int usuarioId) {
         return cuentaDAO.listarPorUsuario(usuarioId);
@@ -30,6 +29,24 @@ public class CuentaBancariaService {
         }
     }
 
+    public void depositar(int cuentaId, double monto) {
+        CuentaBancaria cuenta = cuentaDAO.buscarPorId(cuentaId);
+        if (cuenta != null) {
+            cuenta.setSaldo(cuenta.getSaldo() + monto);
+            cuentaDAO.actualizar(cuenta);
+        }
+    }
 
+    public void retirar(int cuentaId, double monto) {
+        CuentaBancaria cuenta = cuentaDAO.buscarPorId(cuentaId);
+        if (cuenta != null) {
+            cuenta.setSaldo(cuenta.getSaldo() - monto);
+            cuentaDAO.actualizar(cuenta);
+        }
+    }
 
+    // Metodo que debes agregar en CuentaBancariaService.java
+    public void actualizarCuenta(CuentaBancaria cuenta) {
+        cuentaDAO.actualizar(cuenta);
+    }
 }

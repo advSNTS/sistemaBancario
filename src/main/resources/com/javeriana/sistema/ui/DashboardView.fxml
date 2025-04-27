@@ -12,6 +12,9 @@
 
     <Button text="Crear Nueva Cuenta Bancaria" onAction="#abrirCrearCuenta" />
     <Button text="Ver Mis Cuentas" onAction="#verCuentas" />
+
+
     <Button fx:id="cerrarSesionButton" text="Cerrar Sesión" onAction="#cerrarSesion" />
+
 
 </VBox>
