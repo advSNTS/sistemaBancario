@@ -8,13 +8,12 @@
       fx:controller="com.javeriana.sistema.controller.DashboardController"
       spacing="20" alignment="CENTER" style="-fx-background-color: #e3f2fd; -fx-padding: 20;">
 
-    <Text text="¡Bienvenido al Sistema Bancario!" style="-fx-font-size: 18px;"/>
+    <Text text="¡Bienvenido al Sistema Bancario!" style="-fx-font-size: 18px;" />
 
     <Button text="Crear Nueva Cuenta Bancaria" onAction="#abrirCrearCuenta" />
     <Button text="Ver Mis Cuentas" onAction="#verCuentas" />
-
-
+    <Button text="Ver Mis Préstamos" onAction="#verPrestamos" />
+    <Button text="Solicitar Préstamo" onAction="#abrirSolicitarPrestamo" />
     <Button fx:id="cerrarSesionButton" text="Cerrar Sesión" onAction="#cerrarSesion" />
-
 
 </VBox>

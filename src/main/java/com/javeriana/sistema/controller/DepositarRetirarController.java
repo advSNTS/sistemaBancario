@@ -10,95 +10,89 @@ import javafx.stage.Stage;
 
 public class DepositarRetirarController {
 
-    @FXML
-    private Label lblTipoCuenta;
+    @FXML private Label lblSaldo;
+    @FXML private TextField txtMonto;
 
-    @FXML
-    private Label lblSaldoActual;
-
-    @FXML
-    private TextField txtMonto;
-
-    private CuentaBancaria cuentaActual;
+    private CuentaBancaria cuenta;
     private CuentaBancariaService cuentaService = new CuentaBancariaService();
-
-    private VerCuentasController verCuentasController; // para refrescar luego
+    private VerCuentasController verCuentasController; // Para recargar tabla luego
 
     public void setCuenta(CuentaBancaria cuenta) {
-        this.cuentaActual = cuenta;
-        actualizarVista();
+        this.cuenta = cuenta;
+        actualizarLabelSaldo();
     }
 
     public void setVerCuentasController(VerCuentasController controller) {
         this.verCuentasController = controller;
     }
 
-    private void actualizarVista() {
-        lblTipoCuenta.setText(cuentaActual.getTipo());
-        lblSaldoActual.setText(String.format("$ %.2f", cuentaActual.getSaldo()));
-    }
-
     @FXML
     private void depositar() {
-        String montoStr = txtMonto.getText();
-        if (montoStr.isEmpty()) {
-            mostrarAlerta("Error", "Ingresa un monto.");
-            return;
-        }
-
-        try {
-            double monto = Double.parseDouble(montoStr);
-            if (monto <= 0) {
-                mostrarAlerta("Error", "El monto debe ser mayor a 0.");
-                return;
-            }
-            cuentaActual.setSaldo(cuentaActual.getSaldo() + monto);
-            cuentaService.actualizarCuenta(cuentaActual);
-            mostrarAlerta("Éxito", "Depósito realizado.");
-
-            cerrarVentana();
-        } catch (NumberFormatException e) {
-            mostrarAlerta("Error", "Monto inválido.");
-        }
+        operar(true);
     }
 
     @FXML
     private void retirar() {
-        String montoStr = txtMonto.getText();
-        if (montoStr.isEmpty()) {
-            mostrarAlerta("Error", "Ingresa un monto.");
+        operar(false);
+    }
+
+    private void operar(boolean esDeposito) {
+        String montoTexto = txtMonto.getText();
+        if (montoTexto.isEmpty()) {
+            mostrarAlerta("Error", "Debes ingresar un monto.");
             return;
         }
 
         try {
-            double monto = Double.parseDouble(montoStr);
-            if (monto <= 0 || monto > cuentaActual.getSaldo()) {
-                mostrarAlerta("Error", "Monto inválido o saldo insuficiente.");
+            double monto = Double.parseDouble(montoTexto);
+
+            if (monto <= 0) {
+                mostrarAlerta("Error", "El monto debe ser mayor que cero.");
                 return;
             }
-            cuentaActual.setSaldo(cuentaActual.getSaldo() - monto);
-            cuentaService.actualizarCuenta(cuentaActual);
-            mostrarAlerta("Éxito", "Retiro realizado.");
+
+            if (!esDeposito && monto > cuenta.getSaldo()) {
+                mostrarAlerta("Error", "Saldo insuficiente para retirar esa cantidad.");
+                return;
+            }
+
+            double nuevoSaldo = esDeposito ? cuenta.getSaldo() + monto : cuenta.getSaldo() - monto;
+            cuenta.setSaldo(nuevoSaldo);
+
+            cuentaService.actualizarCuenta(cuenta);
+
+            mostrarAlerta("Éxito", esDeposito ? "Depósito realizado correctamente." : "Retiro realizado correctamente.");
+
+            if (verCuentasController != null) {
+                verCuentasController.recargarTabla();
+            }
 
             cerrarVentana();
+
         } catch (NumberFormatException e) {
-            mostrarAlerta("Error", "Monto inválido.");
+            mostrarAlerta("Error", "El monto ingresado no es válido.");
         }
     }
 
+    private void actualizarLabelSaldo() {
+        lblSaldo.setText("Saldo Actual: $" + String.format("%.2f", cuenta.getSaldo()));
+    }
+
+    @FXML
+    private void cancelarOperacion() {
+        cerrarVentana();
+    }
+
     private void cerrarVentana() {
-        Stage stage = (Stage) lblTipoCuenta.getScene().getWindow();
-        if (verCuentasController != null) {
-            verCuentasController.recargarTabla();
-        }
+        Stage stage = (Stage) txtMonto.getScene().getWindow();
         stage.close();
     }
 
     private void mostrarAlerta(String titulo, String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
+        Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+        alerta.setTitle(titulo);
+        alerta.setHeaderText(null);
+        alerta.setContentText(mensaje);
+        alerta.showAndWait();
     }
 }

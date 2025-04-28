@@ -8,12 +8,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import java.io.IOException;
+import com.javeriana.sistema.services.CuentaBancariaService;
+import javafx.scene.control.Alert;
+
 
 public class DashboardController {
 
     @FXML
     private Button cerrarSesionButton;
-
+    private Button solicitarPrestamoButton;
     private Usuario usuarioAutenticado;
 
     public void setUsuarioAutenticado(Usuario usuario) {
@@ -58,6 +61,38 @@ public class DashboardController {
     }
 
     @FXML
+    private void abrirSolicitarPrestamo() {
+        try {
+            CuentaBancariaService cuentaService = new CuentaBancariaService();
+            if (cuentaService.obtenerCuentasDeUsuario(usuarioAutenticado.getId()).isEmpty()) {
+                mostrarAlerta("Error", "Debes crear una cuenta bancaria antes de solicitar un préstamo.");
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/ui/SolicitarPrestamoView.fxml"));
+            Parent root = loader.load();
+
+            SolicitarPrestamoController controller = loader.getController();
+            controller.setUsuario(usuarioAutenticado);
+
+            Stage stage = new Stage();
+            stage.setTitle("Solicitar Préstamo");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Utilidad para mostrar alertas:
+    private void mostrarAlerta(String titulo, String contenido) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(titulo);
+        alert.setContentText(contenido);
+        alert.showAndWait();
+    }
+
+    @FXML
     private void cerrarSesion() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/ui/LoginView.fxml"));
@@ -71,5 +106,24 @@ public class DashboardController {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    private void verPrestamos() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/ui/VerPrestamosView.fxml"));
+            Parent root = loader.load();
+
+            VerPrestamosController controller = loader.getController();
+            controller.setUsuarioId(usuarioAutenticado.getId());
+
+            Stage stage = new Stage();
+            stage.setTitle("Mis Préstamos");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }
