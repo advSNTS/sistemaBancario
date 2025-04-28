@@ -7,6 +7,8 @@ import com.javeriana.sistema.model.CuentaBancaria;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -18,14 +20,35 @@ public class SolicitarPrestamoController {
     @FXML private TextField txtTasaInteres;
     @FXML private TextField txtPlazoMeses;
     @FXML private Button btnSolicitar;
-
-    private Usuario usuario;
+    @FXML private ComboBox<CuentaBancaria> comboCuentas;
 
     private PrestamoService prestamoService = new PrestamoService();
     private CuentaBancariaService cuentaService = new CuentaBancariaService();
+    private int usuarioId;
 
     public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+        this.usuarioId = usuario.getId();
+        cargarCuentas();
+    }
+
+    private void cargarCuentas() {
+        List<CuentaBancaria> cuentas = cuentaService.obtenerCuentasDeUsuario(usuarioId);
+        comboCuentas.getItems().addAll(cuentas);
+
+        comboCuentas.setCellFactory(lv -> new ListCell<>() {
+            @Override
+            protected void updateItem(CuentaBancaria cuenta, boolean empty) {
+                super.updateItem(cuenta, empty);
+                setText((empty || cuenta == null) ? null : cuenta.getTipo() + " - $" + String.format("%.2f", cuenta.getSaldo()));
+            }
+        });
+        comboCuentas.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(CuentaBancaria cuenta, boolean empty) {
+                super.updateItem(cuenta, empty);
+                setText((empty || cuenta == null) ? null : cuenta.getTipo() + " - $" + String.format("%.2f", cuenta.getSaldo()));
+            }
+        });
     }
 
     @FXML
@@ -35,30 +58,31 @@ public class SolicitarPrestamoController {
             double tasaInteres = Double.parseDouble(txtTasaInteres.getText());
             int plazoMeses = Integer.parseInt(txtPlazoMeses.getText());
 
-            if (!prestamoService.puedeSolicitarPrestamo(usuario.getId())) {
+            if (!prestamoService.puedeSolicitarPrestamo(usuarioId)) {
                 mostrarAlerta("Préstamo Denegado", "No puedes solicitar más préstamos. Debes pagar tus deudas pendientes.");
                 return;
             }
 
-            // Registrar el préstamo
-            prestamoService.solicitarPrestamo(usuario.getId(), monto, tasaInteres, plazoMeses);
-
-            // Transferir el monto a la cuenta bancaria principal
-            List<CuentaBancaria> cuentas = cuentaService.obtenerCuentasDeUsuario(usuario.getId());
-            if (!cuentas.isEmpty()) {
-                CuentaBancaria cuenta = cuentas.get(0); // Depositar en la primera cuenta que encuentre
-                double nuevoSaldo = cuenta.getSaldo() + monto;
-                cuenta.setSaldo(nuevoSaldo);
-                cuentaService.actualizarCuenta(cuenta);
+            CuentaBancaria cuenta = comboCuentas.getValue();
+            if (cuenta == null) {
+                mostrarAlerta("Error", "Debes seleccionar una cuenta para depositar el préstamo.");
+                return;
             }
 
-            mostrarAlerta("Éxito", "¡Préstamo solicitado y fondos transferidos a tu cuenta!");
+            // Registrar el préstamo
+            prestamoService.solicitarPrestamo(usuarioId, monto, tasaInteres, plazoMeses);
+
+            // Transferir fondos
+            cuenta.setSaldo(cuenta.getSaldo() + monto);
+            cuentaService.actualizarCuenta(cuenta);
+
+            mostrarAlerta("Éxito", "¡Préstamo solicitado y fondos transferidos a tu cuenta seleccionada!");
 
             Stage stage = (Stage) btnSolicitar.getScene().getWindow();
             stage.close();
 
         } catch (NumberFormatException e) {
-            mostrarAlerta("Error", "Por favor, ingresa valores válidos.");
+            mostrarAlerta("Error", "Por favor, ingresa valores válidos en todos los campos.");
         }
     }
 

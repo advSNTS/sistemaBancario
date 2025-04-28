@@ -9,15 +9,17 @@
       fx:controller="com.javeriana.sistema.controller.VerPrestamosController"
       spacing="15" alignment="CENTER" style="-fx-padding: 20;">
 
-    <TableView fx:id="tablaPrestamos" prefWidth="400">
+    <TableView fx:id="tablaPrestamos">
         <columns>
             <TableColumn fx:id="colId" text="ID" prefWidth="50"/>
             <TableColumn fx:id="colMonto" text="Monto" prefWidth="100"/>
-            <TableColumn fx:id="colSaldo" text="Saldo Pendiente" prefWidth="120"/>
-            <TableColumn fx:id="colFecha" text="Fecha Aprobación" prefWidth="130"/>
+            <TableColumn fx:id="colSaldo" text="Saldo Pendiente" prefWidth="100"/>
+            <TableColumn fx:id="colFecha" text="Fecha Aprobación" prefWidth="120"/>
+            <TableColumn fx:id="colEstado" text="Estado" prefWidth="100"/> <!-- NUEVO -->
         </columns>
     </TableView>
 
-    <Button text="Pagar Préstamo" fx:id="btnPagarPrestamo" onAction="#abrirPagoPrestamo" disable="true" />
+
+    <Button fx:id="btnPagarPrestamo" text="Pagar Préstamo" onAction="#abrirPagarPrestamo" disable="true" />
 
 </VBox>

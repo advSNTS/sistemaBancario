@@ -10,7 +10,7 @@ import java.util.List;
 public class UsuarioService {
     private UsuarioDAO usuarioDAO = new UsuarioDAOImpl();
 
-    //Método actualizado para recibir directamente el objeto Usuario
+    //Metodo actualizado para recibir directamente el objeto Usuario
     public void registrarUsuario(Usuario usuario) {
         usuarioDAO.guardar(usuario);
         System.out.println("Usuario registrado correctamente.");

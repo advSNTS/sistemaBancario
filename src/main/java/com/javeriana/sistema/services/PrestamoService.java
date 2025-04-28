@@ -22,16 +22,14 @@ public class PrestamoService {
 
     public boolean puedeSolicitarPrestamo(int usuarioId) {
         List<Prestamo> prestamos = obtenerPrestamosDeUsuario(usuarioId);
-        if (prestamos.size() >= 2) {
-            return false; // No puede tener más de 2 préstamos
-        }
-        for (Prestamo p : prestamos) {
-            if (p.getSaldoPendiente() > 0) {
-                return false; // Si debe algo, no puede pedir otro préstamo
-            }
-        }
-        return true;
+
+        long prestamosActivos = prestamos.stream()
+                .filter(p -> p.getSaldoPendiente() > 0)
+                .count();
+
+        return prestamosActivos < 2; // Puede pedir si tiene menos de 2 préstamos activos
     }
+
 
     public void actualizarPrestamo(Prestamo prestamo) {
         prestamoDAO.actualizar(prestamo);

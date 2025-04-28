@@ -37,7 +37,7 @@ public class CrearCuentaController {
 
         try {
             double saldo = Double.parseDouble(saldoStr);
-            CuentaBancaria cuenta = new CuentaBancaria(0, usuarioId, tipo, saldo); // ✅ Correcto
+            CuentaBancaria cuenta = new CuentaBancaria(0, usuarioId, tipo, saldo);
             cuentaService.crearCuenta(cuenta);
 
             mostrarAlerta("Éxito", "Cuenta creada exitosamente.");

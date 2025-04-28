@@ -7,9 +7,11 @@
       fx:controller="com.javeriana.sistema.controller.PagarPrestamoController"
       spacing="15" alignment="CENTER" style="-fx-padding: 20; -fx-background-color: #e3f2fd;">
 
-    <Label text="Pago de Préstamo" style="-fx-font-size: 20px;" />
+    <Label text="Selecciona una cuenta:" />
+    <ComboBox fx:id="comboCuentas" prefWidth="250" />
 
-    <TextField fx:id="txtMontoPago" promptText="Monto a pagar" />
+    <Label text="Monto a Pagar:" />
+    <TextField fx:id="txtMontoPago" promptText="Ingrese el monto" prefWidth="250"/>
 
     <Button fx:id="btnConfirmarPago" text="Confirmar Pago" onAction="#pagarPrestamo" />
 </VBox>

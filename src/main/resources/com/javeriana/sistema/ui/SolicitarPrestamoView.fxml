@@ -1,19 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.javeriana.sistema.controller.SolicitarPrestamoController"
-      spacing="15" alignment="CENTER" style="-fx-padding: 20; -fx-background-color: #e3f2fd;">
+      spacing="20" alignment="CENTER"
+      style="-fx-background-color: #E3F2FD; -fx-padding: 30;">
 
-    <Label text="Solicitar Préstamo" style="-fx-font-size: 20px;" />
+    <Label text="Solicitar Préstamo"
+           style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #0D47A1;" />
 
-    <TextField fx:id="txtMonto" promptText="Monto del préstamo" />
-    <TextField fx:id="txtTasaInteres" promptText="Tasa de interés (%)" />
-    <TextField fx:id="txtPlazoMeses" promptText="Plazo en meses" />
+    <Separator />
 
-    <Button fx:id="btnSolicitar" text="Solicitar" onAction="#solicitarPrestamo" />
+    <VBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 10;">
+        <Label text="Monto del Préstamo:" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+        <TextField fx:id="txtMonto" promptText="Ej: 10000"
+                   style="-fx-background-radius: 8; -fx-padding: 8;" />
+
+        <Label text="Tasa de Interés (%):" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+        <TextField fx:id="txtTasaInteres" promptText="Ej: 5.5"
+                   style="-fx-background-radius: 8; -fx-padding: 8;" />
+
+        <Label text="Plazo (Meses):" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+        <TextField fx:id="txtPlazoMeses" promptText="Ej: 12"
+                   style="-fx-background-radius: 8; -fx-padding: 8;" />
+    </VBox>
+
+    <Separator />
+
+    <VBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 10;">
+        <Label text="Cuenta de Depósito:" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+        <ComboBox fx:id="comboCuentas" promptText="Selecciona tu cuenta"
+                  style="-fx-background-radius: 8; -fx-padding: 8;" />
+    </VBox>
+
+    <Separator />
+
+    <Button fx:id="btnSolicitar" text="Solicitar Préstamo"
+            onAction="#solicitarPrestamo"
+            style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px; -fx-background-radius: 10; -fx-padding: 10 30;" />
+
 </VBox>

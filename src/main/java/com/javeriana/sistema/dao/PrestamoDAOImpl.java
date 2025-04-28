@@ -85,10 +85,10 @@ public class PrestamoDAOImpl implements PrestamoDAO {
             stmt.setDate(5, Date.valueOf(prestamo.getFechaAprobacion()));
             stmt.setInt(6, prestamo.getId());
             stmt.executeUpdate();
-            System.out.println("✅ Préstamo actualizado correctamente.");
+            System.out.println("Préstamo actualizado correctamente.");
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("❌ Error al actualizar el préstamo.");
+            System.out.println("Error al actualizar el préstamo.");
         }
     }
 
@@ -99,13 +99,13 @@ public class PrestamoDAOImpl implements PrestamoDAO {
             stmt.setInt(1, id);
             int filasAfectadas = stmt.executeUpdate();
             if (filasAfectadas > 0) {
-                System.out.println("✅ Préstamo eliminado correctamente.");
+                System.out.println("Préstamo eliminado correctamente.");
             } else {
-                System.out.println("⚠️ No se encontró el préstamo con ID: " + id);
+                System.out.println("No se encontró el préstamo con ID: " + id);
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("❌ Error al eliminar el préstamo.");
+            System.out.println("Error al eliminar el préstamo.");
         }
     }
 
