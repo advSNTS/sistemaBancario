@@ -99,4 +99,18 @@ public class LoginController {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    private void abrirRecuperarContrasena() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/ui/RecuperarContrasenaView.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Recuperar Contraseña");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -5,6 +5,8 @@ public class Usuario {
     private String nombre;
     private String correo;
     private String clave;
+    private String preguntaSecreta;
+    private String respuestaSecreta;
 
     public Usuario(int id, String nombre, String correo, String clave) {
         this.id = id;
@@ -25,6 +27,14 @@ public class Usuario {
 
     public String getClave() { return clave; }
     public void setClave(String clave) { this.clave = clave; }
+
+    public String getPreguntaSecreta() { return preguntaSecreta; }
+
+    public void setPreguntaSecreta(String preguntaSecreta) { this.preguntaSecreta = preguntaSecreta;}
+
+    public String getRespuestaSecreta() { return respuestaSecreta; }
+
+    public void setRespuestaSecreta(String respuestaSecreta) { this.respuestaSecreta = respuestaSecreta; }
 
     @Override
     public String toString() {

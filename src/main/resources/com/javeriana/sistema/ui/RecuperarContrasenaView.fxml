@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.javeriana.sistema.controller.RecuperarContrasenaController"
+      spacing="10" alignment="CENTER" style="-fx-padding: 20; -fx-background-color: #f0f8ff;">
+
+    <Label text="Recuperar Contraseña" style="-fx-font-size: 18px;"/>
+    <TextField fx:id="txtCorreo" promptText="Correo Electrónico"/>
+    <Label fx:id="lblPregunta" text="Pregunta secreta aparecerá aquí" wrapText="true"/>
+    <TextField fx:id="txtRespuesta" promptText="Respuesta Secreta"/>
+    <PasswordField fx:id="txtNuevaClave" promptText="Nueva Contraseña"/>
+    <Button text="Restablecer Contraseña" onAction="#restablecerContrasena"/>
+
+</VBox>

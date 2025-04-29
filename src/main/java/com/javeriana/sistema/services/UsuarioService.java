@@ -31,7 +31,7 @@ public class UsuarioService {
         return usuarioDAO.listarTodos();
     }
 
-    // 🔒 Autenticación para el login
+    // Autenticación para el login
     public Usuario autenticar(String correo, String clave) {
         List<Usuario> usuarios = usuarioDAO.listarTodos();
         for (Usuario u : usuarios) {
@@ -41,4 +41,14 @@ public class UsuarioService {
         }
         return null;
     }
+
+    public Usuario buscarPorCorreo(String correo) {
+        // Metodo que busque en la BD el usuario dado un correo.
+        return usuarioDAO.buscarPorCorreo(correo);
+    }
+
+    public void actualizarUsuario(Usuario usuario) {
+        usuarioDAO.actualizar(usuario);
+    }
+
 }

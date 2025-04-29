@@ -33,6 +33,9 @@
 
                 <Button text="Registrarse" onAction="#abrirVentanaRegistro"
                         style="-fx-background-color: transparent; -fx-text-fill: #3f51b5;" />
+
+                <Button text="¿Olvidaste tu contraseña?" onAction="#abrirRecuperarContrasena" style="-fx-background-color: transparent; -fx-text-fill: blue; -fx-underline: true;"/>
+
             </VBox>
         </center>
     </BorderPane>
