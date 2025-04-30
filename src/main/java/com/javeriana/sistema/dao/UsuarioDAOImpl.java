@@ -44,6 +44,38 @@ public class UsuarioDAOImpl implements UsuarioDAO {
     }
 
     @Override
+    public Usuario buscarPorCorreo(String correo) {
+        String sql = "SELECT * FROM usuarios WHERE correo = ?";
+        try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
+            stmt.setString(1, correo);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Usuario(
+                        rs.getInt("id"),
+                        rs.getString("nombre"),
+                        rs.getString("correo"),
+                        rs.getString("clave")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public void actualizarClavePorCorreo(String correo, String nuevaClave) {
+        String sql = "UPDATE usuarios SET clave = ? WHERE correo = ?";
+        try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
+            stmt.setString(1, nuevaClave);
+            stmt.setString(2, correo);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public List<Usuario> listarTodos() {
         List<Usuario> usuarios = new ArrayList<>();
         String sql = "SELECT * FROM usuarios";
@@ -65,7 +97,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 
     @Override
     public void actualizar(Usuario usuario) {
-        String sql = "UPDATE usuarios SET nombre=?, correo=?, clave=? WHERE id=?";
+        String sql = "UPDATE usuarios SET nombre = ?, correo = ?, clave = ? WHERE id = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setString(1, usuario.getNombre());
             stmt.setString(2, usuario.getCorreo());
@@ -79,20 +111,12 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 
     @Override
     public void eliminar(int id) {
-        String sql = "DELETE FROM usuarios WHERE id=?";
+        String sql = "DELETE FROM usuarios WHERE id = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    public interface UsuarioDAO {
-        void guardar(Usuario usuario);
-        Usuario buscarPorId(int id);
-        List<Usuario> listarTodos();
-        void actualizar(Usuario usuario);
-        void eliminar(int id);
     }
 }
