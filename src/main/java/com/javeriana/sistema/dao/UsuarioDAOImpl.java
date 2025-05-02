@@ -8,15 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UsuarioDAOImpl implements UsuarioDAO {
-    private Connection conexion = DBConnection.getInstance();
+    private final Connection conexion = DBConnection.getInstance();
 
     @Override
     public void guardar(Usuario usuario) {
-        String sql = "INSERT INTO usuarios (nombre, correo, clave) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO usuarios (nombre, correo, clave, pregunta_secreta, respuesta_secreta) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setString(1, usuario.getNombre());
             stmt.setString(2, usuario.getCorreo());
             stmt.setString(3, usuario.getClave());
+            stmt.setString(4, usuario.getPreguntaSecreta());
+            stmt.setString(5, usuario.getRespuestaSecreta());
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -34,7 +36,9 @@ public class UsuarioDAOImpl implements UsuarioDAO {
                         rs.getInt("id"),
                         rs.getString("nombre"),
                         rs.getString("correo"),
-                        rs.getString("clave")
+                        rs.getString("clave"),
+                        rs.getString("pregunta_secreta"),
+                        rs.getString("respuesta_secreta")
                 );
             }
         } catch (SQLException e) {
@@ -54,7 +58,9 @@ public class UsuarioDAOImpl implements UsuarioDAO {
                         rs.getInt("id"),
                         rs.getString("nombre"),
                         rs.getString("correo"),
-                        rs.getString("clave")
+                        rs.getString("clave"),
+                        rs.getString("pregunta_secreta"),
+                        rs.getString("respuesta_secreta")
                 );
             }
         } catch (SQLException e) {
@@ -86,7 +92,9 @@ public class UsuarioDAOImpl implements UsuarioDAO {
                         rs.getInt("id"),
                         rs.getString("nombre"),
                         rs.getString("correo"),
-                        rs.getString("clave")
+                        rs.getString("clave"),
+                        rs.getString("pregunta_secreta"),
+                        rs.getString("respuesta_secreta")
                 ));
             }
         } catch (SQLException e) {
@@ -97,12 +105,14 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 
     @Override
     public void actualizar(Usuario usuario) {
-        String sql = "UPDATE usuarios SET nombre = ?, correo = ?, clave = ? WHERE id = ?";
+        String sql = "UPDATE usuarios SET nombre = ?, correo = ?, clave = ?, pregunta_secreta = ?, respuesta_secreta = ? WHERE id = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setString(1, usuario.getNombre());
             stmt.setString(2, usuario.getCorreo());
             stmt.setString(3, usuario.getClave());
-            stmt.setInt(4, usuario.getId());
+            stmt.setString(4, usuario.getPreguntaSecreta());
+            stmt.setString(5, usuario.getRespuestaSecreta());
+            stmt.setInt(6, usuario.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

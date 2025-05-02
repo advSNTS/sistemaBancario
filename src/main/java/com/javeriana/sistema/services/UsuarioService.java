@@ -48,7 +48,13 @@ public class UsuarioService {
     }
 
     public void actualizarUsuario(Usuario usuario) {
+
         usuarioDAO.actualizar(usuario);
     }
+
+    public void actualizarClavePorCorreo(String correo, String nuevaClave) {
+        usuarioDAO.actualizarClavePorCorreo(correo, nuevaClave);
+    }
+
 
 }

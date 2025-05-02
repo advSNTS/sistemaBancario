@@ -125,5 +125,21 @@ public class DashboardController {
         }
     }
 
+    @FXML
+    private void verHistorialTransferencias() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/ui/HistorialTransferenciasView.fxml"));
+            Parent root = loader.load();
 
+            HistorialTransferenciasController controller = loader.getController();
+            controller.setUsuario(usuarioAutenticado);
+
+            Stage stage = new Stage();
+            stage.setTitle("Historial de Transferencias");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

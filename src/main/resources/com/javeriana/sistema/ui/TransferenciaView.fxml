@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.javeriana.sistema.controller.TransferenciaController"
+            style="-fx-background-color: #f0f8ff;">
+
+    <center>
+        <VBox alignment="CENTER" spacing="15" padding="20">
+            <Label text="Transferir entre Cuentas" style="-fx-font-size: 18px; -fx-text-fill: #333;" />
+
+            <ComboBox fx:id="comboOrigen" promptText="Cuenta Origen" prefWidth="250"/>
+            <ComboBox fx:id="comboDestino" promptText="Cuenta Destino" prefWidth="250"/>
+            <TextField fx:id="txtMonto" promptText="Monto a transferir" prefWidth="250"/>
+            <Button text="Realizar Transferencia" onAction="#realizarTransferencia"
+                    style="-fx-background-color: #3f51b5; -fx-text-fill: white; -fx-background-radius: 5;" />
+        </VBox>
+    </center>
+</BorderPane>

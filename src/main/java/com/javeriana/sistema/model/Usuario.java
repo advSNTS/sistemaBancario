@@ -8,11 +8,19 @@ public class Usuario {
     private String preguntaSecreta;
     private String respuestaSecreta;
 
-    public Usuario(int id, String nombre, String correo, String clave) {
+    // Constructor completo
+    public Usuario(int id, String nombre, String correo, String clave, String preguntaSecreta, String respuestaSecreta) {
         this.id = id;
         this.nombre = nombre;
         this.correo = correo;
         this.clave = clave;
+        this.preguntaSecreta = preguntaSecreta;
+        this.respuestaSecreta = respuestaSecreta;
+    }
+
+    // Constructor original (por compatibilidad)
+    public Usuario(int id, String nombre, String correo, String clave) {
+        this(id, nombre, correo, clave, "", "");
     }
 
     // Getters y Setters
@@ -29,11 +37,9 @@ public class Usuario {
     public void setClave(String clave) { this.clave = clave; }
 
     public String getPreguntaSecreta() { return preguntaSecreta; }
-
-    public void setPreguntaSecreta(String preguntaSecreta) { this.preguntaSecreta = preguntaSecreta;}
+    public void setPreguntaSecreta(String preguntaSecreta) { this.preguntaSecreta = preguntaSecreta; }
 
     public String getRespuestaSecreta() { return respuestaSecreta; }
-
     public void setRespuestaSecreta(String respuestaSecreta) { this.respuestaSecreta = respuestaSecreta; }
 
     @Override

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.javeriana.sistema.controller.HistorialTransferenciasController"
+      alignment="CENTER" spacing="20" style="-fx-padding: 30; -fx-background-color: #f4f4f4;">
+
+    <Label text="Historial de Transferencias"
+           style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+
+    <TableView fx:id="tablaTransferencias" prefHeight="400" prefWidth="600">
+        <columns>
+            <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
+            <TableColumn fx:id="colOrigen" text="Cuenta Origen" prefWidth="130"/>
+            <TableColumn fx:id="colDestino" text="Cuenta Destino" prefWidth="130"/>
+            <TableColumn fx:id="colMonto" text="Monto" prefWidth="100"/>
+            <TableColumn fx:id="colFecha" text="Fecha" prefWidth="180"/>
+        </columns>
+    </TableView>
+
+    <Button text="Volver" onAction="#volver" />
+</VBox>

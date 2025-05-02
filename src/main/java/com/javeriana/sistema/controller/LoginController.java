@@ -1,9 +1,11 @@
+// LoginController.java
 package com.javeriana.sistema.controller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -20,7 +22,24 @@ public class LoginController {
     @FXML private PasswordField txtClave;
     @FXML private Button btnLogin;
 
-    private Usuario usuarioAutenticado; //  Usuario logueado
+    private Usuario usuarioAutenticado; // Usuario logueado
+    private boolean mostrarMensajeRegistro = false;
+
+    public void setMostrarMensajeRegistro(boolean valor) {
+        this.mostrarMensajeRegistro = valor;
+    }
+
+    @FXML
+    private void initialize() {
+        if (mostrarMensajeRegistro) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Registro exitoso");
+            alert.setHeaderText(null);
+            alert.setContentText("Usuario registrado correctamente. Ahora puedes iniciar sesión.");
+            alert.showAndWait();
+            mostrarMensajeRegistro = false;
+        }
+    }
 
     @FXML
     private void handleLogin() {
@@ -54,7 +73,6 @@ public class LoginController {
             System.out.println("Credenciales incorrectas.");
         }
     }
-
 
     @FXML
     private void abrirVentanaRegistro() {
