@@ -13,8 +13,6 @@ import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import java.time.LocalDateTime;
 import java.util.List;
-import com.javeriana.sistema.model.Usuario;
-
 
 public class HistorialTransferenciasController {
 
@@ -29,8 +27,8 @@ public class HistorialTransferenciasController {
     private final TransferenciaService transferenciaService = new TransferenciaService();
     private int usuarioId;
 
-    public void setUsuario(Usuario usuario) {
-        this.usuarioId = usuario.getId();
+    public void setUsuarioId(int usuarioId) {
+        this.usuarioId = usuarioId;
         cargarTransferencias();
     }
 

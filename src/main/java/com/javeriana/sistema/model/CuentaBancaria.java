@@ -5,6 +5,7 @@ public class CuentaBancaria {
     private int usuarioId;
     private String tipo;
     private double saldo;
+    private boolean activa = true;
 
     public CuentaBancaria(int id, int usuarioId, String tipo, double saldo) {
         this.id = id;
@@ -44,4 +45,8 @@ public class CuentaBancaria {
     public void setSaldo(double saldo) {
         this.saldo = saldo;
     }
+
+    public boolean isActiva() { return activa; }
+
+    public void setActiva(boolean activa) { this.activa = activa; }
 }

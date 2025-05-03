@@ -7,20 +7,27 @@ public class Usuario {
     private String clave;
     private String preguntaSecreta;
     private String respuestaSecreta;
+    private String cedula;
 
     // Constructor completo
-    public Usuario(int id, String nombre, String correo, String clave, String preguntaSecreta, String respuestaSecreta) {
+    public Usuario(int id, String nombre, String correo, String clave, String preguntaSecreta, String respuestaSecreta, String cedula) {
         this.id = id;
         this.nombre = nombre;
         this.correo = correo;
         this.clave = clave;
         this.preguntaSecreta = preguntaSecreta;
         this.respuestaSecreta = respuestaSecreta;
+        this.cedula = cedula;
     }
 
-    // Constructor original (por compatibilidad)
+    // Constructor compatible sin cédula
+    public Usuario(int id, String nombre, String correo, String clave, String preguntaSecreta, String respuestaSecreta) {
+        this(id, nombre, correo, clave, preguntaSecreta, respuestaSecreta, "");
+    }
+
+    // Constructor reducido (sin pregunta y respuesta secreta)
     public Usuario(int id, String nombre, String correo, String clave) {
-        this(id, nombre, correo, clave, "", "");
+        this(id, nombre, correo, clave, "", "", "");
     }
 
     // Getters y Setters
@@ -41,6 +48,9 @@ public class Usuario {
 
     public String getRespuestaSecreta() { return respuestaSecreta; }
     public void setRespuestaSecreta(String respuestaSecreta) { this.respuestaSecreta = respuestaSecreta; }
+
+    public String getCedula() { return cedula; }
+    public void setCedula(String cedula) { this.cedula = cedula; }
 
     @Override
     public String toString() {

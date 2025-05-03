@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/8"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.javeriana.sistema.controller.TransferenciaPersonaPersonaController"
+      spacing="15" alignment="CENTER" style="-fx-padding: 25; -fx-background-color: #f9f9f9;">
+
+    <Label text="Transferencia a Otra Persona" style="-fx-font-size: 18px;" />
+    <ComboBox fx:id="comboCuentaOrigen" promptText="Selecciona tu cuenta de origen" prefWidth="250"/>
+    <TextField fx:id="txtCedulaDestino" promptText="Cédula destino" prefWidth="250"/>
+    <TextField fx:id="txtMonto" promptText="Monto a transferir" prefWidth="250"/>
+    <Button text="Transferir" fx:id="btnTransferir" onAction="#realizarTransferencia"
+            style="-fx-background-color: #3f51b5; -fx-text-fill: white; -fx-background-radius: 5;" />
+</VBox>

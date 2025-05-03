@@ -17,7 +17,7 @@
                 <Label text="Registro de Usuario"
                        style="-fx-font-size: 20px; -fx-text-fill: #333;" />
 
-                <TextField fx:id="txtId" promptText="Cédula" maxWidth="300"/>
+                <TextField fx:id="txtCedula" promptText="Cédula" maxWidth="300"/>
                 <TextField fx:id="txtNombre" promptText="Nombre completo" maxWidth="300"/>
                 <TextField fx:id="txtCorreo" promptText="Correo electrónico" maxWidth="300"/>
                 <PasswordField fx:id="txtClave" promptText="Contraseña" maxWidth="300"/>

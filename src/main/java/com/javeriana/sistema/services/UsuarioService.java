@@ -56,5 +56,7 @@ public class UsuarioService {
         usuarioDAO.actualizarClavePorCorreo(correo, nuevaClave);
     }
 
-
+    public Usuario buscarPorCedula(String cedula) {
+        return usuarioDAO.buscarPorCedula(cedula);
+    }
 }

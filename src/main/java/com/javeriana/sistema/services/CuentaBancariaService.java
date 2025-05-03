@@ -4,6 +4,11 @@ import com.javeriana.sistema.dao.CuentaBancariaDAO;
 import com.javeriana.sistema.dao.CuentaBancariaDAOImpl;
 import com.javeriana.sistema.model.CuentaBancaria;
 
+import com.javeriana.sistema.model.Usuario;
+import com.javeriana.sistema.dao.UsuarioDAO;
+import com.javeriana.sistema.dao.UsuarioDAOImpl;
+
+
 import java.util.List;
 
 public class CuentaBancariaService {
@@ -45,8 +50,16 @@ public class CuentaBancariaService {
         }
     }
 
-    // Metodo que debes agregar en CuentaBancariaService.java
     public void actualizarCuenta(CuentaBancaria cuenta) {
         cuentaDAO.actualizar(cuenta);
+    }
+
+    public CuentaBancaria buscarPorId(int id) {
+        return cuentaDAO.buscarPorId(id);
+    }
+
+    public Usuario buscarUsuarioPorCedula(String cedula) {
+        UsuarioDAO dao = new UsuarioDAOImpl();
+        return dao.buscarPorCedula(cedula);
     }
 }

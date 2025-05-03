@@ -132,7 +132,7 @@ public class DashboardController {
             Parent root = loader.load();
 
             HistorialTransferenciasController controller = loader.getController();
-            controller.setUsuario(usuarioAutenticado);
+            controller.setUsuarioId(usuarioAutenticado.getId()); // ← CORREGIDO AQUÍ
 
             Stage stage = new Stage();
             stage.setTitle("Historial de Transferencias");
@@ -140,6 +140,25 @@ public class DashboardController {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void abrirTransferenciaPersonaPersona() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/ui/TransferenciaPersonaPersonaView.fxml"));
+            Parent root = loader.load();
+
+            TransferenciaPersonaPersonaController controller = loader.getController();
+            controller.setUsuarioId(usuarioAutenticado.getId());
+
+            Stage stage = new Stage();
+            stage.setTitle("Transferir a Otra Persona");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarAlerta("Error", "No se pudo abrir la ventana de transferencia.");
         }
     }
 }

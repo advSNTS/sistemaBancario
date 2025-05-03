@@ -12,13 +12,14 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 
     @Override
     public void guardar(Usuario usuario) {
-        String sql = "INSERT INTO usuarios (nombre, correo, clave, pregunta_secreta, respuesta_secreta) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO usuarios (nombre, correo, clave, pregunta_secreta, respuesta_secreta, cedula) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setString(1, usuario.getNombre());
             stmt.setString(2, usuario.getCorreo());
             stmt.setString(3, usuario.getClave());
             stmt.setString(4, usuario.getPreguntaSecreta());
             stmt.setString(5, usuario.getRespuestaSecreta());
+            stmt.setString(6, usuario.getCedula());
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -38,7 +39,8 @@ public class UsuarioDAOImpl implements UsuarioDAO {
                         rs.getString("correo"),
                         rs.getString("clave"),
                         rs.getString("pregunta_secreta"),
-                        rs.getString("respuesta_secreta")
+                        rs.getString("respuesta_secreta"),
+                        rs.getString("cedula")
                 );
             }
         } catch (SQLException e) {
@@ -60,7 +62,31 @@ public class UsuarioDAOImpl implements UsuarioDAO {
                         rs.getString("correo"),
                         rs.getString("clave"),
                         rs.getString("pregunta_secreta"),
-                        rs.getString("respuesta_secreta")
+                        rs.getString("respuesta_secreta"),
+                        rs.getString("cedula")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public Usuario buscarPorCedula(String cedula) {
+        String sql = "SELECT * FROM usuarios WHERE cedula = ?";
+        try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
+            stmt.setString(1, cedula);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Usuario(
+                        rs.getInt("id"),
+                        rs.getString("nombre"),
+                        rs.getString("correo"),
+                        rs.getString("clave"),
+                        rs.getString("pregunta_secreta"),
+                        rs.getString("respuesta_secreta"),
+                        rs.getString("cedula")
                 );
             }
         } catch (SQLException e) {
@@ -94,7 +120,8 @@ public class UsuarioDAOImpl implements UsuarioDAO {
                         rs.getString("correo"),
                         rs.getString("clave"),
                         rs.getString("pregunta_secreta"),
-                        rs.getString("respuesta_secreta")
+                        rs.getString("respuesta_secreta"),
+                        rs.getString("cedula")
                 ));
             }
         } catch (SQLException e) {
@@ -105,14 +132,15 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 
     @Override
     public void actualizar(Usuario usuario) {
-        String sql = "UPDATE usuarios SET nombre = ?, correo = ?, clave = ?, pregunta_secreta = ?, respuesta_secreta = ? WHERE id = ?";
+        String sql = "UPDATE usuarios SET nombre = ?, correo = ?, clave = ?, pregunta_secreta = ?, respuesta_secreta = ?, cedula = ? WHERE id = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setString(1, usuario.getNombre());
             stmt.setString(2, usuario.getCorreo());
             stmt.setString(3, usuario.getClave());
             stmt.setString(4, usuario.getPreguntaSecreta());
             stmt.setString(5, usuario.getRespuestaSecreta());
-            stmt.setInt(6, usuario.getId());
+            stmt.setString(6, usuario.getCedula());
+            stmt.setInt(7, usuario.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

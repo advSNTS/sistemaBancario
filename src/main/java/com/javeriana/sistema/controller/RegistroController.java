@@ -1,4 +1,3 @@
-// RegistroController.java
 package com.javeriana.sistema.controller;
 
 import com.javeriana.sistema.model.Usuario;
@@ -15,14 +14,14 @@ import java.util.List;
 
 public class RegistroController {
 
-    @FXML private TextField txtId;
     @FXML private TextField txtNombre;
     @FXML private TextField txtCorreo;
     @FXML private PasswordField txtClave;
     @FXML private ComboBox<String> comboPreguntaSecreta;
     @FXML private TextField txtRespuestaSecreta;
+    @FXML private TextField txtCedula;
 
-    private UsuarioService usuarioService = new UsuarioService();
+    private final UsuarioService usuarioService = new UsuarioService();
 
     @FXML
     public void initialize() {
@@ -39,26 +38,28 @@ public class RegistroController {
     @FXML
     private void registrarUsuario() {
         try {
-            int id = Integer.parseInt(txtId.getText());
+            int id = usuarioService.obtenerTodosLosUsuarios().size() + 1;
             String nombre = txtNombre.getText();
             String correo = txtCorreo.getText();
             String clave = txtClave.getText();
+            String cedula = txtCedula.getText();  // Captura de cédula
             String pregunta = comboPreguntaSecreta.getValue();
             String respuesta = txtRespuestaSecreta.getText();
 
-            if (pregunta == null || respuesta.isEmpty()) {
-                mostrarAlerta("Faltan datos", "Selecciona una pregunta secreta y proporciona tu respuesta.");
+            if (pregunta == null || respuesta.isEmpty() || cedula.isEmpty()) {
+                mostrarAlerta("Faltan datos", "Completa todos los campos requeridos.");
                 return;
             }
 
             Usuario nuevoUsuario = new Usuario(id, nombre, correo, clave);
             nuevoUsuario.setPreguntaSecreta(pregunta);
             nuevoUsuario.setRespuestaSecreta(respuesta);
+            nuevoUsuario.setCedula(cedula);  // Asignación de cédula
 
             usuarioService.registrarUsuario(nuevoUsuario);
             mostrarAlerta("Éxito", "Usuario registrado correctamente.");
 
-            Stage stage = (Stage) txtId.getScene().getWindow();
+            Stage stage = (Stage) txtCedula.getScene().getWindow();
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/ui/LoginView.fxml"));
             Parent root = loader.load();
@@ -71,7 +72,7 @@ public class RegistroController {
             stage.show();
 
         } catch (NumberFormatException e) {
-            mostrarAlerta("Error", "La cédula debe ser un número.");
+            mostrarAlerta("Error", "El ID debe ser un número.");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -87,6 +88,6 @@ public class RegistroController {
 
     @FXML
     private void volverLogin() {
-        ((Stage) txtId.getScene().getWindow()).close();
+        ((Stage) txtCedula.getScene().getWindow()).close();
     }
 }
