@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.javeriana.sistema.controller.VerPagosProgramadosController"
+      spacing="10" alignment="CENTER" style="-fx-padding: 20;">
+
+    <Label text="Pagos Programados" style="-fx-font-size: 18px;" />
+
+    <TableView fx:id="tablaPagos" prefHeight="300" prefWidth="600">
+        <columns>
+            <TableColumn text="Cuenta Origen" fx:id="colCuentaOrigen" prefWidth="120"/>
+            <TableColumn text="Cédula Destino" fx:id="colCedulaDestino" prefWidth="120"/>
+            <TableColumn text="Monto" fx:id="colMonto" prefWidth="100"/>
+            <TableColumn text="Fecha y Hora" fx:id="colFechaHora" prefWidth="160"/>
+            <TableColumn text="Ejecutado" fx:id="colEjecutado" prefWidth="80"/>
+        </columns>
+    </TableView>
+</VBox>

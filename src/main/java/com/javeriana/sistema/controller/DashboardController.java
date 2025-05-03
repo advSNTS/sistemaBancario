@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import com.javeriana.sistema.services.CuentaBancariaService;
 import javafx.scene.control.Alert;
-
+import com.javeriana.sistema.controller.CrearPagoProgramadoController;
 
 public class DashboardController {
 
@@ -159,6 +159,44 @@ public class DashboardController {
         } catch (IOException e) {
             e.printStackTrace();
             mostrarAlerta("Error", "No se pudo abrir la ventana de transferencia.");
+        }
+    }
+
+    @FXML
+    private void abrirCrearPagoProgramado() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/ui/CrearPagoProgramadoView.fxml"));
+            Parent root = loader.load();
+
+            CrearPagoProgramadoController controller = loader.getController();
+            controller.setUsuarioId(usuarioAutenticado.getId());
+
+            Stage stage = new Stage();
+            stage.setTitle("Crear Pago Programado");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarAlerta("Error", "No se pudo abrir la ventana de pagos programados.");
+        }
+    }
+
+    @FXML
+    private void abrirVerPagosProgramados() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/ui/VerPagosProgramadosView.fxml"));
+            Parent root = loader.load();
+
+            VerPagosProgramadosController controller = loader.getController();
+            controller.setUsuarioId(usuarioAutenticado.getId());
+
+            Stage stage = new Stage();
+            stage.setTitle("Pagos Programados");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarAlerta("Error", "No se pudo abrir la ventana de pagos programados.");
         }
     }
 }

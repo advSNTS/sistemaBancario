@@ -37,3 +37,15 @@ CREATE TABLE IF NOT EXISTS transferencias (
     FOREIGN KEY (cuenta_destino_id) REFERENCES cuentas_bancarias(id)
 );
 
+CREATE TABLE IF NOT EXISTS pagos_programados (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    cuenta_origen_id INT NOT NULL,
+    cuenta_destino_id INT NOT NULL,
+    monto DOUBLE NOT NULL,
+    fecha_ejecucion TIMESTAMP NOT NULL,
+    ejecutado BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (cuenta_origen_id) REFERENCES cuentas_bancarias(id),
+    FOREIGN KEY (cuenta_destino_id) REFERENCES cuentas_bancarias(id)
+);
+
+

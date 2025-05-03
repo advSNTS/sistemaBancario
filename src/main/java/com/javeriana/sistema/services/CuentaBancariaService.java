@@ -62,4 +62,24 @@ public class CuentaBancariaService {
         UsuarioDAO dao = new UsuarioDAOImpl();
         return dao.buscarPorCedula(cedula);
     }
+
+    public void transferirEntreCuentas(int cuentaOrigenId, String cedulaDestino, double monto) throws Exception {
+        CuentaBancaria cuentaOrigen = cuentaDAO.buscarPorId(cuentaOrigenId);
+        if (cuentaOrigen == null) throw new Exception("Cuenta origen no encontrada");
+
+        // Buscar todas las cuentas y encontrar la primera asociada a la cédula destino
+        List<CuentaBancaria> posiblesDestinos = cuentaDAO.listarPorUsuario(buscarUsuarioPorCedula(cedulaDestino).getId());
+        if (posiblesDestinos.isEmpty()) throw new Exception("No se encontró cuenta para la cédula destino: " + cedulaDestino);
+
+        CuentaBancaria cuentaDestino = posiblesDestinos.get(0);
+
+        if (cuentaOrigen.getSaldo() < monto)
+            throw new Exception("Fondos insuficientes en cuenta origen");
+
+        cuentaOrigen.setSaldo(cuentaOrigen.getSaldo() - monto);
+        cuentaDestino.setSaldo(cuentaDestino.getSaldo() + monto);
+
+        cuentaDAO.actualizar(cuentaOrigen);
+        cuentaDAO.actualizar(cuentaDestino);
+    }
 }

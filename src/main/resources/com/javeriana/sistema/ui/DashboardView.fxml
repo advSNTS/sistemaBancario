@@ -36,6 +36,12 @@
                 onAction="#abrirTransferenciaPersonaPersona"
                 style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;" />
 
+        <Button text="Crear Pago Programado" onAction="#abrirCrearPagoProgramado"
+                style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;" />
+
+        <Button text="Ver Pagos Programados" onAction="#abrirVerPagosProgramados"
+                style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;" />
+
         <Button text="Historial de Transferencias" onAction="#verHistorialTransferencias"
                 style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;" />
 
