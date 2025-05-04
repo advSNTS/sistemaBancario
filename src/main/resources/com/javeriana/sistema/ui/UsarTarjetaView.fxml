@@ -11,8 +11,10 @@
 
     <Label text="Usar Tarjeta para Pago" style="-fx-font-size: 18px;" />
 
+    <ComboBox fx:id="comboTarjetas" prefWidth="200"/>
+
     <Label fx:id="lblTarjetaSeleccionada" text="Tarjeta: " />
-    <TextField fx:id="txtMontoPago" promptText="Monto a pagar" prefWidth="200"/>
+    <TextField fx:id="txtMonto" promptText="Monto a pagar" prefWidth="200"/>
     <Button text="Procesar Pago" onAction="#realizarPago"
             style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
 </VBox>

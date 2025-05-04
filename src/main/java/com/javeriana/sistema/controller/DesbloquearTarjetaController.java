@@ -7,24 +7,24 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import java.util.List;
+import java.util.Optional;
 
-public class UsarTarjetaController {
+public class DesbloquearTarjetaController {
 
     @FXML private ComboBox<Tarjeta> comboTarjetas;
-    @FXML private TextField txtMonto;
-    @FXML private Button btnPagar;
+    @FXML private Button btnDesbloquear;
 
     private final TarjetaService tarjetaService = new TarjetaService();
     private int usuarioId;
 
     public void setUsuarioId(int id) {
         this.usuarioId = id;
-        cargarTarjetasActivas();
+        cargarTarjetasBloqueadas();
     }
 
-    private void cargarTarjetasActivas() {
+    private void cargarTarjetasBloqueadas() {
         List<Tarjeta> tarjetas = tarjetaService.obtenerTarjetasDeUsuario(usuarioId).stream()
-                .filter(t -> !t.isBloqueada())
+                .filter(Tarjeta::isBloqueada)
                 .toList();
         comboTarjetas.setItems(FXCollections.observableArrayList(tarjetas));
 
@@ -35,7 +35,7 @@ public class UsarTarjetaController {
                 if (tarjeta == null || empty) {
                     setText(null);
                 } else {
-                    setText(tarjeta.getTipo() + " - Disponible: $" + tarjeta.getCupoDisponible());
+                    setText(tarjeta.getTipo() + " - Cupo: $" + tarjeta.getCupoDisponible());
                 }
             }
         });
@@ -47,37 +47,30 @@ public class UsarTarjetaController {
                 if (tarjeta == null || empty) {
                     setText(null);
                 } else {
-                    setText(tarjeta.getTipo() + " - Disponible: $" + tarjeta.getCupoDisponible());
+                    setText(tarjeta.getTipo() + " - Cupo: $" + tarjeta.getCupoDisponible());
                 }
             }
         });
     }
 
     @FXML
-    private void realizarPago() {
-        Tarjeta tarjeta = comboTarjetas.getValue();
-        String montoTexto = txtMonto.getText();
-
-        if (tarjeta == null || montoTexto.isEmpty()) {
-            mostrarAlerta("Error", "Debe seleccionar una tarjeta y especificar un monto.");
+    private void desbloquearTarjeta() {
+        Tarjeta seleccionada = comboTarjetas.getValue();
+        if (seleccionada == null) {
+            mostrarAlerta("Error", "Seleccione una tarjeta para desbloquear.");
             return;
         }
 
-        try {
-            double monto = Double.parseDouble(montoTexto);
-            if (monto <= 0) {
-                mostrarAlerta("Error", "El monto debe ser mayor a cero.");
-                return;
-            }
+        Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmacion.setTitle("Confirmar desbloqueo");
+        confirmacion.setHeaderText(null);
+        confirmacion.setContentText("¿Está seguro que desea desbloquear esta tarjeta?");
+        Optional<ButtonType> resultado = confirmacion.showAndWait();
 
-            tarjetaService.usarTarjeta(tarjeta.getId(), monto);
-            mostrarAlerta("Éxito", "Pago realizado exitosamente.");
-            cargarTarjetasActivas();
-            txtMonto.clear();
-        } catch (NumberFormatException e) {
-            mostrarAlerta("Error", "El monto ingresado no es válido.");
-        } catch (Exception e) {
-            mostrarAlerta("Error", e.getMessage());
+        if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
+            tarjetaService.desbloquearTarjeta(seleccionada.getId());
+            mostrarAlerta("Éxito", "Tarjeta desbloqueada exitosamente.");
+            cargarTarjetasBloqueadas(); // Refresca la lista
         }
     }
 

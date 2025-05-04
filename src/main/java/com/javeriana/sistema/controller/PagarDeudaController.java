@@ -40,7 +40,8 @@ public class PagarDeudaController {
                 if (tarjeta == null || empty) {
                     setText(null);
                 } else {
-                    setText(tarjeta.getTipo() + " - Deuda: $" + tarjeta.getDeuda());
+                    String estado = tarjeta.isBloqueada() ? "BLOQUEADA" : (tarjeta.isActiva() ? "ACTIVA" : "INACTIVA");
+                    setText(tarjeta.getTipo() + " - Deuda: $" + tarjeta.getDeuda() + " - " + estado);
                 }
             }
         });
@@ -52,7 +53,8 @@ public class PagarDeudaController {
                 if (tarjeta == null || empty) {
                     setText(null);
                 } else {
-                    setText(tarjeta.getTipo() + " - Deuda: $" + tarjeta.getDeuda());
+                    String estado = tarjeta.isBloqueada() ? "BLOQUEADA" : (tarjeta.isActiva() ? "ACTIVA" : "INACTIVA");
+                    setText(tarjeta.getTipo() + " - Deuda: $" + tarjeta.getDeuda() + " - " + estado);
                 }
             }
         });

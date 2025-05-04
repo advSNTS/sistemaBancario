@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.javeriana.sistema.controller.DesbloquearTarjetaController"
+      spacing="15" alignment="CENTER" style="-fx-padding: 20;">
+
+    <Label text="Desbloquear Tarjeta" style="-fx-font-size: 18px;" />
+
+    <ComboBox fx:id="comboTarjetas" prefWidth="300" />
+    <Button fx:id="btnDesbloquear" text="Desbloquear" onAction="#desbloquearTarjeta"
+            style="-fx-background-color: #4CAF50; -fx-text-fill: white;" />
+
+</VBox>

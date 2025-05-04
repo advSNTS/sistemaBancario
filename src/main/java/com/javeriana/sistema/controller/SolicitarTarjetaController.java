@@ -1,5 +1,6 @@
 package com.javeriana.sistema.controller;
 
+import com.javeriana.sistema.model.Tarjeta;
 import com.javeriana.sistema.services.TarjetaService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -10,7 +11,7 @@ import javafx.scene.control.TextField;
 public class SolicitarTarjetaController {
 
     @FXML private ComboBox<String> comboTipoTarjeta;
-    @FXML private TextField txtCupo; // ← Añadido campo de cupo
+    @FXML private TextField txtCupo;
     @FXML private Button btnSolicitar;
 
     private final TarjetaService tarjetaService = new TarjetaService();
@@ -49,8 +50,11 @@ public class SolicitarTarjetaController {
         }
 
         try {
-            tarjetaService.solicitarTarjeta(usuarioId, tipoSeleccionado, cupo);
-            mostrarAlerta("Éxito", "La tarjeta fue solicitada exitosamente.");
+            Tarjeta tarjeta = tarjetaService.solicitarTarjeta(usuarioId, tipoSeleccionado, cupo);
+            mostrarAlerta("Éxito", "La tarjeta fue solicitada exitosamente.\n\n"
+                    + "Número: " + tarjeta.getNumero() + "\n"
+                    + "Vencimiento: " + tarjeta.getFechaVencimiento() + "\n"
+                    + "CVV: " + tarjeta.getCvv());
         } catch (Exception e) {
             mostrarAlerta("Error", "Ocurrió un error al solicitar la tarjeta: " + e.getMessage());
         }

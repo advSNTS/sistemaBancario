@@ -13,15 +13,20 @@ public class TarjetaDAOImpl implements TarjetaDAO {
 
     @Override
     public void guardar(Tarjeta tarjeta) {
-        String sql = "INSERT INTO tarjetas (usuario_id, tipo, cupo_total, cupo_disponible, deuda, activa, bloqueada) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO tarjetas (usuario_id, tipo, estado, cupo_total, cupo_disponible, deuda_actual, activa, bloqueada, numero, fecha_vencimiento, cvv) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setInt(1, tarjeta.getUsuarioId());
             stmt.setString(2, tarjeta.getTipo());
-            stmt.setDouble(3, tarjeta.getCupoTotal());
-            stmt.setDouble(4, tarjeta.getCupoDisponible());
-            stmt.setDouble(5, tarjeta.getDeuda());
-            stmt.setBoolean(6, tarjeta.isActiva());
-            stmt.setBoolean(7, tarjeta.isBloqueada());
+            stmt.setString(3, tarjeta.getEstado());
+            stmt.setDouble(4, tarjeta.getCupoTotal());
+            stmt.setDouble(5, tarjeta.getCupoDisponible());
+            stmt.setDouble(6, tarjeta.getDeuda());
+            stmt.setBoolean(7, tarjeta.isActiva());
+            stmt.setBoolean(8, tarjeta.isBloqueada());
+            stmt.setString(9, tarjeta.getNumero());
+            stmt.setDate(10, Date.valueOf(tarjeta.getFechaVencimiento())); // LocalDate → SQL
+            stmt.setString(11, tarjeta.getCvv());
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -30,15 +35,20 @@ public class TarjetaDAOImpl implements TarjetaDAO {
 
     @Override
     public void actualizar(Tarjeta tarjeta) {
-        String sql = "UPDATE tarjetas SET tipo = ?, cupo_total = ?, cupo_disponible = ?, deuda = ?, activa = ?, bloqueada = ? WHERE id = ?";
+        String sql = "UPDATE tarjetas SET tipo = ?, estado = ?, cupo_total = ?, cupo_disponible = ?, deuda_actual = ?, activa = ?, bloqueada = ?, numero = ?, fecha_vencimiento = ?, cvv = ? " +
+                "WHERE id = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setString(1, tarjeta.getTipo());
-            stmt.setDouble(2, tarjeta.getCupoTotal());
-            stmt.setDouble(3, tarjeta.getCupoDisponible());
-            stmt.setDouble(4, tarjeta.getDeuda());
-            stmt.setBoolean(5, tarjeta.isActiva());
-            stmt.setBoolean(6, tarjeta.isBloqueada());
-            stmt.setInt(7, tarjeta.getId());
+            stmt.setString(2, tarjeta.getEstado());
+            stmt.setDouble(3, tarjeta.getCupoTotal());
+            stmt.setDouble(4, tarjeta.getCupoDisponible());
+            stmt.setDouble(5, tarjeta.getDeuda());
+            stmt.setBoolean(6, tarjeta.isActiva());
+            stmt.setBoolean(7, tarjeta.isBloqueada());
+            stmt.setString(8, tarjeta.getNumero());
+            stmt.setDate(9, Date.valueOf(tarjeta.getFechaVencimiento()));
+            stmt.setString(10, tarjeta.getCvv());
+            stmt.setInt(11, tarjeta.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -47,7 +57,18 @@ public class TarjetaDAOImpl implements TarjetaDAO {
 
     @Override
     public void bloquear(int tarjetaId) {
-        String sql = "UPDATE tarjetas SET bloqueada = true WHERE id = ?";
+        String sql = "UPDATE tarjetas SET bloqueada = true, estado = 'Bloqueada' WHERE id = ?";
+        try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
+            stmt.setInt(1, tarjetaId);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void desbloquear(int tarjetaId) {
+        String sql = "UPDATE tarjetas SET bloqueada = false, activa = true, estado = 'Activa' WHERE id = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setInt(1, tarjetaId);
             stmt.executeUpdate();
@@ -92,11 +113,15 @@ public class TarjetaDAOImpl implements TarjetaDAO {
                 rs.getInt("id"),
                 rs.getInt("usuario_id"),
                 rs.getString("tipo"),
+                rs.getString("estado"),
                 rs.getDouble("cupo_total"),
                 rs.getDouble("cupo_disponible"),
-                rs.getDouble("deuda"),
+                rs.getDouble("deuda_actual"),
                 rs.getBoolean("activa"),
-                rs.getBoolean("bloqueada")
+                rs.getBoolean("bloqueada"),
+                rs.getString("numero"),
+                rs.getDate("fecha_vencimiento").toLocalDate(),
+                rs.getString("cvv")
         );
     }
 }

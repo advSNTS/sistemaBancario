@@ -7,16 +7,29 @@ import com.javeriana.sistema.dao.CuentaBancariaDAOImpl;
 import com.javeriana.sistema.model.Tarjeta;
 import com.javeriana.sistema.model.CuentaBancaria;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Random;
 
 public class TarjetaService {
 
     private final TarjetaDAO tarjetaDAO = new TarjetaDAOImpl();
     private final CuentaBancariaDAO cuentaDAO = new CuentaBancariaDAOImpl();
 
-    public void solicitarTarjeta(int usuarioId, String tipo, double cupo) {
-        Tarjeta tarjeta = new Tarjeta(0, usuarioId, tipo, cupo, cupo, 0.0, false, false);
+    public Tarjeta solicitarTarjeta(int usuarioId, String tipo, double cupo) {
+        String estado = "Activa";
+        String numero = generarNumeroTarjeta();
+        LocalDate fechaVencimiento = generarFechaVencimiento();
+        String cvv = generarCVV();
+
+        Tarjeta tarjeta = new Tarjeta(
+                0, usuarioId, tipo, estado,
+                cupo, cupo, 0.0,
+                true, false,
+                numero, fechaVencimiento, cvv
+        );
         tarjetaDAO.guardar(tarjeta);
+        return tarjeta;
     }
 
     public void activarTarjeta(int tarjetaId) {
@@ -74,12 +87,41 @@ public class TarjetaService {
         tarjetaDAO.actualizar(tarjeta);
     }
 
-    // Alias para usar desde controlador
     public void usarTarjeta(int tarjetaId, double monto) throws Exception {
         realizarPagoConTarjeta(tarjetaId, monto);
     }
 
     public void pagarDeudaDesdeCuenta(int tarjetaId, int cuentaId, double monto) throws Exception {
         pagarDeudaConCuenta(tarjetaId, cuentaId, monto);
+    }
+
+    // Generadores auxiliares
+    private String generarNumeroTarjeta() {
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 16; i++) {
+            sb.append(random.nextInt(10));
+            if ((i + 1) % 4 == 0 && i < 15) sb.append(" ");
+        }
+        return sb.toString();
+    }
+
+    private LocalDate generarFechaVencimiento() {
+        return LocalDate.now().plusYears(4); // ← Devuelve LocalDate directamente
+    }
+
+    private String generarCVV() {
+        Random random = new Random();
+        return String.format("%03d", random.nextInt(1000));
+    }
+
+    public void desbloquearTarjeta(int tarjetaId) {
+        Tarjeta tarjeta = tarjetaDAO.buscarPorId(tarjetaId);
+        if (tarjeta != null) {
+            tarjeta.setBloqueada(false);
+            tarjeta.setActiva(true);
+            tarjeta.setEstado("Activa");
+            tarjetaDAO.actualizar(tarjeta);
+        }
     }
 }

@@ -11,9 +11,9 @@
 
     <Label text="Pagar Deuda de Tarjeta" style="-fx-font-size: 18px;" />
 
-    <Label fx:id="lblTarjetaInfo" text="Tarjeta: " />
-    <ComboBox fx:id="comboCuentaPago" promptText="Cuenta para pagar" prefWidth="200"/>
+    <ComboBox fx:id="comboTarjetas" promptText="Selecciona una tarjeta" prefWidth="200"/>
+    <ComboBox fx:id="comboCuentas" promptText="Cuenta para pagar" prefWidth="200"/>
     <TextField fx:id="txtMonto" promptText="Monto a pagar" prefWidth="200"/>
-    <Button text="Confirmar Pago" onAction="#confirmarPago"
-            style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+    <Button text="Confirmar Pago" onAction="#pagarDeuda"
+            style="-fx-background-color: #4CAF50; -fx-text-fill: white;" />
 </VBox>

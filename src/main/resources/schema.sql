@@ -53,9 +53,15 @@ CREATE TABLE IF NOT EXISTS tarjetas (
     usuario_id INT NOT NULL,
     tipo VARCHAR(20) NOT NULL,
     estado VARCHAR(20) NOT NULL,
+    numero VARCHAR(25) NOT NULL,
+    fecha_vencimiento VARCHAR(10) NOT NULL,
+    cvv VARCHAR(5) NOT NULL,
     cupo_total DOUBLE NOT NULL,
     cupo_disponible DOUBLE NOT NULL,
     deuda_actual DOUBLE NOT NULL DEFAULT 0,
+    activa BOOLEAN NOT NULL DEFAULT FALSE,
+    bloqueada BOOLEAN NOT NULL DEFAULT FALSE,
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 );
+
 

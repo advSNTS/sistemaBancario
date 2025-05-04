@@ -24,7 +24,7 @@ public class BloquearTarjetaController {
 
     private void cargarTarjetasActivas() {
         List<Tarjeta> tarjetas = tarjetaService.obtenerTarjetasDeUsuario(usuarioId).stream()
-                .filter(t -> t.isActiva() && !t.isBloqueada()) // ← CORREGIDO AQUÍ
+                .filter(t -> !t.isBloqueada())
                 .toList();
         comboTarjetas.setItems(FXCollections.observableArrayList(tarjetas));
 

@@ -16,6 +16,7 @@ public class GestionarTarjetasController {
     @FXML private Tab tabBloquear;
     @FXML private Tab tabUsar;
     @FXML private Tab tabPagar;
+    @FXML private Tab tabDesbloquear;
 
     private int usuarioId;
 
@@ -55,6 +56,11 @@ public class GestionarTarjetasController {
             PagarDeudaController controller5 = loader5.getController();
             controller5.setUsuarioId(usuarioId);
             tabPagar.setContent(pagarPane);
+
+            FXMLLoader desbloquearLoader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/ui/DesbloquearTarjetaView.fxml"));
+            tabDesbloquear.setContent(desbloquearLoader.load());
+            DesbloquearTarjetaController desbloquearController = desbloquearLoader.getController();
+            desbloquearController.setUsuarioId(usuarioId);
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -3,18 +3,24 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.javeriana.sistema.controller.VerTarjetasController"
-      spacing="10" alignment="CENTER" style="-fx-padding: 20;">
+      spacing="15"
+      alignment="CENTER"
+      style="-fx-padding: 20;">
 
-    <Label text="Mis Tarjetas" style="-fx-font-size: 18px;" />
+    <Label text="Tarjetas Registradas" style="-fx-font-size: 18px;"/>
 
-    <TableView fx:id="tablaTarjetas" prefHeight="300" prefWidth="600">
+    <TableView fx:id="tablaTarjetas" prefWidth="700" prefHeight="300">
         <columns>
-            <TableColumn fx:id="colTipo" text="Tipo" prefWidth="150"/>
-            <TableColumn fx:id="colEstado" text="Estado" prefWidth="150"/>
-            <TableColumn fx:id="colCupo" text="Cupo Disponible" prefWidth="150"/>
-            <TableColumn fx:id="colDeuda" text="Deuda Actual" prefWidth="150"/>
+            <TableColumn fx:id="colTipo" text="Tipo" prefWidth="100"/>
+            <TableColumn fx:id="colEstado" text="Estado" prefWidth="100"/>
+            <TableColumn fx:id="colCupo" text="Cupo Disponible" prefWidth="120"/>
+            <TableColumn fx:id="colDeuda" text="Deuda" prefWidth="100"/>
+            <TableColumn fx:id="colNumero" text="Número" prefWidth="160"/>
+            <TableColumn fx:id="colVencimiento" text="Vencimiento" prefWidth="80"/>
+            <TableColumn fx:id="colCVV" text="CVV" prefWidth="50"/>
         </columns>
     </TableView>
 </VBox>

@@ -13,6 +13,7 @@
                 <Tab fx:id="tabSolicitar" text="Solicitar"/>
                 <Tab fx:id="tabVer" text="Ver"/>
                 <Tab fx:id="tabBloquear" text="Bloquear"/>
+                <Tab fx:id="tabDesbloquear" text="Desbloquear"/>
                 <Tab fx:id="tabUsar" text="Usar"/>
                 <Tab fx:id="tabPagar" text="Pagar Deuda"/>
             </tabs>
