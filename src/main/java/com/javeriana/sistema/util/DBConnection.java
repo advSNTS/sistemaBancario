@@ -10,7 +10,7 @@ import java.sql.Statement;
 
 public class DBConnection {
 
-    private static final String URL = "jdbc:h2:tcp://localhost/~/sistema_db";
+    private static final String URL = "jdbc:h2:~/sistema_db;AUTO_SERVER=TRUE";
     private static final String USER = "sa";
     private static final String PASSWORD = "";
 

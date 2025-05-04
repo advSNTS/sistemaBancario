@@ -2,9 +2,9 @@ package com.javeriana.sistema.controller;
 
 import com.javeriana.sistema.model.CuentaBancaria;
 import com.javeriana.sistema.model.PagoProgramado;
+import com.javeriana.sistema.model.Usuario;
 import com.javeriana.sistema.services.CuentaBancariaService;
 import com.javeriana.sistema.services.PagoProgramadoService;
-import com.javeriana.sistema.model.Usuario;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -96,7 +96,7 @@ public class CrearPagoProgramadoController {
             PagoProgramado pago = new PagoProgramado(
                     0,
                     origen.getId(),
-                    cedulaDestino,
+                    cuentaDestino.getId(), // ✅ ID real de cuenta bancaria
                     monto,
                     fechaHoraEjecucion,
                     false

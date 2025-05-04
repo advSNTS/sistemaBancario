@@ -5,15 +5,15 @@ import java.time.LocalDateTime;
 public class PagoProgramado {
     private int id;
     private int cuentaOrigenId;
-    private String cedulaDestino;
+    private int cuentaDestinoId;  // ✅ Cambio aquí
     private double monto;
     private LocalDateTime fechaHoraEjecucion;
     private boolean ejecutado;
 
-    public PagoProgramado(int id, int cuentaOrigenId, String cedulaDestino, double monto, LocalDateTime fechaHoraEjecucion, boolean ejecutado) {
+    public PagoProgramado(int id, int cuentaOrigenId, int cuentaDestinoId, double monto, LocalDateTime fechaHoraEjecucion, boolean ejecutado) {
         this.id = id;
         this.cuentaOrigenId = cuentaOrigenId;
-        this.cedulaDestino = cedulaDestino;
+        this.cuentaDestinoId = cuentaDestinoId;
         this.monto = monto;
         this.fechaHoraEjecucion = fechaHoraEjecucion;
         this.ejecutado = ejecutado;
@@ -35,12 +35,12 @@ public class PagoProgramado {
         this.cuentaOrigenId = cuentaOrigenId;
     }
 
-    public String getCedulaDestino() {
-        return cedulaDestino;
+    public int getCuentaDestinoId() {
+        return cuentaDestinoId;
     }
 
-    public void setCedulaDestino(String cedulaDestino) {
-        this.cedulaDestino = cedulaDestino;
+    public void setCuentaDestinoId(int cuentaDestinoId) {
+        this.cuentaDestinoId = cuentaDestinoId;
     }
 
     public double getMonto() {

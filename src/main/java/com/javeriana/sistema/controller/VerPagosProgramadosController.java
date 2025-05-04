@@ -15,7 +15,7 @@ public class VerPagosProgramadosController {
 
     @FXML private TableView<PagoProgramado> tablaPagos;
     @FXML private TableColumn<PagoProgramado, String> colCuentaOrigen;
-    @FXML private TableColumn<PagoProgramado, String> colCedulaDestino;
+    @FXML private TableColumn<PagoProgramado, String> colCuentaDestino;
     @FXML private TableColumn<PagoProgramado, Double> colMonto;
     @FXML private TableColumn<PagoProgramado, String> colFechaHora;
     @FXML private TableColumn<PagoProgramado, Boolean> colEjecutado;
@@ -37,8 +37,8 @@ public class VerPagosProgramadosController {
         colCuentaOrigen.setCellValueFactory(cell ->
                 new SimpleStringProperty(String.valueOf(cell.getValue().getCuentaOrigenId()))
         );
-        colCedulaDestino.setCellValueFactory(cell ->
-                new SimpleStringProperty(cell.getValue().getCedulaDestino())
+        colCuentaDestino.setCellValueFactory(cell ->
+                new SimpleStringProperty(String.valueOf(cell.getValue().getCuentaDestinoId()))
         );
         colMonto.setCellValueFactory(cell ->
                 new SimpleDoubleProperty(cell.getValue().getMonto()).asObject()

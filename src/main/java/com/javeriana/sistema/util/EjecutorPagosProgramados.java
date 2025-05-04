@@ -23,7 +23,7 @@ public class EjecutorPagosProgramados {
                     try {
                         cuentaService.transferirEntreCuentas(
                                 pago.getCuentaOrigenId(),
-                                pago.getCedulaDestino(),
+                                pago.getCuentaDestinoId(),
                                 pago.getMonto()
                         );
                         pagoService.marcarComoEjecutado(pago.getId());
