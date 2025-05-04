@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.javeriana.sistema.controller.UsarTarjetaController"
+      spacing="15" alignment="CENTER" style="-fx-padding: 20;">
+
+    <Label text="Usar Tarjeta para Pago" style="-fx-font-size: 18px;" />
+
+    <Label fx:id="lblTarjetaSeleccionada" text="Tarjeta: " />
+    <TextField fx:id="txtMontoPago" promptText="Monto a pagar" prefWidth="200"/>
+    <Button text="Procesar Pago" onAction="#realizarPago"
+            style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
+</VBox>

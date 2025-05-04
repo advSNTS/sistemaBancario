@@ -199,4 +199,23 @@ public class DashboardController {
             mostrarAlerta("Error", "No se pudo abrir la ventana de pagos programados.");
         }
     }
+
+    @FXML
+    private void abrirGestionTarjetas() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/ui/GestionarTarjetasView.fxml"));
+            Parent root = loader.load();
+
+            GestionarTarjetasController controller = loader.getController();
+            controller.setUsuarioId(usuarioAutenticado.getId());
+
+            Stage stage = new Stage();
+            stage.setTitle("Gestión de Tarjetas");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarAlerta("Error", "No se pudo abrir la gestión de tarjetas.");
+        }
+    }
 }

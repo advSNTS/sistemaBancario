@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.javeriana.sistema.controller.VerTarjetasController"
+      spacing="10" alignment="CENTER" style="-fx-padding: 20;">
+
+    <Label text="Mis Tarjetas" style="-fx-font-size: 18px;" />
+
+    <TableView fx:id="tablaTarjetas" prefHeight="300" prefWidth="600">
+        <columns>
+            <TableColumn fx:id="colTipo" text="Tipo" prefWidth="150"/>
+            <TableColumn fx:id="colEstado" text="Estado" prefWidth="150"/>
+            <TableColumn fx:id="colCupo" text="Cupo Disponible" prefWidth="150"/>
+            <TableColumn fx:id="colDeuda" text="Deuda Actual" prefWidth="150"/>
+        </columns>
+    </TableView>
+</VBox>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.javeriana.sistema.controller.BloquearTarjetaController"
+      spacing="15" alignment="CENTER" style="-fx-padding: 20;">
+
+    <Label text="Bloquear Tarjeta" style="-fx-font-size: 18px;" />
+
+    <ComboBox fx:id="comboTarjetas" promptText="Seleccione tarjeta" prefWidth="300"/>
+
+    <Button fx:id="btnBloquear" text="Bloquear" onAction="#bloquearTarjeta"
+            style="-fx-background-color: #d32f2f; -fx-text-fill: white;" />
+</VBox>

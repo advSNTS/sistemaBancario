@@ -48,4 +48,14 @@ CREATE TABLE IF NOT EXISTS pagos_programados (
     FOREIGN KEY (cuenta_destino_id) REFERENCES cuentas_bancarias(id)
 );
 
+CREATE TABLE IF NOT EXISTS tarjetas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    tipo VARCHAR(20) NOT NULL,
+    estado VARCHAR(20) NOT NULL,
+    cupo_total DOUBLE NOT NULL,
+    cupo_disponible DOUBLE NOT NULL,
+    deuda_actual DOUBLE NOT NULL DEFAULT 0,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+);
 

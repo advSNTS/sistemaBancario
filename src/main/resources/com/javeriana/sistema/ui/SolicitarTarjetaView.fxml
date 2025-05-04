@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.javeriana.sistema.controller.SolicitarTarjetaController"
+      spacing="15" alignment="CENTER" style="-fx-padding: 20;">
+
+    <Label text="Solicitar Tarjeta" style="-fx-font-size: 18px;"/>
+
+    <ComboBox fx:id="comboTipoTarjeta" promptText="Tipo de Tarjeta" prefWidth="250"/>
+    <TextField fx:id="txtCupo" promptText="Cupo deseado" prefWidth="250"/>
+
+    <Button fx:id="btnSolicitar" text="Solicitar"
+            onAction="#solicitarTarjeta"
+            style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+</VBox>
