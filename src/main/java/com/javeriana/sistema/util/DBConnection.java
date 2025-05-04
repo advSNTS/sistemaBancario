@@ -9,7 +9,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DBConnection {
-    private static final String URL = "jdbc:h2:~/sistema_db;AUTO_SERVER=TRUE";
+
+    private static final String URL = "jdbc:h2:tcp://localhost/~/sistema_db";
     private static final String USER = "sa";
     private static final String PASSWORD = "";
 
@@ -21,8 +22,6 @@ public class DBConnection {
                 Class.forName("org.h2.Driver");
                 conexion = DriverManager.getConnection(URL, USER, PASSWORD);
                 System.out.println("Conexión a la BD establecida en " + URL);
-
-                // Ya no se abre la consola H2 desde aquí
                 ejecutarScriptSQL(conexion);
             } catch (ClassNotFoundException | SQLException e) {
                 e.printStackTrace();

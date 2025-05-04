@@ -4,6 +4,7 @@ import com.javeriana.sistema.model.CuentaBancaria;
 import com.javeriana.sistema.model.PagoProgramado;
 import com.javeriana.sistema.services.CuentaBancariaService;
 import com.javeriana.sistema.services.PagoProgramadoService;
+import com.javeriana.sistema.model.Usuario;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -61,33 +62,41 @@ public class CrearPagoProgramadoController {
     @FXML
     private void guardarPagoProgramado() {
         CuentaBancaria origen = comboCuentaOrigen.getValue();
-        String cuentaDestinoTexto = txtCuentaDestinoId.getText();
+        String cedulaDestino = txtCuentaDestinoId.getText().trim();
         String montoTexto = txtMonto.getText();
         LocalDate fecha = dateFechaEjecucion.getValue();
         String horaTexto = txtHoraEjecucion.getText();
 
-        if (origen == null || cuentaDestinoTexto.isEmpty() || montoTexto.isEmpty() || fecha == null || horaTexto.isEmpty()) {
+        if (origen == null || cedulaDestino.isEmpty() || montoTexto.isEmpty() || fecha == null || horaTexto.isEmpty()) {
             mostrarAlerta("Error", "Todos los campos son obligatorios.");
             return;
         }
 
         try {
-            int cuentaDestinoId = Integer.parseInt(cuentaDestinoTexto);
             double monto = Double.parseDouble(montoTexto);
             LocalTime hora = LocalTime.parse(horaTexto); // Formato HH:mm
             LocalDateTime fechaHoraEjecucion = LocalDateTime.of(fecha, hora);
 
-            // Validar que la cuenta destino exista
-            CuentaBancaria cuentaDestino = cuentaService.buscarPorId(cuentaDestinoId);
-            if (cuentaDestino == null) {
-                mostrarAlerta("Error", "La cuenta destino no existe.");
+            // Buscar el usuario por cédula
+            Usuario usuarioDestino = cuentaService.buscarUsuarioPorCedula(cedulaDestino);
+            if (usuarioDestino == null) {
+                mostrarAlerta("Error", "No se encontró un usuario con esa cédula.");
                 return;
             }
+
+            // Buscar la primera cuenta del usuario destino
+            List<CuentaBancaria> cuentasDestino = cuentaService.obtenerCuentasDeUsuario(usuarioDestino.getId());
+            if (cuentasDestino.isEmpty()) {
+                mostrarAlerta("Error", "El usuario con esa cédula no tiene cuentas registradas.");
+                return;
+            }
+
+            CuentaBancaria cuentaDestino = cuentasDestino.get(0); // Tomamos la primera
 
             PagoProgramado pago = new PagoProgramado(
                     0,
                     origen.getId(),
-                    String.valueOf(cuentaDestinoId), // aún usa String como cedula
+                    cedulaDestino,
                     monto,
                     fechaHoraEjecucion,
                     false
@@ -98,7 +107,7 @@ public class CrearPagoProgramadoController {
             limpiarCampos();
 
         } catch (NumberFormatException e) {
-            mostrarAlerta("Error", "El ID de cuenta destino y el monto deben ser números válidos.");
+            mostrarAlerta("Error", "El monto debe ser un número válido.");
         } catch (Exception e) {
             mostrarAlerta("Error", "Formato de hora inválido. Usa HH:mm (ej: 14:30).");
         }

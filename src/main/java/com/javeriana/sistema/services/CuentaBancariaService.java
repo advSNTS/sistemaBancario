@@ -67,9 +67,11 @@ public class CuentaBancariaService {
         CuentaBancaria cuentaOrigen = cuentaDAO.buscarPorId(cuentaOrigenId);
         if (cuentaOrigen == null) throw new Exception("Cuenta origen no encontrada");
 
-        // Buscar todas las cuentas y encontrar la primera asociada a la cédula destino
-        List<CuentaBancaria> posiblesDestinos = cuentaDAO.listarPorUsuario(buscarUsuarioPorCedula(cedulaDestino).getId());
-        if (posiblesDestinos.isEmpty()) throw new Exception("No se encontró cuenta para la cédula destino: " + cedulaDestino);
+        Usuario usuarioDestino = buscarUsuarioPorCedula(cedulaDestino);
+        if (usuarioDestino == null) throw new Exception("Usuario con cédula " + cedulaDestino + " no encontrado");
+
+        List<CuentaBancaria> posiblesDestinos = cuentaDAO.listarPorUsuario(usuarioDestino.getId());
+        if (posiblesDestinos.isEmpty()) throw new Exception("No se encontró cuenta asociada a la cédula " + cedulaDestino);
 
         CuentaBancaria cuentaDestino = posiblesDestinos.get(0);
 
