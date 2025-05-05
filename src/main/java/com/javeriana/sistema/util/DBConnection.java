@@ -13,6 +13,7 @@ public class DBConnection {
     private static final String URL = "jdbc:h2:~/sistema_db;AUTO_SERVER=TRUE";
     private static final String USER = "sa";
     private static final String PASSWORD = "";
+    private static boolean yaMostroMensaje = false;
 
     private static Connection conexion;
 
@@ -21,8 +22,10 @@ public class DBConnection {
             if (conexion == null || conexion.isClosed()) {
                 Class.forName("org.h2.Driver");
                 conexion = DriverManager.getConnection(URL, USER, PASSWORD);
-                System.out.println("Conexión a la BD establecida en " + URL);
-                ejecutarScriptSQL(conexion);
+                if (!yaMostroMensaje) {
+                    System.out.println("Conexión a la BD establecida en " + URL);
+                    yaMostroMensaje = true;
+                }
             }
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
@@ -31,8 +34,9 @@ public class DBConnection {
         return conexion;
     }
 
-    private static void ejecutarScriptSQL(Connection conexion) {
-        try {
+    // Ahora es público para que se ejecute una sola vez desde HelloApplication
+    public static void ejecutarScript() {
+        try (Connection conn = getInstance()) {
             InputStream inputStream = DBConnection.class.getClassLoader().getResourceAsStream("schema.sql");
             if (inputStream == null) {
                 System.out.println("No se encontró el archivo schema.sql");
@@ -47,7 +51,7 @@ public class DBConnection {
             }
             reader.close();
 
-            Statement stmt = conexion.createStatement();
+            Statement stmt = conn.createStatement();
             stmt.execute(sql.toString());
             System.out.println("Tablas creadas exitosamente.");
         } catch (Exception e) {

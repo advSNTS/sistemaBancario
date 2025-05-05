@@ -1,5 +1,6 @@
 package com.javeriana.sistema;
 
+import com.javeriana.sistema.util.DBConnection;
 import com.javeriana.sistema.util.EjecutorPagosProgramados;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +11,9 @@ public class HelloApplication extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        // Ejecutar el script de base de datos solo una vez
+        DBConnection.ejecutarScript();
+
         // Ejecutar pagos programados pendientes al iniciar
         new EjecutorPagosProgramados().iniciar();
 
