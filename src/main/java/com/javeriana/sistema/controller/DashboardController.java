@@ -249,4 +249,23 @@ public class DashboardController {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    private void abrirConfiguracionLimite() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/ui/ConfigurarLimiteView.fxml"));
+            Parent root = loader.load();
+
+            ConfigurarLimiteController controller = loader.getController();
+            controller.setUsuarioId(usuarioAutenticado.getId());
+
+            Stage stage = new Stage();
+            stage.setTitle("Configurar Límite de Alerta");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarAlerta("Error", "No se pudo abrir la configuración de límite.");
+        }
+    }
 }

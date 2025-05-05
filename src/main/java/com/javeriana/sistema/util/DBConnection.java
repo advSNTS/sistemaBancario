@@ -17,16 +17,16 @@ public class DBConnection {
     private static Connection conexion;
 
     public static Connection getInstance() {
-        if (conexion == null) {
-            try {
+        try {
+            if (conexion == null || conexion.isClosed()) {
                 Class.forName("org.h2.Driver");
                 conexion = DriverManager.getConnection(URL, USER, PASSWORD);
                 System.out.println("Conexión a la BD establecida en " + URL);
                 ejecutarScriptSQL(conexion);
-            } catch (ClassNotFoundException | SQLException e) {
-                e.printStackTrace();
-                System.out.println("Error al conectar a la BD.");
             }
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error al conectar a la BD.");
         }
         return conexion;
     }

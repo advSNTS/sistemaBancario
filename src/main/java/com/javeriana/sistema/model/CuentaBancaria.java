@@ -6,12 +6,22 @@ public class CuentaBancaria {
     private String tipo;
     private double saldo;
     private boolean activa = true;
+    private Double limiteAlerta; // Nuevo campo
 
     public CuentaBancaria(int id, int usuarioId, String tipo, double saldo) {
         this.id = id;
         this.usuarioId = usuarioId;
         this.tipo = tipo;
         this.saldo = saldo;
+    }
+
+    // Constructor extendido
+    public CuentaBancaria(int id, int usuarioId, String tipo, double saldo, Double limiteAlerta) {
+        this.id = id;
+        this.usuarioId = usuarioId;
+        this.tipo = tipo;
+        this.saldo = saldo;
+        this.limiteAlerta = limiteAlerta;
     }
 
     public int getId() {
@@ -30,6 +40,14 @@ public class CuentaBancaria {
         return saldo;
     }
 
+    public boolean isActiva() {
+        return activa;
+    }
+
+    public Double getLimiteAlerta() {
+        return limiteAlerta;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -46,16 +64,16 @@ public class CuentaBancaria {
         this.saldo = saldo;
     }
 
-    public boolean isActiva() {
-        return activa;
-    }
-
     public void setActiva(boolean activa) {
         this.activa = activa;
     }
 
+    public void setLimiteAlerta(Double limiteAlerta) {
+        this.limiteAlerta = limiteAlerta;
+    }
+
     @Override
     public String toString() {
-        return tipo + " - Saldo: $" + String.format("%.2f", saldo);
+        return tipo + " - $" + String.format("%.2f", saldo);
     }
 }
