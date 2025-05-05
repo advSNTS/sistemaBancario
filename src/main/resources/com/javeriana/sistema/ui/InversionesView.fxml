@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="root"
+      xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.javeriana.sistema.controller.InversionesController"
+      spacing="20" alignment="CENTER" style="-fx-padding: 20;">
+
+    <Label text="Gestión de Inversiones" style="-fx-font-size: 18px;"/>
+
+    <TabPane fx:id="tabPaneInversiones" prefWidth="600" prefHeight="400">
+        <tabs>
+            <Tab text="Abrir Inversión">
+                <fx:include fx:id="incluirAbrirInversion" source="AbrirInversionView.fxml"/>
+            </Tab>
+            <Tab text="Simular Finalización">
+                <VBox alignment="CENTER" spacing="10" style="-fx-padding: 20;">
+                    <Button text="Simular Paso del Tiempo"
+                            onAction="#simularFinalizacion"
+                            style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+                    <Label fx:id="lblResultadoSimulacion" text=""/>
+                </VBox>
+            </Tab>
+        </tabs>
+    </TabPane>
+</VBox>

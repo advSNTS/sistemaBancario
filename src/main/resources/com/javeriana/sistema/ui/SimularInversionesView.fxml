@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.javeriana.sistema.controller.SimularInversionesController"
+      spacing="15" alignment="CENTER" style="-fx-padding: 20;">
+
+    <Label text="Simular Finalización de Inversiones" style="-fx-font-size: 18px;"/>
+
+    <Button text="Ejecutar Simulación"
+            fx:id="btnSimular"
+            onAction="#simularInversiones"
+            style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
+
+    <Label fx:id="lblResultado" text="" style="-fx-font-weight: bold;"/>
+</VBox>

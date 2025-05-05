@@ -48,6 +48,9 @@
         <Button text="Gestionar Tarjetas" onAction="#abrirGestionTarjetas"
                 style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;"/>
 
+        <Button text="Inversiones" onAction="#abrirInversiones"
+                style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;"/>
+
 
     </VBox>
 

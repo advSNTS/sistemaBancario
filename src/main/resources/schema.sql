@@ -64,4 +64,13 @@ CREATE TABLE IF NOT EXISTS tarjetas (
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 );
 
-
+CREATE TABLE IF NOT EXISTS inversiones (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    cuenta_id INT NOT NULL,
+    monto DOUBLE NOT NULL,
+    plazo_meses INT NOT NULL,
+    interes DOUBLE NOT NULL,
+    fecha_inicio DATE NOT NULL,
+    finalizada BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (cuenta_id) REFERENCES cuentas_bancarias(id)
+);

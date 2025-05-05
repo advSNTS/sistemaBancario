@@ -218,4 +218,20 @@ public class DashboardController {
             mostrarAlerta("Error", "No se pudo abrir la gestión de tarjetas.");
         }
     }
+
+    @FXML
+    private void abrirInversiones() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/ui/InversionesView.fxml"));
+            Parent root = loader.load();
+            InversionesController controller = loader.getController();
+            controller.setUsuarioId(usuarioAutenticado.getId());
+            Stage stage = new Stage();
+            stage.setTitle("Inversiones y Ahorros");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

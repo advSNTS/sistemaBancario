@@ -46,7 +46,16 @@ public class CuentaBancaria {
         this.saldo = saldo;
     }
 
-    public boolean isActiva() { return activa; }
+    public boolean isActiva() {
+        return activa;
+    }
 
-    public void setActiva(boolean activa) { this.activa = activa; }
+    public void setActiva(boolean activa) {
+        this.activa = activa;
+    }
+
+    @Override
+    public String toString() {
+        return tipo + " - Saldo: $" + String.format("%.2f", saldo);
+    }
 }

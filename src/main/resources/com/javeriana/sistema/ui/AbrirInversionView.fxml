@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.javeriana.sistema.controller.AbrirInversionController"
+      spacing="15" alignment="CENTER" style="-fx-padding: 20;">
+
+    <Label text="Abrir Cuenta de Inversión" style="-fx-font-size: 18px;"/>
+
+    <ComboBox fx:id="comboCuentas" promptText="Seleccione una cuenta" prefWidth="250"/>
+
+    <TextField fx:id="txtMonto" promptText="Monto a invertir" prefWidth="250"/>
+
+    <ComboBox fx:id="comboPlazo" promptText="Plazo" prefWidth="250"/>
+
+    <Button fx:id="btnSimular" text="Simular y Confirmar Inversión"
+            onAction="#simularInversion"
+            style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+
+    <Label fx:id="lblResultado" text="" style="-fx-font-weight: bold;"/>
+</VBox>
