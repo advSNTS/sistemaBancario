@@ -7,31 +7,48 @@ import java.sql.*;
 
 public class DBConnection {
 
-    private static final String URL = "jdbc:h2:~/sistema_db;AUTO_SERVER=TRUE";
-    private static final String USER = "sa";
-    private static final String PASSWORD = "";
+    private static Connection conexion;
+    private static boolean esModoPrueba = false;
     private static boolean yaMostroMensaje = false;
 
-    // Siempre devuelve una nueva conexión para evitar errores de conexión cerrada
-    public static Connection getInstance() throws SQLException {
-        try {
-            Class.forName("org.h2.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        if (!yaMostroMensaje) {
-            System.out.println("Conexión a la BD establecida en " + URL);
-            yaMostroMensaje = true;
-        }
-        return DriverManager.getConnection(URL, USER, PASSWORD);
+    public static void activarModoPrueba() {
+        esModoPrueba = true;
+        conexion = null; // Reiniciar para que se cree una nueva conexión
     }
 
-    // Ejecutar el script solo 1 vez desde HelloApplication
-    public static void ejecutarScript() {
-        try (Connection conn = getInstance()) {
-            InputStream inputStream = DBConnection.class.getClassLoader().getResourceAsStream("schema.sql");
+    public static Connection getInstance() {
+        if (conexion == null) {
+            try {
+                Class.forName("org.h2.Driver");
+
+                String url = esModoPrueba
+                        ? "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1"
+                        : "jdbc:h2:~/sistema_db;AUTO_SERVER=TRUE";
+
+                conexion = DriverManager.getConnection(url, "sa", "");
+
+                if (!yaMostroMensaje) {
+                    System.out.println("Conexión a la BD " + (esModoPrueba ? "de prueba" : "real") + " establecida.");
+                    yaMostroMensaje = true;
+                }
+
+                ejecutarScript(conexion);
+
+            } catch (ClassNotFoundException | SQLException e) {
+                e.printStackTrace();
+                System.out.println("Error al conectar a la BD.");
+            }
+        }
+        return conexion;
+    }
+
+    public static void ejecutarScript(Connection conexion) {
+        try {
+            String scriptPath = esModoPrueba ? "test-schema.sql" : "schema.sql";
+            InputStream inputStream = DBConnection.class.getClassLoader().getResourceAsStream(scriptPath);
+
             if (inputStream == null) {
-                System.out.println("No se encontró el archivo schema.sql");
+                System.out.println("No se encontró el archivo " + scriptPath);
                 return;
             }
 
@@ -43,12 +60,18 @@ public class DBConnection {
             }
             reader.close();
 
-            Statement stmt = conn.createStatement();
+            Statement stmt = conexion.createStatement();
             stmt.execute(sql.toString());
-            System.out.println("Tablas creadas exitosamente.");
+            stmt.close();
+
+            System.out.println("Script " + scriptPath + " ejecutado exitosamente.");
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error al ejecutar el script SQL.");
         }
     }
+    public static void ejecutarScript() {
+        ejecutarScript(getInstance());
+    }
+
 }
