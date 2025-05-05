@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.javeriana.sistema.controller.SoporteController"
+      spacing="15" alignment="CENTER" style="-fx-padding: 20;">
+
+    <Label text="Soporte al Cliente - Preguntas Frecuentes"
+           style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+    <ComboBox fx:id="comboPreguntas"
+              promptText="Seleccione una pregunta"
+              prefWidth="400" />
+
+    <TextArea fx:id="areaRespuesta"
+              editable="false"
+              wrapText="true"
+              prefWidth="500"
+              prefHeight="200"
+              style="-fx-border-color: #90CAF9; -fx-border-radius: 5; -fx-padding: 10;"/>
+</VBox>

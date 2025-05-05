@@ -56,6 +56,10 @@
 
     <Separator />
 
+    <Button text="Soporte al Cliente" onAction="#abrirSoporte"
+            style="-fx-background-color: #43A047; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;"/>
+
+
     <Button fx:id="cerrarSesionButton" text="Cerrar Sesión"
             onAction="#cerrarSesion"
             style="-fx-background-color: #D32F2F; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;" />
