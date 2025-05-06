@@ -15,4 +15,20 @@ import java.sql.Statement;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class LoginTest {
+    private UsuarioService usuarioService;
+
+    @BeforeEach
+    void setUp(){
+        DBConnection.activarModoPrueba();
+        DBConnection.getInstance();
+        usuarioService = new UsuarioService();
+
+        Usuario usuario = new Usuario(1, "Juan", "juan@mail.com", "fundamentos123");
+        usuario.setCedula("12345678");
+        usuario.setPreguntaSecreta("¿Ciudad?");
+        usuario.setRespuestaSecreta("Bogotá");
+
+        usuarioService.registrarUsuario(usuario);
+    }
+    
 }
