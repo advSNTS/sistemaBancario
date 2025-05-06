@@ -13,7 +13,7 @@ public class DBConnection {
 
     public static void activarModoPrueba() {
         esModoPrueba = true;
-        conexion = null; // Reiniciar para que se cree una nueva conexión
+        conexion = null;
     }
 
     public static Connection getInstance() {
