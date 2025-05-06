@@ -14,7 +14,7 @@ public class LoginTest {
     private UsuarioService usuarioService;
 
     @BeforeEach
-    void setUp(){
+    void iniciacion(){
         DBConnection.activarModoPrueba();
         DBConnection.getInstance();
         usuarioService = new UsuarioService();
