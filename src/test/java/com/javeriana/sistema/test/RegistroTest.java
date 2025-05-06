@@ -15,10 +15,7 @@ public class RegistroTest {
 
     @BeforeEach
     void setUp() {
-        // Activar modo de prueba (usa BD en memoria)
         DBConnection.activarModoPrueba();
-
-        // Inicializar servicio
         usuarioService = new UsuarioService();
     }
 
