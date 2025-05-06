@@ -3,10 +3,7 @@ package com.javeriana.sistema.util;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class DBConnection {
 
@@ -15,26 +12,21 @@ public class DBConnection {
     private static final String PASSWORD = "";
     private static boolean yaMostroMensaje = false;
 
-    private static Connection conexion;
-
-    public static Connection getInstance() {
+    // Siempre devuelve una nueva conexión para evitar errores de conexión cerrada
+    public static Connection getInstance() throws SQLException {
         try {
-            if (conexion == null || conexion.isClosed()) {
-                Class.forName("org.h2.Driver");
-                conexion = DriverManager.getConnection(URL, USER, PASSWORD);
-                if (!yaMostroMensaje) {
-                    System.out.println("Conexión a la BD establecida en " + URL);
-                    yaMostroMensaje = true;
-                }
-            }
-        } catch (ClassNotFoundException | SQLException e) {
+            Class.forName("org.h2.Driver");
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
-            System.out.println("Error al conectar a la BD.");
         }
-        return conexion;
+        if (!yaMostroMensaje) {
+            System.out.println("Conexión a la BD establecida en " + URL);
+            yaMostroMensaje = true;
+        }
+        return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 
-    // Ahora es público para que se ejecute una sola vez desde HelloApplication
+    // Ejecutar el script solo 1 vez desde HelloApplication
     public static void ejecutarScript() {
         try (Connection conn = getInstance()) {
             InputStream inputStream = DBConnection.class.getClassLoader().getResourceAsStream("schema.sql");

@@ -9,6 +9,7 @@
       spacing="15" alignment="CENTER" style="-fx-background-color: #e3f2fd; -fx-padding: 20;">
 
     <Label fx:id="lblSaldo" text="Saldo Actual: $" style="-fx-font-size: 16px;" />
+    <Label fx:id="lblLimiteAlerta" text="Límite de Alerta: $" style="-fx-font-size: 14px;"/>
 
     <TextField fx:id="txtMonto" promptText="Ingrese el monto..." />
 

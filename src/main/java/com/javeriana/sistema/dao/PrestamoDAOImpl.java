@@ -9,7 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PrestamoDAOImpl implements PrestamoDAO {
-    private Connection conexion = DBConnection.getInstance();
+    private Connection conexion;
+
+    public PrestamoDAOImpl() {
+        try {
+            this.conexion = DBConnection.getInstance();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void guardar(Prestamo prestamo) {

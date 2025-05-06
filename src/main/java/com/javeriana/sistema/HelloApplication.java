@@ -11,12 +11,13 @@ public class HelloApplication extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        // Ejecutar el script de base de datos solo una vez
+        // Ejecutar script SQL una única vez al iniciar la aplicación
         DBConnection.ejecutarScript();
 
-        // Ejecutar pagos programados pendientes al iniciar
+        // Iniciar ejecución periódica de pagos programados
         new EjecutorPagosProgramados().iniciar();
 
+        // Cargar vista principal
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/ui/WelcomeView.fxml"));
         Scene scene = new Scene(loader.load());
         stage.setTitle("Sistema Bancario");

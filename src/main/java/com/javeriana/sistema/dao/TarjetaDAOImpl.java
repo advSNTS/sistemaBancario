@@ -9,7 +9,15 @@ import java.util.List;
 
 public class TarjetaDAOImpl implements TarjetaDAO {
 
-    private final Connection conexion = DBConnection.getInstance();
+    private Connection conexion;
+
+    public TarjetaDAOImpl() {
+        try {
+            this.conexion = DBConnection.getInstance();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void guardar(Tarjeta tarjeta) {

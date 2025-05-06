@@ -82,6 +82,18 @@ public class TransferenciaPersonaPersonaController {
                 return;
             }
 
+            // ✅ Validar límite de alerta
+            if (origen.getLimiteAlerta() != null && monto >= origen.getLimiteAlerta()) {
+                Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+                confirmacion.setTitle("Confirmar Transferencia");
+                confirmacion.setHeaderText("El monto supera el límite de alerta configurado: $" + origen.getLimiteAlerta());
+                confirmacion.setContentText("¿Desea continuar con la transferencia de $" + monto + "?");
+
+                if (confirmacion.showAndWait().orElse(ButtonType.CANCEL) != ButtonType.OK) {
+                    return; // Se cancela la operación
+                }
+            }
+
             // Buscar usuario destino por cédula
             Usuario destinatario = usuarioService.buscarPorCedula(cedulaDestino);
             if (destinatario == null) {

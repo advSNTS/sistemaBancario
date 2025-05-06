@@ -8,7 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UsuarioDAOImpl implements UsuarioDAO {
-    private final Connection conexion = DBConnection.getInstance();
+    private Connection conexion;
+
+    public UsuarioDAOImpl() {
+        try {
+            this.conexion = DBConnection.getInstance();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void guardar(Usuario usuario) {

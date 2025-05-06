@@ -9,7 +9,15 @@ import java.util.List;
 
 public class InversionDAOImpl implements InversionDAO {
 
-    private final Connection conexion = DBConnection.getInstance();
+    private Connection conexion;
+
+    public InversionDAOImpl() {
+        try {
+            this.conexion = DBConnection.getInstance();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void guardar(Inversion inversion) {

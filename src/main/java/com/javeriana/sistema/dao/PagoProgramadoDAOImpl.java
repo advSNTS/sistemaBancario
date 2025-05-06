@@ -10,7 +10,15 @@ import java.util.List;
 
 public class PagoProgramadoDAOImpl implements PagoProgramadoDAO {
 
-    private final Connection conexion = DBConnection.getInstance();
+    private Connection conexion;
+
+    public PagoProgramadoDAOImpl() {
+        try {
+            this.conexion = DBConnection.getInstance();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void guardar(PagoProgramado pago) {

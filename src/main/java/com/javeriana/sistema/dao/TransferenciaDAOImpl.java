@@ -8,7 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TransferenciaDAOImpl implements TransferenciaDAO {
-    private final Connection conexion = DBConnection.getInstance();
+    private Connection conexion;
+
+    public TransferenciaDAOImpl() {
+        try {
+            this.conexion = DBConnection.getInstance();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void registrar(Transferencia t) {
