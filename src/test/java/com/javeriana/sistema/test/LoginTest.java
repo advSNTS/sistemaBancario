@@ -16,7 +16,12 @@ public class LoginTest {
     @BeforeEach
     void iniciacion(){
         DBConnection.activarModoPrueba();
-        DBConnection.getInstance();
+        try {
+            DBConnection.getInstance();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         usuarioService = new UsuarioService();
 
         Usuario usuario = new Usuario(1, "Juan", "juan@mail.com", "fundamentos123");

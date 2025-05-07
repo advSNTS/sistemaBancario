@@ -16,7 +16,7 @@ public class DBConnection {
         conexion = null;
     }
 
-    public static Connection getInstance() {
+    public static Connection getInstance() throws SQLException{
         if (conexion == null) {
             try {
                 Class.forName("org.h2.Driver");
@@ -71,7 +71,11 @@ public class DBConnection {
         }
     }
     public static void ejecutarScript() {
-        ejecutarScript(getInstance());
+        try {
+            ejecutarScript(getInstance());
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 }
