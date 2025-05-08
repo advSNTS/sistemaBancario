@@ -13,6 +13,7 @@ public class RegistroTest {
 
     private UsuarioService usuarioService;
 
+    //comentario
     @BeforeEach
     void setUp() {
         DBConnection.activarModoPrueba();
