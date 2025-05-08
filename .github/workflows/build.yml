@@ -1,0 +1,23 @@
+name: Compilación y Test
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  build:
+    permissions: write-all
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Configurar JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '22'
+          distribution: 'corretto'
+      - name: Compilar
+        run: mvn --batch-mode -DskipTests compile
+        
