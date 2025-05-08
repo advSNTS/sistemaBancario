@@ -22,3 +22,7 @@ jobs:
         run: mvn --batch-mode -DskipTests compile
       - name: Test
         run: mvn --batch-mode test
+      - name: Reporte de pruebas
+        uses: mikepenz/action-junit-report@v5
+        with:
+          report_paths: 'target/surefire-reports/TEST-*.xml'
