@@ -7,48 +7,78 @@ import java.sql.*;
 
 public class DBConnection {
 
-    private static Connection conexion;
+    private static final String PRODUCTION_URL = "jdbc:h2:~/sistema_db;AUTO_SERVER=TRUE";
+    private static final String TEST_URL = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1";
+
+    private static final String USER = "sa";
+    private static final String PASSWORD = "";
+
     private static boolean esModoPrueba = false;
     private static boolean yaMostroMensaje = false;
 
+
     public static void activarModoPrueba() {
         esModoPrueba = true;
-        conexion = null;
+        yaMostroMensaje = false;
+        System.out.println("Modo de prueba activado.");
     }
 
-    public static Connection getInstance() throws SQLException{
-        if (conexion == null) {
-            try {
-                Class.forName("org.h2.Driver");
 
-                String url = esModoPrueba
-                        ? "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1"
-                        : "jdbc:h2:~/sistema_db;AUTO_SERVER=TRUE";
+    public static Connection getInstance() throws SQLException {
+        String currentUrl;
+        String modeDescription;
 
-                conexion = DriverManager.getConnection(url, "sa", "");
 
-                if (!yaMostroMensaje) {
-                    System.out.println("Conexión a la BD " + (esModoPrueba ? "de prueba" : "real") + " establecida.");
-                    yaMostroMensaje = true;
-                }
-
-                ejecutarScript(conexion);
-
-            } catch (ClassNotFoundException | SQLException e) {
-                e.printStackTrace();
-                System.out.println("Error al conectar a la BD.");
-            }
+        if (esModoPrueba) {
+            currentUrl = TEST_URL;
+            modeDescription = "de prueba (en memoria)";
+        } else {
+            currentUrl = PRODUCTION_URL;
+            modeDescription = "real (archivo)";
         }
-        return conexion;
+
+        try {
+            Class.forName("org.h2.Driver");
+
+
+            Connection conn = DriverManager.getConnection(currentUrl, USER, PASSWORD);
+
+
+            if (!yaMostroMensaje) {
+                System.out.println("Conexión a la BD " + modeDescription + " establecida en " + currentUrl);
+                yaMostroMensaje = true; // Mark message as shown for this mode
+            }
+
+            return conn;
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            System.err.println("Error: H2 database driver not found. Make sure the H2 JAR is in your classpath.");
+
+            throw new SQLException("Database driver not found", e);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error al conectar a la BD " + modeDescription + ".");
+            throw e;
+        }
     }
 
-    public static void ejecutarScript(Connection conexion) {
-        try {
-            String scriptPath = esModoPrueba ? "test-schema.sql" : "schema.sql";
+    public static void ejecutarScript() {
+        String scriptPath;
+        String modeDescription;
+        if (esModoPrueba) {
+            scriptPath = "test-schema.sql";
+            modeDescription = "de prueba";
+        } else {
+            scriptPath = "schema.sql";
+            modeDescription = "real";
+        }
+        try (Connection conn = getInstance()) {
             InputStream inputStream = DBConnection.class.getClassLoader().getResourceAsStream(scriptPath);
 
             if (inputStream == null) {
-                System.out.println("No se encontró el archivo " + scriptPath);
+                System.err.println("Error: No se encontró el archivo " + scriptPath + " en el classpath.");
+                System.out.println("Skipping script execution.");
                 return;
             }
 
@@ -59,23 +89,18 @@ public class DBConnection {
                 sql.append(linea).append("\n");
             }
             reader.close();
-
-            Statement stmt = conexion.createStatement();
+            Statement stmt = conn.createStatement();
             stmt.execute(sql.toString());
             stmt.close();
 
-            System.out.println("Script " + scriptPath + " ejecutado exitosamente.");
+            System.out.println("Script " + scriptPath + " (" + modeDescription + ") ejecutado exitosamente.");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error de SQL al ejecutar el script " + scriptPath + ".");
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Error al ejecutar el script SQL.");
+            System.err.println("Error general al ejecutar el script " + scriptPath + ".");
         }
     }
-    public static void ejecutarScript() {
-        try {
-            ejecutarScript(getInstance());
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
 }

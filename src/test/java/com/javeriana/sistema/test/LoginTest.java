@@ -16,12 +16,7 @@ public class LoginTest {
     @BeforeEach
     void iniciacion(){
         DBConnection.activarModoPrueba();
-        try {
-            DBConnection.getInstance();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
+        DBConnection.ejecutarScript();
         usuarioService = new UsuarioService();
 
         Usuario usuario = new Usuario(1, "Juan", "juan@mail.com", "fundamentos123");
@@ -29,7 +24,12 @@ public class LoginTest {
         usuario.setPreguntaSecreta("¿Ciudad?");
         usuario.setRespuestaSecreta("Bogotá");
 
-        usuarioService.registrarUsuario(usuario);
+        try {
+            usuarioService.registrarUsuario(usuario);
+        } catch (Exception e) {
+            System.err.println("Error al registrar usuario en el BeforeEach: " + e.getMessage());
+        }
+
     }
 
     @Test
