@@ -170,9 +170,20 @@ public class TransferenciaServiceTest {
         assertEquals(11000, cuentaBancariaService.obtenerCuentasDeUsuario(1).getFirst().getSaldo());
         assertEquals(7000, cuentaBancariaService.obtenerCuentasDeUsuario(2).getFirst().getSaldo());
         transferenciaService.realizarTransferencia(1, 3, 1000);
-        
-        System.out.println(transferenciaService.obtenerTransferenciasPorUsuario(1).toString());
-        System.out.println(transferenciaService.obtenerTransferenciasPorUsuario(2).toString());
+        assertEquals(10000, cuentaBancariaService.obtenerCuentasDeUsuario(1).getFirst().getSaldo());
+        assertEquals(2000, cuentaBancariaService.obtenerCuentasDeUsuario(1).get(1).getSaldo());
+
+
+
+        List<Transferencia> transferenciasUsuario1 = transferenciaService.obtenerTransferenciasPorUsuario(1);
+        List<Transferencia> transferenciasUsuario2 = transferenciaService.obtenerTransferenciasPorUsuario(2);
+
+        System.out.println(transferenciasUsuario2.toString());
+
+        assertEquals(16000, Objects.requireNonNull(findById(2, transferenciasUsuario1)).getMonto());
+        assertEquals(1000, Objects.requireNonNull(findById(4, transferenciasUsuario1)).getMonto());
+        assertEquals(8000, Objects.requireNonNull(findById(1, transferenciasUsuario2)).getMonto());
+        assertEquals(11000, Objects.requireNonNull(findById(3, transferenciasUsuario2)).getMonto());
 
 
     }
