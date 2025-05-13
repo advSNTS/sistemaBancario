@@ -44,6 +44,49 @@ public class CuentaBancariaTest {
         CuentaBancaria cuentaBancaria = new CuentaBancaria(0, 1, "Ahorro", 1000, null);
         cuentaBancariaService.crearCuenta(cuentaBancaria);
         List<CuentaBancaria> cuentaBancarias = cuentaBancariaService.obtenerCuentasDeUsuario(1);
-        System.out.println(cuentaBancarias.toString());
+        CuentaBancaria cuenta = cuentaBancarias.getFirst();
+        assertEquals(1, cuenta.getId());
+        assertEquals(1, cuenta.getUsuarioId());
+        assertEquals("Ahorro", cuenta.getTipo());
+        assertEquals(1000, cuenta.getSaldo());
     }
+
+    @Test
+    public void testCrearDosCuentas(){
+        CuentaBancaria cuentaBancaria = new CuentaBancaria(0, 1, "Ahorro", 1000, null);
+        CuentaBancaria cuentaBancaria1 = new CuentaBancaria(1, 1, "Corriente", 2000, null);
+        cuentaBancariaService.crearCuenta(cuentaBancaria);
+        cuentaBancariaService.crearCuenta(cuentaBancaria1);
+        List<CuentaBancaria> cuentaBancarias = cuentaBancariaService.obtenerCuentasDeUsuario(1);
+
+        CuentaBancaria cuenta = cuentaBancarias.getFirst();
+        CuentaBancaria cuenta2 = cuentaBancarias.get(1);
+
+        assertEquals(1, cuenta.getId());
+        assertEquals(1, cuenta.getUsuarioId());
+        assertEquals("Ahorro", cuenta.getTipo());
+        assertEquals(1000, cuenta.getSaldo());
+
+        assertEquals(2, cuenta2.getId());
+        assertEquals(1, cuenta2.getUsuarioId());
+        assertEquals("Corriente", cuenta2.getTipo());
+        assertEquals(2000, cuenta2.getSaldo());
+
+    }
+
+    @Test
+    public void testCambiarSaldo(){
+        CuentaBancaria cuentaBancaria = new CuentaBancaria(0, 1, "Ahorro", 1000, null);
+        cuentaBancariaService.crearCuenta(cuentaBancaria);
+        List<CuentaBancaria> cuentaBancarias = cuentaBancariaService.obtenerCuentasDeUsuario(1);
+        CuentaBancaria cuenta1 = cuentaBancarias.getFirst();
+
+        cuentaBancariaService.actualizarSaldo(1, 2000);
+        List<CuentaBancaria> cuentaBancarias2 = cuentaBancariaService.obtenerCuentasDeUsuario(1);
+        CuentaBancaria cuenta2 = cuentaBancarias2.getFirst();
+
+        assertEquals(1000, cuenta1.getSaldo());
+        assertEquals(2000, cuenta2.getSaldo());
+    }
+
 }
