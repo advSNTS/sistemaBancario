@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.javeriana.sistema.controller.DashboardCuentasController"
+      alignment="CENTER" spacing="20" style="-fx-background-color: #F3F7FA; -fx-padding: 30;">
+
+    <Text text="Gestión de Cuentas"
+          style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-fill: #0D47A1;" />
+
+    <Button text="Crear Nueva Cuenta"
+            onAction="#abrirCrearCuenta"
+            style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px; -fx-padding: 10 30;" />
+
+    <Button text="Ver Mis Cuentas"
+            onAction="#verCuentas"
+            style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px; -fx-padding: 10 30;" />
+
+    <Button text="Volver"
+            onAction="#volver"
+            style="-fx-background-color: #D32F2F; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px; -fx-padding: 10 30;" />
+</VBox>

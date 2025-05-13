@@ -53,11 +53,11 @@ public class LoginController {
             System.out.println("Inicio de sesión exitoso para: " + usuario.getNombre());
 
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/ui/DashboardView.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/ui/DashboardCategoriasView.fxml"));
                 Parent root = loader.load();
 
-                DashboardController controller = loader.getController();
-                controller.setUsuarioAutenticado(usuario); // Pasamos el usuario al dashboard
+                DashboardCategoriasController controller = loader.getController();
+                controller.setUsuarioAutenticado(usuario); // Asegúrate que esté implementado
 
                 Stage stage = (Stage) txtCorreo.getScene().getWindow();
                 stage.setScene(new Scene(root));
@@ -66,11 +66,15 @@ public class LoginController {
 
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println("Error al cargar DashboardView.fxml");
+                System.out.println("Error al cargar DashboardCategoriasView.fxml");
             }
 
         } else {
-            System.out.println("Credenciales incorrectas.");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error de autenticación");
+            alert.setHeaderText(null);
+            alert.setContentText("Correo o contraseña incorrectos.");
+            alert.showAndWait();
         }
     }
 

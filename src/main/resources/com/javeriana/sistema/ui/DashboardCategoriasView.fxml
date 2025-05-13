@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.javeriana.sistema.controller.DashboardCategoriasController"
+      alignment="CENTER" spacing="20" style="-fx-background-color: #E3F2FD; -fx-padding: 30;">
+
+    <Text text="Categorías del Sistema Bancario"
+          style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-fill: #0D47A1;" />
+
+    <Button text="Cuentas"
+            onAction="#abrirCategoriaCuentas"
+            style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 30; -fx-font-size: 16px;" />
+
+    <Button text="Préstamos"
+            onAction="#abrirCategoriaPrestamos"
+            style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 30; -fx-font-size: 16px;" />
+
+    <Button text="Transferencias y Pagos"
+            onAction="#abrirCategoriaTransferencias"
+            style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 30; -fx-font-size: 16px;" />
+
+    <Button text="Tarjetas"
+            onAction="#abrirCategoriaTarjetas"
+            style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 30; -fx-font-size: 16px;" />
+
+    <Button text="Inversiones"
+            onAction="#abrirCategoriaInversiones"
+            style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 30; -fx-font-size: 16px;" />
+
+    <Button text="Configuraciones"
+            onAction="#abrirCategoriaSeguridad"
+            style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 30; -fx-font-size: 16px;" />
+
+    <Button text="Soporte al Cliente"
+            onAction="#abrirSoporte"
+            style="-fx-background-color: #43A047; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 30; -fx-font-size: 16px;" />
+
+    <Button fx:id="cerrarSesionButton" text="Cerrar Sesión"
+            onAction="#cerrarSesion"
+            style="-fx-background-color: #D32F2F; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 30; -fx-font-size: 16px;" />
+</VBox>

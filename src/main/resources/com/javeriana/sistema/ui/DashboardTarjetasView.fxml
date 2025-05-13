@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.javeriana.sistema.controller.DashboardTarjetasController"
+      alignment="CENTER" spacing="20" style="-fx-background-color: #F3F7FA; -fx-padding: 30;">
+
+    <Text text="Gestión de Tarjetas"
+          style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-fill: #0D47A1;" />
+
+    <Button text="Solicitar Tarjeta" onAction="#abrirSolicitarTarjeta"
+            style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 30;" />
+
+    <Button text="Ver Tarjetas" onAction="#abrirVerTarjetas"
+            style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 30;" />
+
+    <Button text="Bloquear Tarjeta" onAction="#abrirBloquearTarjeta"
+            style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 30;" />
+
+    <Button text="Desbloquear Tarjeta" onAction="#abrirDesbloquearTarjeta"
+            style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 30;" />
+
+    <Button text="Usar Tarjeta" onAction="#abrirUsarTarjeta"
+            style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 30;" />
+
+    <Button text="Pagar Deuda Tarjeta" onAction="#abrirPagarDeuda"
+            style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 30;" />
+
+    <Button text="Volver" onAction="#volver"
+            style="-fx-background-color: #D32F2F; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px; -fx-padding: 10 30;" />
+
+</VBox>
