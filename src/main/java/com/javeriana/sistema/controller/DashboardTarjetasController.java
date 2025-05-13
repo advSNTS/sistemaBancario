@@ -1,5 +1,6 @@
 package com.javeriana.sistema.controller;
 
+import com.javeriana.sistema.model.Usuario;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,33 +11,47 @@ import javafx.stage.Window;
 
 import java.io.IOException;
 
-public class DashboardTarjetasController {
+public class DashboardTarjetasController implements UsuarioAwareController {
 
-    @FXML private void abrirSolicitarTarjeta() {
+    private Usuario usuarioAutenticado;
+
+    @Override
+    public void setUsuarioAutenticado(Usuario usuario) {
+        this.usuarioAutenticado = usuario;
+    }
+
+    @FXML
+    private void abrirSolicitarTarjeta() {
         abrirModal("/com/javeriana/sistema/ui/SolicitarTarjetaView.fxml", "Solicitar Tarjeta");
     }
 
-    @FXML private void abrirVerTarjetas() {
+    @FXML
+    private void abrirVerTarjetas() {
         abrirModal("/com/javeriana/sistema/ui/VerTarjetasView.fxml", "Ver Tarjetas");
     }
 
-    @FXML private void abrirBloquearTarjeta() {
+    @FXML
+    private void abrirBloquearTarjeta() {
         abrirModal("/com/javeriana/sistema/ui/BloquearTarjetaView.fxml", "Bloquear Tarjeta");
     }
 
-    @FXML private void abrirDesbloquearTarjeta() {
+    @FXML
+    private void abrirDesbloquearTarjeta() {
         abrirModal("/com/javeriana/sistema/ui/DesbloquearTarjetaView.fxml", "Desbloquear Tarjeta");
     }
 
-    @FXML private void abrirUsarTarjeta() {
+    @FXML
+    private void abrirUsarTarjeta() {
         abrirModal("/com/javeriana/sistema/ui/UsarTarjetaView.fxml", "Usar Tarjeta");
     }
 
-    @FXML private void abrirPagarDeuda() {
+    @FXML
+    private void abrirPagarDeuda() {
         abrirModal("/com/javeriana/sistema/ui/PagarDeudaTarjetaView.fxml", "Pagar Deuda Tarjeta");
     }
 
-    @FXML private void volver() {
+    @FXML
+    private void volver() {
         Stage stage = (Stage) getCurrentWindow();
         if (stage != null) stage.close();
     }
@@ -45,6 +60,12 @@ public class DashboardTarjetasController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
+
+            // Si el controlador implementa UsuarioAwareController, pasamos el usuario autenticado
+            Object controller = loader.getController();
+            if (controller instanceof UsuarioAwareController) {
+                ((UsuarioAwareController) controller).setUsuarioAutenticado(usuarioAutenticado);
+            }
 
             Stage modalStage = new Stage();
             modalStage.initModality(Modality.APPLICATION_MODAL);

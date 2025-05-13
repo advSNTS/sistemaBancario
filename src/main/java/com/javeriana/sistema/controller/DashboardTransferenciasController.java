@@ -1,5 +1,6 @@
 package com.javeriana.sistema.controller;
 
+import com.javeriana.sistema.model.Usuario;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,26 +11,33 @@ import javafx.stage.Window;
 
 import java.io.IOException;
 
-public class DashboardTransferenciasController {
+public class DashboardTransferenciasController implements UsuarioAwareController {
+
+    private Usuario usuario;
+
+    @Override
+    public void setUsuarioAutenticado(Usuario usuario) {
+        this.usuario = usuario;
+    }
 
     @FXML
     private void abrirTransferencia() {
-        abrirModal("/com/javeriana/sistema/ui/TransferenciaPersonaPersonaView.fxml", "Transferencia a Otro Usuario");
+        abrirModalConUsuario("/com/javeriana/sistema/ui/TransferenciaPersonaPersonaView.fxml", "Transferencia a Otro Usuario");
     }
 
     @FXML
     private void abrirCrearPagoProgramado() {
-        abrirModal("/com/javeriana/sistema/ui/CrearPagoProgramadoView.fxml", "Crear Pago Programado");
+        abrirModalConUsuario("/com/javeriana/sistema/ui/CrearPagoProgramadoView.fxml", "Crear Pago Programado");
     }
 
     @FXML
     private void abrirVerPagosProgramados() {
-        abrirModal("/com/javeriana/sistema/ui/VerPagosProgramadosView.fxml", "Pagos Programados");
+        abrirModalConUsuario("/com/javeriana/sistema/ui/VerPagosProgramadosView.fxml", "Pagos Programados");
     }
 
     @FXML
     private void abrirHistorialTransferencias() {
-        abrirModal("/com/javeriana/sistema/ui/HistorialTransferenciasView.fxml", "Historial de Transferencias");
+        abrirModalConUsuario("/com/javeriana/sistema/ui/HistorialTransferenciasView.fxml", "Historial de Transferencias");
     }
 
     @FXML
@@ -38,10 +46,15 @@ public class DashboardTransferenciasController {
         if (stage != null) stage.close();
     }
 
-    private void abrirModal(String fxmlPath, String titulo) {
+    private void abrirModalConUsuario(String fxmlPath, String titulo) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
+
+            Object controller = loader.getController();
+            if (controller instanceof UsuarioAwareController) {
+                ((UsuarioAwareController) controller).setUsuarioAutenticado(usuario);
+            }
 
             Stage modalStage = new Stage();
             modalStage.initModality(Modality.APPLICATION_MODAL);

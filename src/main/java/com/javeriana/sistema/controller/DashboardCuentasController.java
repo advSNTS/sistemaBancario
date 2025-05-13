@@ -1,5 +1,6 @@
 package com.javeriana.sistema.controller;
 
+import com.javeriana.sistema.model.Usuario;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,16 +11,23 @@ import javafx.stage.Window;
 
 import java.io.IOException;
 
-public class DashboardCuentasController {
+public class DashboardCuentasController implements UsuarioAwareController {
+
+    private Usuario usuario;
+
+    @Override
+    public void setUsuarioAutenticado(Usuario usuario) {
+        this.usuario = usuario;
+    }
 
     @FXML
     private void abrirCrearCuenta() {
-        abrirVentana("/com/javeriana/sistema/ui/CrearCuentaView.fxml", "Crear Nueva Cuenta");
+        abrirVentanaConUsuario("/com/javeriana/sistema/ui/CrearCuentaView.fxml", "Crear Nueva Cuenta");
     }
 
     @FXML
     private void verCuentas() {
-        abrirVentana("/com/javeriana/sistema/ui/VerCuentasView.fxml", "Mis Cuentas");
+        abrirVentanaConUsuario("/com/javeriana/sistema/ui/VerCuentasView.fxml", "Mis Cuentas");
     }
 
     @FXML
@@ -30,10 +38,16 @@ public class DashboardCuentasController {
         }
     }
 
-    private void abrirVentana(String rutaFXML, String titulo) {
+    private void abrirVentanaConUsuario(String rutaFXML, String titulo) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(rutaFXML));
             Parent root = loader.load();
+
+            // Verificamos si el controlador implementa la interfaz para pasar el usuario
+            Object controller = loader.getController();
+            if (controller instanceof UsuarioAwareController) {
+                ((UsuarioAwareController) controller).setUsuarioAutenticado(usuario);
+            }
 
             Stage modalStage = new Stage();
             modalStage.initModality(Modality.APPLICATION_MODAL);

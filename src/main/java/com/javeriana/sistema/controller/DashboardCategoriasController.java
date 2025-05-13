@@ -18,6 +18,8 @@ public class DashboardCategoriasController {
         this.usuarioAutenticado = usuario;
     }
 
+    @FXML private javafx.scene.control.Button cerrarSesionButton;
+
     private void abrirVentanaModal(String titulo, String rutaFXML) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(rutaFXML));
@@ -34,43 +36,35 @@ public class DashboardCategoriasController {
         }
     }
 
-    @FXML
-    private void abrirCategoriaCuentas() {
+    @FXML private void abrirCategoriaCuentas() {
         abrirVentanaModal("Gestión de Cuentas", "/com/javeriana/sistema/ui/DashboardCuentasView.fxml");
     }
 
-    @FXML
-    private void abrirCategoriaPrestamos() {
+    @FXML private void abrirCategoriaPrestamos() {
         abrirVentanaModal("Gestión de Préstamos", "/com/javeriana/sistema/ui/DashboardPrestamosView.fxml");
     }
 
-    @FXML
-    private void abrirCategoriaTransferencias() {
+    @FXML private void abrirCategoriaTransferencias() {
         abrirVentanaModal("Transferencias y Pagos", "/com/javeriana/sistema/ui/DashboardTransferenciasView.fxml");
     }
 
-    @FXML
-    private void abrirCategoriaTarjetas() {
+    @FXML private void abrirCategoriaTarjetas() {
         abrirVentanaModal("Gestión de Tarjetas", "/com/javeriana/sistema/ui/DashboardTarjetasView.fxml");
     }
 
-    @FXML
-    private void abrirCategoriaInversiones() {
+    @FXML private void abrirCategoriaInversiones() {
         abrirVentanaModal("Gestión de Inversiones", "/com/javeriana/sistema/ui/DashboardInversionesView.fxml");
     }
 
-    @FXML
-    private void abrirCategoriaSeguridad() {
-        abrirVentanaModal("Configuración de Seguridad", "/com/javeriana/sistema/ui/ConfigurarLimiteView.fxml");
+    @FXML private void abrirCategoriaConfiguraciones() {
+        abrirVentanaModal("Configuraciones", "/com/javeriana/sistema/ui/DashboardConfiguracionesView.fxml");
     }
 
-    @FXML
-    private void abrirSoporte() {
+    @FXML private void abrirSoporte() {
         abrirVentanaModal("Soporte al Cliente", "/com/javeriana/sistema/ui/Soporte.fxml");
     }
 
-    @FXML
-    private void cerrarSesion() {
+    @FXML private void cerrarSesion() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/ui/LoginView.fxml"));
             Parent root = loader.load();
@@ -80,14 +74,11 @@ public class DashboardCategoriasController {
             stageLogin.setScene(new Scene(root));
             stageLogin.show();
 
-            // Cierra la ventana actual
-            Stage ventanaActual = (Stage) cerrarSesionButton.getScene().getWindow(); // usa fx:id
+            Stage ventanaActual = (Stage) cerrarSesionButton.getScene().getWindow();
             ventanaActual.close();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-    @FXML private javafx.scene.control.Button cerrarSesionButton; // Asegúrate de tener fx:id
 }
