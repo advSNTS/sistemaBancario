@@ -136,4 +136,37 @@ public class CuentaBancariaTest {
         assertEquals(0, cuenta2.getSaldo());
     }
 
+    @Test
+    public void transferirEntreCuentasTest(){
+        cuentaBancariaService.crearCuenta(new CuentaBancaria(0, 1, "Corriente", 1000, null));
+        cuentaBancariaService.crearCuenta(new CuentaBancaria(1, 1, "Ahorro", 8000, null));
+        CuentaBancaria cuenta1 = cuentaBancariaService.obtenerCuentasDeUsuario(1).getFirst();
+        CuentaBancaria cuenta2 = cuentaBancariaService.obtenerCuentasDeUsuario(1).get(1);
+        assertEquals(1000, cuenta1.getSaldo());
+        assertEquals(8000, cuenta2.getSaldo());
+
+        try{
+            cuentaBancariaService.transferirEntreCuentas(1, 2, 500);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+        CuentaBancaria cuenta11 = cuentaBancariaService.obtenerCuentasDeUsuario(1).getFirst();
+        CuentaBancaria cuenta22 = cuentaBancariaService.obtenerCuentasDeUsuario(1).get(1);
+        assertEquals(500, cuenta11.getSaldo());
+        assertEquals(8500, cuenta22.getSaldo());
+
+        try{
+            cuentaBancariaService.transferirEntreCuentas(2, 1, 8500);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        CuentaBancaria cuenta111 = cuentaBancariaService.obtenerCuentasDeUsuario(1).getFirst();
+        CuentaBancaria cuenta222 = cuentaBancariaService.obtenerCuentasDeUsuario(1).get(1);
+        assertEquals(9000, cuenta111.getSaldo());
+        assertEquals(0, cuenta222.getSaldo());
+
+    }
 }
