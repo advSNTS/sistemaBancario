@@ -89,4 +89,21 @@ public class CuentaBancariaTest {
         assertEquals(2000, cuenta2.getSaldo());
     }
 
+    @Test
+    public void testDepositar(){
+        CuentaBancaria cuentaBancaria = new CuentaBancaria(0, 1, "Ahorro", 1000, null);
+        cuentaBancariaService.crearCuenta(cuentaBancaria);
+        cuentaBancariaService.depositar(1, 5000);
+        CuentaBancaria cuentaDespuesDeTest = cuentaBancariaService.obtenerCuentasDeUsuario(1).getFirst();
+
+        assertEquals(6000, cuentaDespuesDeTest.getSaldo());
+
+        cuentaBancariaService.depositar(1, 300);
+        CuentaBancaria cuentaBancaria1 = cuentaBancariaService.obtenerCuentasDeUsuario(1).getFirst();
+
+        assertEquals(6300, cuentaBancaria1.getSaldo());
+    }
+
+
+
 }
