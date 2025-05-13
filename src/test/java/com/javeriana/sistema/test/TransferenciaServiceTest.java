@@ -44,6 +44,12 @@ public class TransferenciaServiceTest {
             System.err.println("Error al registrar usuario en el BeforeEach: " + e.getMessage());
         }
 
+        Usuario usuario11 = usuarioService.obtenerTodosLosUsuarios().getFirst();
+        Usuario usuario22 = usuarioService.obtenerTodosLosUsuarios().get(1);
+
+        System.out.println(usuario11.toString());
+        System.out.println(usuario22.toString());
+
 
     }
 
@@ -63,6 +69,32 @@ public class TransferenciaServiceTest {
         CuentaBancaria cuenta22 = cuentaBancariaService.obtenerCuentasDeUsuario(1).get(1);
         assertEquals(0, cuenta11.getSaldo());
         assertEquals(2000, cuenta22.getSaldo());
+    }
+
+
+    @Test
+    public void testTransferenciaEntreCuentasDiferenteUsuario(){
+
+        CuentaBancariaService cuentaBancariaService = new CuentaBancariaService();
+        cuentaBancariaService.crearCuenta(new CuentaBancaria(0, 1, "Ahorro", 1000, null));
+        CuentaBancaria cuenta1 = cuentaBancariaService.obtenerCuentasDeUsuario(1).getFirst();
+        cuentaBancariaService.crearCuenta(new CuentaBancaria(0, 2, "Corriente", 1000, null));
+        CuentaBancaria cuenta2 = cuentaBancariaService.obtenerCuentasDeUsuario(2).getFirst();
+
+        assertEquals(1000, cuenta1.getSaldo());
+        assertEquals(1000, cuenta2.getSaldo());
+
+        transferenciaService.realizarTransferencia(1, 2, 1000);
+
+
+        CuentaBancaria cuenta11 = cuentaBancariaService.obtenerCuentasDeUsuario(1).getFirst();
+        CuentaBancaria cuenta22 = cuentaBancariaService.obtenerCuentasDeUsuario(2).getFirst();
+
+        assertEquals(0, cuenta11.getSaldo());
+        assertEquals(2000, cuenta22.getSaldo());
+
+
+
     }
 
 }
