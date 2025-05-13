@@ -92,9 +92,26 @@ public class TransferenciaServiceTest {
 
         assertEquals(0, cuenta11.getSaldo());
         assertEquals(2000, cuenta22.getSaldo());
+    }
 
+    @Test
+    public void testMultiplesTransferenciasEntreDosUsuarios(){
+        CuentaBancariaService cuentaBancariaService = new CuentaBancariaService();
+        cuentaBancariaService.crearCuenta(new CuentaBancaria(0, 1, "Ahorro", 1000, null));
+        cuentaBancariaService.crearCuenta(new CuentaBancaria(0, 2, "Corriente", 1000, null));
 
+        assertEquals(1000, cuentaBancariaService.obtenerCuentasDeUsuario(1).getFirst().getSaldo());
+        assertEquals(1000, cuentaBancariaService.obtenerCuentasDeUsuario(2).getFirst().getSaldo());
 
+        transferenciaService.realizarTransferencia(1, 2, 500);
+        assertEquals(500, cuentaBancariaService.obtenerCuentasDeUsuario(1).getFirst().getSaldo());
+        assertEquals(1500, cuentaBancariaService.obtenerCuentasDeUsuario(2).getFirst().getSaldo());
+        transferenciaService.realizarTransferencia(1, 2, 500);
+        assertEquals(0, cuentaBancariaService.obtenerCuentasDeUsuario(1).getFirst().getSaldo());
+        assertEquals(2000, cuentaBancariaService.obtenerCuentasDeUsuario(2).getFirst().getSaldo());
+        transferenciaService.realizarTransferencia(2, 1, 1000);
+        assertEquals(1000, cuentaBancariaService.obtenerCuentasDeUsuario(1).getFirst().getSaldo());
+        assertEquals(1000, cuentaBancariaService.obtenerCuentasDeUsuario(2).getFirst().getSaldo());
     }
 
 }
