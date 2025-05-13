@@ -1,11 +1,11 @@
 CREATE TABLE IF NOT EXISTS usuarios (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100),
-    correo VARCHAR(100),
-    clave VARCHAR(100),
-    pregunta_secreta VARCHAR(255),
-    respuesta_secreta VARCHAR(255),
-    cedula VARCHAR(50)
+                          id INT AUTO_INCREMENT PRIMARY KEY,
+                          nombre VARCHAR(100),
+                          correo VARCHAR(100),
+                          clave VARCHAR(100),
+                          pregunta_secreta VARCHAR(255),
+                          respuesta_secreta VARCHAR(255),
+                          cedula VARCHAR(50)
 );
 
 CREATE TABLE IF NOT EXISTS cuentas_bancarias (

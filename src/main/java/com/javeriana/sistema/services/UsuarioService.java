@@ -1,62 +1,62 @@
-package com.javeriana.sistema.services;
+    package com.javeriana.sistema.services;
 
-import com.javeriana.sistema.dao.UsuarioDAO;
-import com.javeriana.sistema.dao.UsuarioDAOImpl;
-import com.javeriana.sistema.model.Usuario;
+    import com.javeriana.sistema.dao.UsuarioDAO;
+    import com.javeriana.sistema.dao.UsuarioDAOImpl;
+    import com.javeriana.sistema.model.Usuario;
 
 
-import java.util.List;
+    import java.util.List;
 
-public class UsuarioService {
-    private UsuarioDAO usuarioDAO = new UsuarioDAOImpl();
+    public class UsuarioService {
+        private UsuarioDAO usuarioDAO = new UsuarioDAOImpl();
 
-    //Metodo actualizado para recibir directamente el objeto Usuario
-    public void registrarUsuario(Usuario usuario) {
-        usuarioDAO.guardar(usuario);
-        System.out.println("Usuario registrado correctamente.");
-    }
-
-    public Usuario autenticarUsuario(String correo, String clave) {
-        List<Usuario> usuarios = usuarioDAO.listarTodos();
-        for (Usuario u : usuarios) {
-            if (u.getCorreo().equals(correo) && u.getClave().equals(clave)) {
-                return u;
-            }
+        //Metodo actualizado para recibir directamente el objeto Usuario
+        public void registrarUsuario(Usuario usuario) {
+            usuarioDAO.guardar(usuario);
+            System.out.println("Usuario registrado correctamente.");
         }
-        return null;
-    }
 
-    // Obtener todos los usuarios (opcional para otras vistas)
-    public List<Usuario> obtenerTodosLosUsuarios() {
-        return usuarioDAO.listarTodos();
-    }
-
-    // Autenticación para el login
-    public Usuario autenticar(String correo, String clave) {
-        List<Usuario> usuarios = usuarioDAO.listarTodos();
-        for (Usuario u : usuarios) {
-            if (u.getCorreo().equals(correo) && u.getClave().equals(clave)) {
-                return u;
+        public Usuario autenticarUsuario(String correo, String clave) {
+            List<Usuario> usuarios = usuarioDAO.listarTodos();
+            for (Usuario u : usuarios) {
+                if (u.getCorreo().equals(correo) && u.getClave().equals(clave)) {
+                    return u;
+                }
             }
+            return null;
         }
-        return null;
-    }
 
-    public Usuario buscarPorCorreo(String correo) {
-        // Metodo que busque en la BD el usuario dado un correo.
-        return usuarioDAO.buscarPorCorreo(correo);
-    }
+        // Obtener todos los usuarios (opcional para otras vistas)
+        public List<Usuario> obtenerTodosLosUsuarios() {
+            return usuarioDAO.listarTodos();
+        }
 
-    public void actualizarUsuario(Usuario usuario) {
+        // Autenticación para el login
+        public Usuario autenticar(String correo, String clave) {
+            List<Usuario> usuarios = usuarioDAO.listarTodos();
+            for (Usuario u : usuarios) {
+                if (u.getCorreo().equals(correo) && u.getClave().equals(clave)) {
+                    return u;
+                }
+            }
+            return null;
+        }
 
-        usuarioDAO.actualizar(usuario);
-    }
+        public Usuario buscarPorCorreo(String correo) {
+            // Metodo que busque en la BD el usuario dado un correo.
+            return usuarioDAO.buscarPorCorreo(correo);
+        }
 
-    public void actualizarClavePorCorreo(String correo, String nuevaClave) {
-        usuarioDAO.actualizarClavePorCorreo(correo, nuevaClave);
-    }
+        public void actualizarUsuario(Usuario usuario) {
 
-    public Usuario buscarPorCedula(String cedula) {
-        return usuarioDAO.buscarPorCedula(cedula);
+            usuarioDAO.actualizar(usuario);
+        }
+
+        public void actualizarClavePorCorreo(String correo, String nuevaClave) {
+            usuarioDAO.actualizarClavePorCorreo(correo, nuevaClave);
+        }
+
+        public Usuario buscarPorCedula(String cedula) {
+            return usuarioDAO.buscarPorCedula(cedula);
+        }
     }
-}
