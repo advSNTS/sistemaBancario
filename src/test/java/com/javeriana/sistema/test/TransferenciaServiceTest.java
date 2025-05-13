@@ -9,6 +9,8 @@ import com.javeriana.sistema.util.DBConnection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class TransferenciaServiceTest {
     private TransferenciaService transferenciaService;
 
@@ -31,6 +33,17 @@ public class TransferenciaServiceTest {
             System.err.println("Error al registrar usuario en el BeforeEach: " + e.getMessage());
         }
 
+        Usuario usuario1 = new Usuario(2, "Santiago", "santiago@mail.com", "casa123");
+        usuario1.setCedula("456789");
+        usuario1.setPreguntaSecreta("¿Ciudad?");
+        usuario1.setRespuestaSecreta("Barranquilla");
+
+        try{
+            usuarioService.registrarUsuario(usuario1);
+        }catch (Exception e){
+            System.err.println("Error al registrar usuario en el BeforeEach: " + e.getMessage());
+        }
+
 
     }
 
@@ -42,11 +55,14 @@ public class TransferenciaServiceTest {
         cuentaBancariaService.crearCuenta(new CuentaBancaria(1, 1, "Corriente", 1000, null));
         CuentaBancaria cuenta2 = cuentaBancariaService.obtenerCuentasDeUsuario(1).get(1);
 
+        assertEquals(1000, cuenta1.getSaldo());
+        assertEquals(1000, cuenta2.getSaldo());
+
         transferenciaService.realizarTransferencia(1, 2, 1000);
         CuentaBancaria cuenta11 = cuentaBancariaService.obtenerCuentasDeUsuario(1).getFirst();
         CuentaBancaria cuenta22 = cuentaBancariaService.obtenerCuentasDeUsuario(1).get(1);
-        System.out.println(cuenta11.toString());
-        System.out.println(cuenta22.toString());
+        assertEquals(0, cuenta11.getSaldo());
+        assertEquals(2000, cuenta22.getSaldo());
     }
 
 }
