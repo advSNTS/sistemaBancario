@@ -104,6 +104,21 @@ public class CuentaBancariaTest {
         assertEquals(6300, cuentaBancaria1.getSaldo());
     }
 
+    @Test
+    public void testActualizarSaldo(){
+        CuentaBancaria cuentaBancaria = new CuentaBancaria(0, 1, "Ahorro", 1000, null);
+        cuentaBancariaService.crearCuenta(cuentaBancaria);
+        CuentaBancaria cuenta = cuentaBancariaService.obtenerCuentasDeUsuario(1).getFirst();
+        assertEquals(1000, cuenta.getSaldo());
+
+        cuentaBancariaService.actualizarSaldo(1, 99999);
+
+        cuentaBancariaService.crearCuenta(cuentaBancaria);
+        CuentaBancaria cuentaDespuesDeTest = cuentaBancariaService.obtenerCuentasDeUsuario(1).getFirst();
+
+        assertEquals(99999, cuentaDespuesDeTest.getSaldo());
+        
+    }
 
 
 }
