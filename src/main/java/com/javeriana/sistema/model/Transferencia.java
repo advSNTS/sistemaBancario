@@ -56,4 +56,17 @@ public class Transferencia {
     public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
+
+    @Override
+    public String toString() {
+        return "Transferencia{" +
+                "id=" + id +
+                ", cuentaOrigenId=" + cuentaOrigenId +
+                ", cuentaDestinoId=" + cuentaDestinoId +
+                ", monto=" + monto +
+                ", fecha=" + fecha +
+                '}';
+    }
 }
+
+

@@ -1,6 +1,7 @@
 package com.javeriana.sistema.test;
 
 import com.javeriana.sistema.model.CuentaBancaria;
+import com.javeriana.sistema.model.Transferencia;
 import com.javeriana.sistema.model.Usuario;
 import com.javeriana.sistema.services.CuentaBancariaService;
 import com.javeriana.sistema.services.TransferenciaService;
@@ -8,6 +9,9 @@ import com.javeriana.sistema.services.UsuarioService;
 import com.javeriana.sistema.util.DBConnection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -112,6 +116,41 @@ public class TransferenciaServiceTest {
         transferenciaService.realizarTransferencia(2, 1, 1000);
         assertEquals(1000, cuentaBancariaService.obtenerCuentasDeUsuario(1).getFirst().getSaldo());
         assertEquals(1000, cuentaBancariaService.obtenerCuentasDeUsuario(2).getFirst().getSaldo());
+    }
+
+    @Test
+    public void testObtenerTransferenciasBancarias(){
+        CuentaBancariaService cuentaBancariaService = new CuentaBancariaService();
+        cuentaBancariaService.crearCuenta(new CuentaBancaria(0, 1, "Ahorro", 1000, null));
+        cuentaBancariaService.crearCuenta(new CuentaBancaria(0, 2, "Corriente", 1000, null));
+
+        assertEquals(1000, cuentaBancariaService.obtenerCuentasDeUsuario(1).getFirst().getSaldo());
+        assertEquals(1000, cuentaBancariaService.obtenerCuentasDeUsuario(2).getFirst().getSaldo());
+
+        transferenciaService.realizarTransferencia(1, 2, 500);
+        assertEquals(500, cuentaBancariaService.obtenerCuentasDeUsuario(1).getFirst().getSaldo());
+        assertEquals(1500, cuentaBancariaService.obtenerCuentasDeUsuario(2).getFirst().getSaldo());
+        transferenciaService.realizarTransferencia(1, 2, 500);
+        assertEquals(0, cuentaBancariaService.obtenerCuentasDeUsuario(1).getFirst().getSaldo());
+        assertEquals(2000, cuentaBancariaService.obtenerCuentasDeUsuario(2).getFirst().getSaldo());
+        transferenciaService.realizarTransferencia(2, 1, 1000);
+        assertEquals(1000, cuentaBancariaService.obtenerCuentasDeUsuario(1).getFirst().getSaldo());
+        assertEquals(1000, cuentaBancariaService.obtenerCuentasDeUsuario(2).getFirst().getSaldo());
+
+        List<Transferencia> transferenciaLIst = transferenciaService.obtenerTransferenciasDeCuenta(1);
+        assertEquals(500, Objects.requireNonNull(findById(1, transferenciaLIst)).getMonto());
+        assertEquals(500, Objects.requireNonNull(findById(2, transferenciaLIst)).getMonto());
+        assertEquals(1000, Objects.requireNonNull(findById(3, transferenciaLIst)).getMonto());
+        
+    }
+
+    private Transferencia findById(int id, List<Transferencia> transferencias){
+        for(Transferencia t : transferencias){
+            if(t.getId()==id){
+                return t;
+            }
+        }
+        return null;
     }
 
 }
