@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS transferencias;
 DROP TABLE IF EXISTS cuentas_bancarias;
 DROP TABLE IF EXISTS usuarios;
 
@@ -20,3 +21,13 @@ CREATE TABLE IF NOT EXISTS cuentas_bancarias (
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
     );
 
+
+CREATE TABLE IF NOT EXISTS transferencias (
+                                              id INT AUTO_INCREMENT PRIMARY KEY,
+                                              cuenta_origen_id INT NOT NULL,
+                                              cuenta_destino_id INT NOT NULL,
+                                              monto DECIMAL(10,2) NOT NULL CHECK (monto > 0),
+    fecha TIMESTAMP NOT NULL,
+    FOREIGN KEY (cuenta_origen_id) REFERENCES cuentas_bancarias(id),
+    FOREIGN KEY (cuenta_destino_id) REFERENCES cuentas_bancarias(id)
+    );
