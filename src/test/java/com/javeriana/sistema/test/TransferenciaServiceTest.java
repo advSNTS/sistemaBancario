@@ -141,7 +141,40 @@ public class TransferenciaServiceTest {
         assertEquals(500, Objects.requireNonNull(findById(1, transferenciaLIst)).getMonto());
         assertEquals(500, Objects.requireNonNull(findById(2, transferenciaLIst)).getMonto());
         assertEquals(1000, Objects.requireNonNull(findById(3, transferenciaLIst)).getMonto());
+
+        assertEquals(500, Objects.requireNonNull(findById(1, transferenciaService.obtenerTransferenciasDeCuenta(2))).getMonto());
+        assertEquals(500, Objects.requireNonNull(findById(2, transferenciaService.obtenerTransferenciasDeCuenta(2))).getMonto());
+        assertEquals(1000, Objects.requireNonNull(findById(3, transferenciaService.obtenerTransferenciasDeCuenta(2))).getMonto());
+
+    }
+
+    @Test
+    public void testObtenerTransferenciasBancariasPorIdDeUsuario(){
+        CuentaBancariaService cuentaBancariaService = new CuentaBancariaService();
+        cuentaBancariaService.crearCuenta(new CuentaBancaria(0, 1, "Ahorro", 8000, null));
+        cuentaBancariaService.crearCuenta(new CuentaBancaria(0, 2, "Corriente", 10000, null));
+        cuentaBancariaService.crearCuenta(new CuentaBancaria(1, 1, "Ahorro", 1000, null));
+
+        //cuenta origen id = 2 cuando usuario es 2
+        //cuenta origen id = 1, 3 cuando usuario es 1
+        assertEquals(8000, cuentaBancariaService.obtenerCuentasDeUsuario(1).getFirst().getSaldo());
+        assertEquals(10000, cuentaBancariaService.obtenerCuentasDeUsuario(2).getFirst().getSaldo());
+
+        transferenciaService.realizarTransferencia(2, 1, 8000);
+        assertEquals(16000, cuentaBancariaService.obtenerCuentasDeUsuario(1).getFirst().getSaldo());
+        assertEquals(2000, cuentaBancariaService.obtenerCuentasDeUsuario(2).getFirst().getSaldo());
+        transferenciaService.realizarTransferencia(1, 2, 16000);
+        assertEquals(0, cuentaBancariaService.obtenerCuentasDeUsuario(1).getFirst().getSaldo());
+        assertEquals(18000, cuentaBancariaService.obtenerCuentasDeUsuario(2).getFirst().getSaldo());
+        transferenciaService.realizarTransferencia(2, 1, 11000);
+        assertEquals(11000, cuentaBancariaService.obtenerCuentasDeUsuario(1).getFirst().getSaldo());
+        assertEquals(7000, cuentaBancariaService.obtenerCuentasDeUsuario(2).getFirst().getSaldo());
+        transferenciaService.realizarTransferencia(1, 3, 1000);
         
+        System.out.println(transferenciaService.obtenerTransferenciasPorUsuario(1).toString());
+        System.out.println(transferenciaService.obtenerTransferenciasPorUsuario(2).toString());
+
+
     }
 
     private Transferencia findById(int id, List<Transferencia> transferencias){
