@@ -117,8 +117,23 @@ public class CuentaBancariaTest {
         CuentaBancaria cuentaDespuesDeTest = cuentaBancariaService.obtenerCuentasDeUsuario(1).getFirst();
 
         assertEquals(99999, cuentaDespuesDeTest.getSaldo());
-        
+
     }
 
+    @Test
+    public void testRetirar(){
+        CuentaBancaria cuentaBancaria = new CuentaBancaria(0, 1, "Ahorro", 1000, null);
+        cuentaBancariaService.crearCuenta(cuentaBancaria);
+        CuentaBancaria cuenta = cuentaBancariaService.obtenerCuentasDeUsuario(1).getFirst();
+        assertEquals(1000, cuenta.getSaldo());
+
+        cuentaBancariaService.retirar(1, 500);
+        CuentaBancaria cuenta1 = cuentaBancariaService.obtenerCuentasDeUsuario(1).getFirst();
+        assertEquals(500, cuenta1.getSaldo());
+
+        cuentaBancariaService.retirar(1, 500);
+        CuentaBancaria cuenta2 = cuentaBancariaService.obtenerCuentasDeUsuario(1).getFirst();
+        assertEquals(0, cuenta2.getSaldo());
+    }
 
 }
