@@ -2,13 +2,14 @@ package com.javeriana.sistema.controller;
 
 import com.javeriana.sistema.model.Tarjeta;
 import com.javeriana.sistema.services.TarjetaService;
+import com.javeriana.sistema.util.UsuarioSesion;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import java.time.format.DateTimeFormatter;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class VerTarjetasController {
@@ -25,12 +26,13 @@ public class VerTarjetasController {
     private final TarjetaService tarjetaService = new TarjetaService();
     private int usuarioId;
 
-    public void setUsuarioId(int id) {
-        this.usuarioId = id;
-        cargarTarjetas();
+    @FXML
+    public void initialize() {
+        int usuarioId = UsuarioSesion.getInstancia().getUsuario().getId();
+        cargarTarjetas(usuarioId);
     }
 
-    private void cargarTarjetas() {
+    private void cargarTarjetas(int usuarioId) {
         List<Tarjeta> tarjetas = tarjetaService.obtenerTarjetasDeUsuario(usuarioId);
         tablaTarjetas.setItems(FXCollections.observableArrayList(tarjetas));
 
@@ -47,9 +49,14 @@ public class VerTarjetasController {
 
         colNumero.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getNumero()));
         colVencimiento.setCellValueFactory(cell -> {
-            String venc = cell.getValue().getFechaVencimiento().format(java.time.format.DateTimeFormatter.ofPattern("MM/yy"));
+            String venc = cell.getValue().getFechaVencimiento().format(DateTimeFormatter.ofPattern("MM/yy"));
             return new SimpleStringProperty(venc);
         });
         colCVV.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getCvv()));
+    }
+
+    public void setUsuarioId(int id) {
+        this.usuarioId = id;
+        cargarTarjetas(usuarioId); 
     }
 }

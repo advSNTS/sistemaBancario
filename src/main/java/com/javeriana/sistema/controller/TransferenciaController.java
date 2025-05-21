@@ -4,6 +4,7 @@ import com.javeriana.sistema.model.CuentaBancaria;
 import com.javeriana.sistema.model.Transferencia;
 import com.javeriana.sistema.services.CuentaBancariaService;
 import com.javeriana.sistema.services.TransferenciaService;
+import com.javeriana.sistema.util.UsuarioSesion;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -18,16 +19,12 @@ public class TransferenciaController {
     @FXML private TextField txtMonto;
     @FXML private Button btnTransferir;
 
-    private CuentaBancariaService cuentaService = new CuentaBancariaService();
-    private TransferenciaService transferenciaService = new TransferenciaService();
-    private int usuarioId;
+    private final CuentaBancariaService cuentaService = new CuentaBancariaService();
+    private final TransferenciaService transferenciaService = new TransferenciaService();
 
-    public void setUsuarioId(int id) {
-        this.usuarioId = id;
-        cargarCuentas();
-    }
-
-    private void cargarCuentas() {
+    @FXML
+    private void initialize() {
+        int usuarioId = UsuarioSesion.getInstancia().getUsuario().getId();
         List<CuentaBancaria> cuentas = cuentaService.obtenerCuentasDeUsuario(usuarioId);
         comboOrigen.getItems().addAll(cuentas);
         comboDestino.getItems().addAll(cuentas);
@@ -71,7 +68,6 @@ public class TransferenciaController {
             transferenciaService.registrar(t);
 
             mostrarAlerta("Éxito", "Transferencia realizada correctamente.");
-
             ((Stage) btnTransferir.getScene().getWindow()).close();
 
         } catch (NumberFormatException e) {

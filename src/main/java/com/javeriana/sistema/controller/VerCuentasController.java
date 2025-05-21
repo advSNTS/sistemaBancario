@@ -1,12 +1,15 @@
 package com.javeriana.sistema.controller;
 
 import com.javeriana.sistema.model.CuentaBancaria;
+import com.javeriana.sistema.services.CuentaBancariaService;
+import com.javeriana.sistema.util.UsuarioSesion;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -18,10 +21,20 @@ public class VerCuentasController {
     @FXML private TableColumn<CuentaBancaria, Double> colSaldo;
     @FXML private Button btnOperar;
 
-    private com.javeriana.sistema.services.CuentaBancariaService cuentaService = new com.javeriana.sistema.services.CuentaBancariaService();
-    private List<CuentaBancaria> cuentasUsuario;
+    private final CuentaBancariaService cuentaService = new CuentaBancariaService();
+    private int usuarioId = -1;
 
-    private int usuarioId;
+    @FXML
+    public void initialize() {
+        if (usuarioId <= 0 && UsuarioSesion.getInstancia().getUsuario() != null) {
+            this.usuarioId = UsuarioSesion.getInstancia().getUsuario().getId();
+        }
+        cargarCuentas();
+
+        tablaCuentas.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            btnOperar.setDisable(newSelection == null);
+        });
+    }
 
     public void setUsuarioId(int id) {
         this.usuarioId = id;
@@ -29,17 +42,13 @@ public class VerCuentasController {
     }
 
     private void cargarCuentas() {
-        // Aquí llamarías a tu servicio real
-        cuentasUsuario = new com.javeriana.sistema.services.CuentaBancariaService().obtenerCuentasDeUsuario(usuarioId);
+        if (usuarioId <= 0) return;
+        List<CuentaBancaria> cuentasUsuario = cuentaService.obtenerCuentasDeUsuario(usuarioId);
 
-        tablaCuentas.getItems().addAll(cuentasUsuario);
+        tablaCuentas.getItems().setAll(cuentasUsuario);
         colId.setCellValueFactory(cellData -> new javafx.beans.property.SimpleIntegerProperty(cellData.getValue().getId()).asObject());
         colTipo.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getTipo()));
         colSaldo.setCellValueFactory(cellData -> new javafx.beans.property.SimpleDoubleProperty(cellData.getValue().getSaldo()).asObject());
-
-        tablaCuentas.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            btnOperar.setDisable(newSelection == null);
-        });
     }
 
     @FXML
@@ -73,7 +82,7 @@ public class VerCuentasController {
 
                 DepositarRetirarController controller = loader.getController();
                 controller.setCuenta(cuentaSeleccionada);
-                controller.setVerCuentasController(this); // Pasamos "this" para refrescar después
+                controller.setVerCuentasController(this); // Para recargar luego
 
                 Stage stage = new Stage();
                 stage.setTitle("Operaciones de Cuenta");
@@ -88,8 +97,7 @@ public class VerCuentasController {
     }
 
     public void recargarTabla() {
-        List<CuentaBancaria> cuentasActualizadas = cuentaService.obtenerCuentasDeUsuario(usuarioId);
-        tablaCuentas.getItems().setAll(cuentasActualizadas);
+        cargarCuentas();
     }
 
     private void mostrarAlerta(String titulo, String mensaje) {
@@ -99,7 +107,4 @@ public class VerCuentasController {
         alerta.setContentText(mensaje);
         alerta.showAndWait();
     }
-
-
-
 }

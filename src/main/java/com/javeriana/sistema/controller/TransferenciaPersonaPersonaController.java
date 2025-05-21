@@ -2,11 +2,11 @@ package com.javeriana.sistema.controller;
 
 import com.javeriana.sistema.model.CuentaBancaria;
 import com.javeriana.sistema.model.Transferencia;
+import com.javeriana.sistema.model.Usuario;
 import com.javeriana.sistema.services.CuentaBancariaService;
 import com.javeriana.sistema.services.TransferenciaService;
 import com.javeriana.sistema.services.UsuarioService;
-import com.javeriana.sistema.model.Usuario;
-
+import com.javeriana.sistema.util.UsuarioSesion;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -26,12 +26,13 @@ public class TransferenciaPersonaPersonaController {
     private final UsuarioService usuarioService = new UsuarioService();
     private int usuarioId;
 
-    public void setUsuarioId(int id) {
-        this.usuarioId = id;
-        cargarCuentasOrigen();
+    @FXML
+    private void initialize() {
+        int usuarioId = UsuarioSesion.getInstancia().getUsuario().getId();
+        cargarCuentasOrigen(usuarioId);
     }
 
-    private void cargarCuentasOrigen() {
+    private void cargarCuentasOrigen(int usuarioId) {
         List<CuentaBancaria> cuentas = cuentaService.obtenerCuentasDeUsuario(usuarioId);
         comboCuentaOrigen.getItems().addAll(cuentas);
 
@@ -39,22 +40,15 @@ public class TransferenciaPersonaPersonaController {
             @Override
             protected void updateItem(CuentaBancaria cuenta, boolean empty) {
                 super.updateItem(cuenta, empty);
-                if (cuenta == null || empty) {
-                    setText(null);
-                } else {
-                    setText(cuenta.getTipo() + " - $" + cuenta.getSaldo());
-                }
+                setText((cuenta == null || empty) ? null : cuenta.getTipo() + " - $" + cuenta.getSaldo());
             }
         });
+
         comboCuentaOrigen.setButtonCell(new ListCell<>() {
             @Override
             protected void updateItem(CuentaBancaria cuenta, boolean empty) {
                 super.updateItem(cuenta, empty);
-                if (cuenta == null || empty) {
-                    setText(null);
-                } else {
-                    setText(cuenta.getTipo() + " - $" + cuenta.getSaldo());
-                }
+                setText((cuenta == null || empty) ? null : cuenta.getTipo() + " - $" + cuenta.getSaldo());
             }
         });
     }
@@ -82,19 +76,19 @@ public class TransferenciaPersonaPersonaController {
                 return;
             }
 
-            // ✅ Validar límite de alerta
+            // Validación de límite de alerta
             if (origen.getLimiteAlerta() != null && monto >= origen.getLimiteAlerta()) {
                 Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
                 confirmacion.setTitle("Confirmar Transferencia");
-                confirmacion.setHeaderText("El monto supera el límite de alerta configurado: $" + origen.getLimiteAlerta());
+                confirmacion.setHeaderText("El monto supera el límite de alerta: $" + origen.getLimiteAlerta());
                 confirmacion.setContentText("¿Desea continuar con la transferencia de $" + monto + "?");
 
                 if (confirmacion.showAndWait().orElse(ButtonType.CANCEL) != ButtonType.OK) {
-                    return; // Se cancela la operación
+                    return;
                 }
             }
 
-            // Buscar usuario destino por cédula
+            // Buscar usuario destino
             Usuario destinatario = usuarioService.buscarPorCedula(cedulaDestino);
             if (destinatario == null) {
                 mostrarAlerta("Error", "No se encontró ningún usuario con esa cédula.");
@@ -107,14 +101,13 @@ public class TransferenciaPersonaPersonaController {
                 return;
             }
 
-            CuentaBancaria destino = cuentasDestino.get(0); // Tomamos la primera cuenta disponible
-
+            CuentaBancaria destino = cuentasDestino.get(0);
             if (!destino.isActiva()) {
                 mostrarAlerta("Error", "La cuenta destino está desactivada.");
                 return;
             }
 
-            // Realizar transferencia
+            // Ejecutar transferencia
             origen.setSaldo(origen.getSaldo() - monto);
             destino.setSaldo(destino.getSaldo() + monto);
 
@@ -138,5 +131,10 @@ public class TransferenciaPersonaPersonaController {
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
+    }
+
+    public void setUsuarioId(int id) {
+        this.usuarioId = id;
+        cargarCuentasOrigen(usuarioId);
     }
 }

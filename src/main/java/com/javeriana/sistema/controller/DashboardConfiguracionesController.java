@@ -13,8 +13,8 @@ import java.io.IOException;
 public class DashboardConfiguracionesController {
 
     @FXML
-    private void abrirCategoriaSeguridad() {
-        abrirModal("/com/javeriana/sistema/ui/ConfigurarLimiteView.fxml", "Configurar Límite de Transacción");
+    private void abrirConfigurarLimite() {
+        abrirModal("/com/javeriana/sistema/ui/ConfigurarLimiteView.fxml", "Configurar Límite");
     }
 
     @FXML
@@ -26,4 +26,19 @@ public class DashboardConfiguracionesController {
     private void abrirModal(String fxmlPath, String titulo) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-            Parent root = loader.lo
+            Parent root = loader.load();
+
+            Stage modalStage = new Stage();
+            modalStage.initModality(Modality.APPLICATION_MODAL);
+            modalStage.setTitle(titulo);
+            modalStage.setScene(new Scene(root));
+            modalStage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Window getCurrentWindow() {
+        return Window.getWindows().stream().filter(Window::isFocused).findFirst().orElse(null);
+    }
+}

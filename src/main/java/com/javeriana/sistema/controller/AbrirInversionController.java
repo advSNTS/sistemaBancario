@@ -3,6 +3,7 @@ package com.javeriana.sistema.controller;
 import com.javeriana.sistema.model.CuentaBancaria;
 import com.javeriana.sistema.services.CuentaBancariaService;
 import com.javeriana.sistema.services.InversionService;
+import com.javeriana.sistema.util.UsuarioSesion;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -10,13 +11,6 @@ import javafx.scene.control.*;
 import java.util.List;
 
 public class AbrirInversionController {
-
-    // Variable estática temporal para recibir el usuarioId desde InversionesController
-    private static int usuarioIdTemporal = 0;
-
-    public static void setUsuarioIdTemporal(int id) {
-        usuarioIdTemporal = id;
-    }
 
     @FXML private ComboBox<CuentaBancaria> comboCuentas;
     @FXML private TextField txtMonto;
@@ -30,9 +24,7 @@ public class AbrirInversionController {
 
     @FXML
     private void initialize() {
-        this.usuarioId = usuarioIdTemporal;
-        usuarioIdTemporal = 0; // limpiar para evitar conflictos futuros
-
+        this.usuarioId = UsuarioSesion.getInstancia().getUsuario().getId();
         cargarCuentas();
         cargarPlazos();
     }

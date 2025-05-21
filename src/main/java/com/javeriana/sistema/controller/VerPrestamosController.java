@@ -26,15 +26,20 @@ public class VerPrestamosController {
     @FXML private TableColumn<Prestamo, String> colEstado;
     @FXML private Button btnPagarPrestamo;
 
-    private PrestamoService prestamoService = new PrestamoService();
+    private final PrestamoService prestamoService = new PrestamoService();
     private int usuarioId;
 
     public void setUsuarioId(int id) {
         this.usuarioId = id;
-        cargarPrestamos();
+        cargarPrestamos(usuarioId);
     }
 
-    private void cargarPrestamos() {
+    @FXML
+    public void initialize() {
+        // No se hace nada hasta que se llame a setUsuarioId
+    }
+
+    private void cargarPrestamos(int usuarioId) {
         List<Prestamo> prestamos = prestamoService.obtenerPrestamosDeUsuario(usuarioId);
 
         tablaPrestamos.getItems().setAll(prestamos);
@@ -52,7 +57,7 @@ public class VerPrestamosController {
             return new javafx.beans.property.SimpleStringProperty(estado);
         });
 
-        colEstado.setCellFactory(column -> new TableCell<Prestamo, String>() {
+        colEstado.setCellFactory(column -> new TableCell<>() {
             @Override
             protected void updateItem(String estado, boolean empty) {
                 super.updateItem(estado, empty);
@@ -61,18 +66,16 @@ public class VerPrestamosController {
                     setStyle("");
                 } else {
                     setText(estado);
-                    if (estado.equals("Pagado")) {
-                        setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
-                    } else {
-                        setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
-                    }
+                    setStyle(estado.equals("Pagado")
+                            ? "-fx-text-fill: green; -fx-font-weight: bold;"
+                            : "-fx-text-fill: red; -fx-font-weight: bold;");
                 }
             }
         });
     }
 
     public void recargarPrestamos() {
-        cargarPrestamos();
+        cargarPrestamos(usuarioId);
     }
 
     @FXML
@@ -86,7 +89,7 @@ public class VerPrestamosController {
                 PagarPrestamoController controller = loader.getController();
                 controller.setPrestamo(prestamoSeleccionado);
                 controller.setVerPrestamosController(this);
-                controller.setUsuarioId(usuarioId);
+                controller.setUsuarioId(usuarioId); // ← IMPORTANTE para cargar cuentas
 
                 Stage stage = new Stage();
                 stage.setTitle("Pagar Préstamo");
@@ -108,6 +111,4 @@ public class VerPrestamosController {
         alert.setContentText(mensaje);
         alert.showAndWait();
     }
-
-
 }

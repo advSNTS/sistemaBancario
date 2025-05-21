@@ -17,12 +17,17 @@ public class ConfigurarLimiteController {
     private final CuentaBancariaService cuentaService = new CuentaBancariaService();
     private int usuarioId;
 
-    public void setUsuarioId(int id) {
-        this.usuarioId = id;
-        cargarCuentas();
+    @FXML
+    private void initialize() {
+        // No hacer nada aquí directamente. Esperar a que se llame setUsuarioId().
     }
 
-    private void cargarCuentas() {
+    public void setUsuarioId(int id) {
+        this.usuarioId = id;
+        cargarCuentas(usuarioId);
+    }
+
+    private void cargarCuentas(int usuarioId) {
         List<CuentaBancaria> cuentas = cuentaService.obtenerCuentasDeUsuario(usuarioId);
         comboCuentas.setItems(FXCollections.observableArrayList(cuentas));
     }

@@ -2,6 +2,7 @@ package com.javeriana.sistema.controller;
 
 import com.javeriana.sistema.model.Tarjeta;
 import com.javeriana.sistema.services.TarjetaService;
+import com.javeriana.sistema.util.UsuarioSesion;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -17,26 +18,24 @@ public class DesbloquearTarjetaController {
     private final TarjetaService tarjetaService = new TarjetaService();
     private int usuarioId;
 
-    public void setUsuarioId(int id) {
-        this.usuarioId = id;
-        cargarTarjetasBloqueadas();
+    @FXML
+    public void initialize() {
+        usuarioId = UsuarioSesion.getInstancia().getUsuario().getId();
+        cargarTarjetasBloqueadas(usuarioId);
     }
 
-    private void cargarTarjetasBloqueadas() {
+    private void cargarTarjetasBloqueadas(int usuarioId) {
         List<Tarjeta> tarjetas = tarjetaService.obtenerTarjetasDeUsuario(usuarioId).stream()
                 .filter(Tarjeta::isBloqueada)
                 .toList();
+
         comboTarjetas.setItems(FXCollections.observableArrayList(tarjetas));
 
         comboTarjetas.setCellFactory(list -> new ListCell<>() {
             @Override
             protected void updateItem(Tarjeta tarjeta, boolean empty) {
                 super.updateItem(tarjeta, empty);
-                if (tarjeta == null || empty) {
-                    setText(null);
-                } else {
-                    setText(tarjeta.getTipo() + " - Cupo: $" + tarjeta.getCupoDisponible());
-                }
+                setText((empty || tarjeta == null) ? null : tarjeta.getTipo() + " - Cupo: $" + tarjeta.getCupoDisponible());
             }
         });
 
@@ -44,11 +43,7 @@ public class DesbloquearTarjetaController {
             @Override
             protected void updateItem(Tarjeta tarjeta, boolean empty) {
                 super.updateItem(tarjeta, empty);
-                if (tarjeta == null || empty) {
-                    setText(null);
-                } else {
-                    setText(tarjeta.getTipo() + " - Cupo: $" + tarjeta.getCupoDisponible());
-                }
+                setText((empty || tarjeta == null) ? null : tarjeta.getTipo() + " - Cupo: $" + tarjeta.getCupoDisponible());
             }
         });
     }
@@ -70,7 +65,7 @@ public class DesbloquearTarjetaController {
         if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
             tarjetaService.desbloquearTarjeta(seleccionada.getId());
             mostrarAlerta("Éxito", "Tarjeta desbloqueada exitosamente.");
-            cargarTarjetasBloqueadas(); // Refresca la lista
+            cargarTarjetasBloqueadas(usuarioId);
         }
     }
 
@@ -80,5 +75,10 @@ public class DesbloquearTarjetaController {
         alerta.setHeaderText(null);
         alerta.setContentText(mensaje);
         alerta.showAndWait();
+    }
+
+    public void setUsuarioId(int id) {
+        this.usuarioId = id;
+        cargarTarjetasBloqueadas(usuarioId);
     }
 }

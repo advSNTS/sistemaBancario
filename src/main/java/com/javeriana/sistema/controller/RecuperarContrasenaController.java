@@ -12,24 +12,30 @@ public class RecuperarContrasenaController {
     @FXML private TextField txtRespuesta;
     @FXML private PasswordField txtNuevaClave;
 
-    private UsuarioService usuarioService = new UsuarioService();
+    private final UsuarioService usuarioService = new UsuarioService();
     private Usuario usuario;
 
     @FXML
     private void initialize() {
         lblPregunta.setText("Ingresa tu correo y presiona Enter");
-
         txtCorreo.setOnAction(event -> mostrarPregunta());
     }
 
     private void mostrarPregunta() {
-        String correo = txtCorreo.getText();
+        String correo = txtCorreo.getText().trim();
+
+        if (correo.isEmpty()) {
+            lblPregunta.setText("Ingresa un correo válido.");
+            return;
+        }
+
         usuario = usuarioService.buscarPorCorreo(correo);
 
-        if (usuario != null) {
+        if (usuario != null && usuario.getPreguntaSecreta() != null) {
             lblPregunta.setText(usuario.getPreguntaSecreta());
         } else {
-            lblPregunta.setText("Correo no registrado.");
+            usuario = null;
+            lblPregunta.setText("Correo no registrado o sin pregunta secreta.");
         }
     }
 
@@ -40,8 +46,13 @@ public class RecuperarContrasenaController {
             return;
         }
 
-        String respuestaIngresada = txtRespuesta.getText();
+        String respuestaIngresada = txtRespuesta.getText().trim();
         String nuevaClave = txtNuevaClave.getText();
+
+        if (respuestaIngresada.isEmpty() || nuevaClave.isEmpty()) {
+            mostrarAlerta("Error", "Completa todos los campos.");
+            return;
+        }
 
         if (!respuestaIngresada.equalsIgnoreCase(usuario.getRespuestaSecreta())) {
             mostrarAlerta("Error", "Respuesta secreta incorrecta.");
@@ -50,6 +61,15 @@ public class RecuperarContrasenaController {
 
         usuarioService.actualizarClavePorCorreo(usuario.getCorreo(), nuevaClave);
         mostrarAlerta("Éxito", "Contraseña actualizada correctamente.");
+        limpiarCampos();
+    }
+
+    private void limpiarCampos() {
+        txtCorreo.clear();
+        txtRespuesta.clear();
+        txtNuevaClave.clear();
+        lblPregunta.setText("Ingresa tu correo y presiona Enter");
+        usuario = null;
     }
 
     private void mostrarAlerta(String titulo, String mensaje) {

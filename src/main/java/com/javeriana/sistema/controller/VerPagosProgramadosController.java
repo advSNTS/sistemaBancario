@@ -2,6 +2,7 @@ package com.javeriana.sistema.controller;
 
 import com.javeriana.sistema.model.PagoProgramado;
 import com.javeriana.sistema.services.PagoProgramadoService;
+import com.javeriana.sistema.util.UsuarioSesion;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -21,11 +22,11 @@ public class VerPagosProgramadosController {
     @FXML private TableColumn<PagoProgramado, Boolean> colEjecutado;
 
     private final PagoProgramadoService pagoService = new PagoProgramadoService();
-
     private int usuarioId;
 
-    public void setUsuarioId(int id) {
-        this.usuarioId = id;
+    @FXML
+    public void initialize() {
+        usuarioId = UsuarioSesion.getInstancia().getUsuario().getId();
         cargarPagos();
     }
 
@@ -52,5 +53,10 @@ public class VerPagosProgramadosController {
         colEjecutado.setCellValueFactory(cell ->
                 new SimpleBooleanProperty(cell.getValue().isEjecutado()).asObject()
         );
+    }
+
+    public void setUsuarioId(int id) {
+        this.usuarioId = id;
+        cargarPagos();
     }
 }

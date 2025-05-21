@@ -2,6 +2,7 @@ package com.javeriana.sistema.controller;
 
 import com.javeriana.sistema.model.Tarjeta;
 import com.javeriana.sistema.services.TarjetaService;
+import com.javeriana.sistema.util.UsuarioSesion;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -17,15 +18,17 @@ public class UsarTarjetaController {
     private final TarjetaService tarjetaService = new TarjetaService();
     private int usuarioId;
 
-    public void setUsuarioId(int id) {
-        this.usuarioId = id;
-        cargarTarjetasActivas();
+    @FXML
+    private void initialize() {
+        int usuarioId = UsuarioSesion.getInstancia().getUsuario().getId();
+        cargarTarjetasActivas(usuarioId);
     }
 
-    private void cargarTarjetasActivas() {
+    private void cargarTarjetasActivas(int usuarioId) {
         List<Tarjeta> tarjetas = tarjetaService.obtenerTarjetasDeUsuario(usuarioId).stream()
                 .filter(t -> !t.isBloqueada())
                 .toList();
+
         comboTarjetas.setItems(FXCollections.observableArrayList(tarjetas));
 
         comboTarjetas.setCellFactory(list -> new ListCell<>() {
@@ -72,7 +75,9 @@ public class UsarTarjetaController {
 
             tarjetaService.usarTarjeta(tarjeta.getId(), monto);
             mostrarAlerta("Éxito", "Pago realizado exitosamente.");
-            cargarTarjetasActivas();
+
+            int usuarioId = UsuarioSesion.getInstancia().getUsuario().getId();
+            cargarTarjetasActivas(usuarioId);
             txtMonto.clear();
         } catch (NumberFormatException e) {
             mostrarAlerta("Error", "El monto ingresado no es válido.");
@@ -87,5 +92,10 @@ public class UsarTarjetaController {
         alerta.setHeaderText(null);
         alerta.setContentText(mensaje);
         alerta.showAndWait();
+    }
+
+    public void setUsuarioId(int id) {
+        this.usuarioId = id;
+        cargarTarjetasActivas(usuarioId);
     }
 }

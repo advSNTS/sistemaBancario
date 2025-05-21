@@ -1,6 +1,5 @@
 package com.javeriana.sistema.controller;
 
-import com.javeriana.sistema.model.Usuario;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,23 +10,16 @@ import javafx.stage.Window;
 
 import java.io.IOException;
 
-public class DashboardCuentasController implements UsuarioAwareController {
-
-    private Usuario usuario;
-
-    @Override
-    public void setUsuarioAutenticado(Usuario usuario) {
-        this.usuario = usuario;
-    }
+public class DashboardCuentasController {
 
     @FXML
     private void abrirCrearCuenta() {
-        abrirVentanaConUsuario("/com/javeriana/sistema/ui/CrearCuentaView.fxml", "Crear Nueva Cuenta");
+        abrirVentana("/com/javeriana/sistema/ui/CrearCuentaView.fxml", "Crear Nueva Cuenta");
     }
 
     @FXML
     private void verCuentas() {
-        abrirVentanaConUsuario("/com/javeriana/sistema/ui/VerCuentasView.fxml", "Mis Cuentas");
+        abrirVentana("/com/javeriana/sistema/ui/VerCuentasView.fxml", "Mis Cuentas");
     }
 
     @FXML
@@ -38,16 +30,10 @@ public class DashboardCuentasController implements UsuarioAwareController {
         }
     }
 
-    private void abrirVentanaConUsuario(String rutaFXML, String titulo) {
+    private void abrirVentana(String rutaFXML, String titulo) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(rutaFXML));
             Parent root = loader.load();
-
-            // Verificamos si el controlador implementa la interfaz para pasar el usuario
-            Object controller = loader.getController();
-            if (controller instanceof UsuarioAwareController) {
-                ((UsuarioAwareController) controller).setUsuarioAutenticado(usuario);
-            }
 
             Stage modalStage = new Stage();
             modalStage.initModality(Modality.APPLICATION_MODAL);
@@ -61,7 +47,7 @@ public class DashboardCuentasController implements UsuarioAwareController {
     }
 
     private Window getCurrentWindow() {
-        return javafx.stage.Window.getWindows().stream()
+        return Window.getWindows().stream()
                 .filter(Window::isFocused)
                 .findFirst()
                 .orElse(null);

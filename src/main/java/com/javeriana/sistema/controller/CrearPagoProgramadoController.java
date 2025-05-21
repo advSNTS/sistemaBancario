@@ -5,6 +5,7 @@ import com.javeriana.sistema.model.PagoProgramado;
 import com.javeriana.sistema.model.Usuario;
 import com.javeriana.sistema.services.CuentaBancariaService;
 import com.javeriana.sistema.services.PagoProgramadoService;
+import com.javeriana.sistema.util.UsuarioSesion;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -25,12 +26,17 @@ public class CrearPagoProgramadoController {
     private final PagoProgramadoService pagoService = new PagoProgramadoService();
     private int usuarioId;
 
-    public void setUsuarioId(int id) {
-        this.usuarioId = id;
-        cargarCuentas();
+    @FXML
+    public void initialize() {
+        Usuario usuario = UsuarioSesion.getInstancia().getUsuario();
+        if (usuario != null) {
+            cargarCuentas(usuario.getId());
+        } else {
+            mostrarAlerta("Error", "No hay un usuario autenticado en sesión.");
+        }
     }
 
-    private void cargarCuentas() {
+    private void cargarCuentas(int usuarioId) {
         List<CuentaBancaria> cuentas = cuentaService.obtenerCuentasDeUsuario(usuarioId);
         comboCuentaOrigen.getItems().addAll(cuentas);
 
@@ -38,11 +44,7 @@ public class CrearPagoProgramadoController {
             @Override
             protected void updateItem(CuentaBancaria cuenta, boolean empty) {
                 super.updateItem(cuenta, empty);
-                if (cuenta == null || empty) {
-                    setText(null);
-                } else {
-                    setText(cuenta.getTipo() + " - $" + cuenta.getSaldo());
-                }
+                setText((cuenta == null || empty) ? null : cuenta.getTipo() + " - $" + cuenta.getSaldo());
             }
         });
 
@@ -50,11 +52,7 @@ public class CrearPagoProgramadoController {
             @Override
             protected void updateItem(CuentaBancaria cuenta, boolean empty) {
                 super.updateItem(cuenta, empty);
-                if (cuenta == null || empty) {
-                    setText(null);
-                } else {
-                    setText(cuenta.getTipo() + " - $" + cuenta.getSaldo());
-                }
+                setText((cuenta == null || empty) ? null : cuenta.getTipo() + " - $" + cuenta.getSaldo());
             }
         });
     }
@@ -77,14 +75,12 @@ public class CrearPagoProgramadoController {
             LocalTime hora = LocalTime.parse(horaTexto); // Formato HH:mm
             LocalDateTime fechaHoraEjecucion = LocalDateTime.of(fecha, hora);
 
-            // Buscar el usuario por cédula
             Usuario usuarioDestino = cuentaService.buscarUsuarioPorCedula(cedulaDestino);
             if (usuarioDestino == null) {
                 mostrarAlerta("Error", "No se encontró un usuario con esa cédula.");
                 return;
             }
 
-            // Buscar la primera cuenta del usuario destino
             List<CuentaBancaria> cuentasDestino = cuentaService.obtenerCuentasDeUsuario(usuarioDestino.getId());
             if (cuentasDestino.isEmpty()) {
                 mostrarAlerta("Error", "El usuario con esa cédula no tiene cuentas registradas.");
@@ -96,7 +92,7 @@ public class CrearPagoProgramadoController {
             PagoProgramado pago = new PagoProgramado(
                     0,
                     origen.getId(),
-                    cuentaDestino.getId(), // ✅ ID real de cuenta bancaria
+                    cuentaDestino.getId(),
                     monto,
                     fechaHoraEjecucion,
                     false
@@ -127,5 +123,10 @@ public class CrearPagoProgramadoController {
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
+    }
+
+    public void setUsuarioId(int id) {
+        this.usuarioId = id;
+        cargarCuentas(usuarioId);
     }
 }

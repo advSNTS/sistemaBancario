@@ -17,12 +17,8 @@ public class SolicitarTarjetaController {
     private final TarjetaService tarjetaService = new TarjetaService();
     private int usuarioId;
 
-    public void setUsuarioId(int id) {
-        this.usuarioId = id;
-        inicializarCombo();
-    }
-
-    private void inicializarCombo() {
+    @FXML
+    private void initialize() {
         comboTipoTarjeta.getItems().addAll("Débito", "Crédito");
         comboTipoTarjeta.getSelectionModel().selectFirst();
     }
@@ -66,5 +62,9 @@ public class SolicitarTarjetaController {
         alerta.setHeaderText(null);
         alerta.setContentText(mensaje);
         alerta.showAndWait();
+    }
+
+    public void setUsuarioId(int id) {
+        this.usuarioId = id;
     }
 }
