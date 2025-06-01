@@ -12,11 +12,14 @@ import javafx.scene.control.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class CrearPagoProgramadoController {
 
     @FXML private ComboBox<CuentaBancaria> comboCuentaOrigen;
+    @FXML private ComboBox<String> comboTipoDestino;
     @FXML private TextField txtCuentaDestinoId;
     @FXML private TextField txtMonto;
     @FXML private DatePicker dateFechaEjecucion;
@@ -34,11 +37,23 @@ public class CrearPagoProgramadoController {
         } else {
             mostrarAlerta("Error", "No hay un usuario autenticado en sesión.");
         }
+
+        comboTipoDestino.getItems().addAll("Cédula", "ID Cuenta");
+        comboTipoDestino.setValue("Cédula");
     }
 
     private void cargarCuentas(int usuarioId) {
+        comboCuentaOrigen.getItems().clear(); // Limpia las cuentas anteriores
+
         List<CuentaBancaria> cuentas = cuentaService.obtenerCuentasDeUsuario(usuarioId);
-        comboCuentaOrigen.getItems().addAll(cuentas);
+
+        // También puedes evitar duplicados por precaución
+        Set<Integer> idsUnicos = new HashSet<>();
+        for (CuentaBancaria cuenta : cuentas) {
+            if (idsUnicos.add(cuenta.getId())) {
+                comboCuentaOrigen.getItems().add(cuenta);
+            }
+        }
 
         comboCuentaOrigen.setCellFactory(list -> new ListCell<>() {
             @Override
@@ -60,12 +75,13 @@ public class CrearPagoProgramadoController {
     @FXML
     private void guardarPagoProgramado() {
         CuentaBancaria origen = comboCuentaOrigen.getValue();
-        String cedulaDestino = txtCuentaDestinoId.getText().trim();
+        String destinoTexto = txtCuentaDestinoId.getText().trim();
+        String tipoDestino = comboTipoDestino.getValue();
         String montoTexto = txtMonto.getText();
         LocalDate fecha = dateFechaEjecucion.getValue();
         String horaTexto = txtHoraEjecucion.getText();
 
-        if (origen == null || cedulaDestino.isEmpty() || montoTexto.isEmpty() || fecha == null || horaTexto.isEmpty()) {
+        if (origen == null || destinoTexto.isEmpty() || montoTexto.isEmpty() || fecha == null || horaTexto.isEmpty()) {
             mostrarAlerta("Error", "Todos los campos son obligatorios.");
             return;
         }
@@ -75,19 +91,35 @@ public class CrearPagoProgramadoController {
             LocalTime hora = LocalTime.parse(horaTexto); // Formato HH:mm
             LocalDateTime fechaHoraEjecucion = LocalDateTime.of(fecha, hora);
 
-            Usuario usuarioDestino = cuentaService.buscarUsuarioPorCedula(cedulaDestino);
-            if (usuarioDestino == null) {
-                mostrarAlerta("Error", "No se encontró un usuario con esa cédula.");
-                return;
-            }
+            CuentaBancaria cuentaDestino = null;
 
-            List<CuentaBancaria> cuentasDestino = cuentaService.obtenerCuentasDeUsuario(usuarioDestino.getId());
-            if (cuentasDestino.isEmpty()) {
-                mostrarAlerta("Error", "El usuario con esa cédula no tiene cuentas registradas.");
-                return;
+            if ("Cédula".equals(tipoDestino)) {
+                Usuario usuarioDestino = cuentaService.buscarUsuarioPorCedula(destinoTexto);
+                if (usuarioDestino != null) {
+                    List<CuentaBancaria> cuentasDestino = cuentaService.obtenerCuentasDeUsuario(usuarioDestino.getId());
+                    if (!cuentasDestino.isEmpty()) {
+                        cuentaDestino = cuentasDestino.get(0);
+                    } else {
+                        mostrarAlerta("Error", "El usuario con esa cédula no tiene cuentas registradas.");
+                        return;
+                    }
+                } else {
+                    mostrarAlerta("Error", "No se encontró un usuario con esa cédula.");
+                    return;
+                }
+            } else if ("ID Cuenta".equals(tipoDestino)) {
+                try {
+                    int idCuenta = Integer.parseInt(destinoTexto);
+                    cuentaDestino = cuentaService.buscarPorId(idCuenta);
+                    if (cuentaDestino == null) {
+                        mostrarAlerta("Error", "No se encontró una cuenta con ese ID.");
+                        return;
+                    }
+                } catch (NumberFormatException e) {
+                    mostrarAlerta("Error", "El ID de cuenta debe ser un número.");
+                    return;
+                }
             }
-
-            CuentaBancaria cuentaDestino = cuentasDestino.get(0); // Tomamos la primera
 
             PagoProgramado pago = new PagoProgramado(
                     0,
@@ -115,6 +147,7 @@ public class CrearPagoProgramadoController {
         txtHoraEjecucion.clear();
         dateFechaEjecucion.setValue(null);
         comboCuentaOrigen.getSelectionModel().clearSelection();
+        comboTipoDestino.setValue("Cédula");
     }
 
     private void mostrarAlerta(String titulo, String mensaje) {

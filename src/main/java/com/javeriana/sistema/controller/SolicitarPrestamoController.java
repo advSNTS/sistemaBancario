@@ -4,6 +4,8 @@ import com.javeriana.sistema.model.CuentaBancaria;
 import com.javeriana.sistema.model.Usuario;
 import com.javeriana.sistema.services.CuentaBancariaService;
 import com.javeriana.sistema.services.PrestamoService;
+import com.javeriana.sistema.util.UsuarioSesion;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -22,28 +24,39 @@ public class SolicitarPrestamoController {
     private final CuentaBancariaService cuentaService = new CuentaBancariaService();
     private Usuario usuario;
 
+    @FXML
+    public void initialize() {
+        // Intenta obtener usuario automáticamente si no se setea desde otro lado
+        if (usuario == null) {
+            usuario = UsuarioSesion.getInstancia().getUsuario();
+        }
+        if (usuario != null) {
+            cargarCuentas(usuario.getId());
+        } else {
+            mostrarAlerta("Error", "No se ha identificado un usuario activo.");
+        }
+    }
+
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
         cargarCuentas(usuario.getId());
     }
 
-    @FXML
-    public void initialize() {
-        // Solo se cargarán las cuentas si el usuario ya ha sido seteado
-        if (usuario != null) {
-            cargarCuentas(usuario.getId());
-        }
-    }
-
     private void cargarCuentas(int usuarioId) {
         List<CuentaBancaria> cuentas = cuentaService.obtenerCuentasDeUsuario(usuarioId);
-        comboCuentas.getItems().addAll(cuentas);
+        if (cuentas == null || cuentas.isEmpty()) {
+            mostrarAlerta("Sin cuentas", "Este usuario no tiene cuentas bancarias disponibles.");
+            return;
+        }
+
+        comboCuentas.setItems(FXCollections.observableArrayList(cuentas));
 
         comboCuentas.setCellFactory(lv -> new ListCell<>() {
             @Override
             protected void updateItem(CuentaBancaria cuenta, boolean empty) {
                 super.updateItem(cuenta, empty);
-                setText((empty || cuenta == null) ? null : cuenta.getTipo() + " - $" + String.format("%.2f", cuenta.getSaldo()));
+                setText((empty || cuenta == null) ? null :
+                        cuenta.getTipo() + " - $" + String.format("%.2f", cuenta.getSaldo()));
             }
         });
 
@@ -51,7 +64,8 @@ public class SolicitarPrestamoController {
             @Override
             protected void updateItem(CuentaBancaria cuenta, boolean empty) {
                 super.updateItem(cuenta, empty);
-                setText((empty || cuenta == null) ? null : cuenta.getTipo() + " - $" + String.format("%.2f", cuenta.getSaldo()));
+                setText((empty || cuenta == null) ? null :
+                        cuenta.getTipo() + " - $" + String.format("%.2f", cuenta.getSaldo()));
             }
         });
     }
@@ -80,7 +94,6 @@ public class SolicitarPrestamoController {
             }
 
             prestamoService.solicitarPrestamo(usuario.getId(), monto, tasaInteres, plazoMeses);
-
             cuenta.setSaldo(cuenta.getSaldo() + monto);
             cuentaService.actualizarCuenta(cuenta);
 

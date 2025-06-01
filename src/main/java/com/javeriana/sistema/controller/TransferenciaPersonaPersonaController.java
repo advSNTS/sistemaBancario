@@ -6,7 +6,7 @@ import com.javeriana.sistema.model.Usuario;
 import com.javeriana.sistema.services.CuentaBancariaService;
 import com.javeriana.sistema.services.TransferenciaService;
 import com.javeriana.sistema.services.UsuarioService;
-import com.javeriana.sistema.util.UsuarioSesion;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -17,24 +17,33 @@ import java.util.List;
 public class TransferenciaPersonaPersonaController {
 
     @FXML private ComboBox<CuentaBancaria> comboCuentaOrigen;
-    @FXML private TextField txtCedulaDestino;
+    @FXML private TextField txtIdentificadorDestino;
     @FXML private TextField txtMonto;
+    @FXML private ChoiceBox<String> choiceTipoBusqueda;
     @FXML private Button btnTransferir;
 
     private final CuentaBancariaService cuentaService = new CuentaBancariaService();
     private final TransferenciaService transferenciaService = new TransferenciaService();
     private final UsuarioService usuarioService = new UsuarioService();
+
     private int usuarioId;
 
     @FXML
     private void initialize() {
-        int usuarioId = UsuarioSesion.getInstancia().getUsuario().getId();
-        cargarCuentasOrigen(usuarioId);
+        // Se inicializa tipo de búsqueda
+        choiceTipoBusqueda.setItems(FXCollections.observableArrayList("Cédula", "ID Cuenta"));
+        choiceTipoBusqueda.setValue("Cédula");
     }
 
-    private void cargarCuentasOrigen(int usuarioId) {
+    public void setUsuarioId(int id) {
+        this.usuarioId = id;
+        cargarCuentasOrigen();
+    }
+
+    private void cargarCuentasOrigen() {
+        comboCuentaOrigen.getItems().clear();
         List<CuentaBancaria> cuentas = cuentaService.obtenerCuentasDeUsuario(usuarioId);
-        comboCuentaOrigen.getItems().addAll(cuentas);
+        comboCuentaOrigen.setItems(FXCollections.observableArrayList(cuentas));
 
         comboCuentaOrigen.setCellFactory(list -> new ListCell<>() {
             @Override
@@ -56,10 +65,11 @@ public class TransferenciaPersonaPersonaController {
     @FXML
     private void realizarTransferencia() {
         CuentaBancaria origen = comboCuentaOrigen.getValue();
-        String cedulaDestino = txtCedulaDestino.getText();
+        String identificador = txtIdentificadorDestino.getText();
+        String tipoBusqueda = choiceTipoBusqueda.getValue();
         String montoTexto = txtMonto.getText();
 
-        if (origen == null || cedulaDestino.isEmpty() || montoTexto.isEmpty()) {
+        if (origen == null || identificador.isEmpty() || montoTexto.isEmpty()) {
             mostrarAlerta("Error", "Todos los campos son obligatorios.");
             return;
         }
@@ -88,22 +98,32 @@ public class TransferenciaPersonaPersonaController {
                 }
             }
 
-            // Buscar usuario destino
-            Usuario destinatario = usuarioService.buscarPorCedula(cedulaDestino);
-            if (destinatario == null) {
-                mostrarAlerta("Error", "No se encontró ningún usuario con esa cédula.");
-                return;
+            CuentaBancaria destino = null;
+
+            if (tipoBusqueda.equals("Cédula")) {
+                Usuario destinatario = usuarioService.buscarPorCedula(identificador);
+                if (destinatario == null) {
+                    mostrarAlerta("Error", "No se encontró ningún usuario con esa cédula.");
+                    return;
+                }
+                List<CuentaBancaria> cuentasDestino = cuentaService.obtenerCuentasDeUsuario(destinatario.getId());
+                if (cuentasDestino.isEmpty()) {
+                    mostrarAlerta("Error", "El usuario destino no tiene cuentas registradas.");
+                    return;
+                }
+                destino = cuentasDestino.get(0); // Selecciona la primera activa
+            } else {
+                try {
+                    int cuentaId = Integer.parseInt(identificador);
+                    destino = cuentaService.buscarPorId(cuentaId);
+                } catch (NumberFormatException e) {
+                    mostrarAlerta("Error", "El ID de cuenta debe ser un número.");
+                    return;
+                }
             }
 
-            List<CuentaBancaria> cuentasDestino = cuentaService.obtenerCuentasDeUsuario(destinatario.getId());
-            if (cuentasDestino.isEmpty()) {
-                mostrarAlerta("Error", "El usuario destino no tiene cuentas registradas.");
-                return;
-            }
-
-            CuentaBancaria destino = cuentasDestino.get(0);
-            if (!destino.isActiva()) {
-                mostrarAlerta("Error", "La cuenta destino está desactivada.");
+            if (destino == null || !destino.isActiva()) {
+                mostrarAlerta("Error", "La cuenta destino no existe o está desactivada.");
                 return;
             }
 
@@ -131,10 +151,5 @@ public class TransferenciaPersonaPersonaController {
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
-    }
-
-    public void setUsuarioId(int id) {
-        this.usuarioId = id;
-        cargarCuentasOrigen(usuarioId);
     }
 }

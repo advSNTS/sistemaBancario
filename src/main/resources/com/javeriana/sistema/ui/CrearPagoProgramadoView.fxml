@@ -1,21 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.control.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
 
-<StackPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="com.javeriana.sistema.controller.CrearPagoProgramadoController">
+<VBox xmlns="http://javafx.com/javafx/8"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.javeriana.sistema.controller.CrearPagoProgramadoController"
+      spacing="15" alignment="CENTER" style="-fx-padding: 25; -fx-background-color: #f9f9f9;">
 
-    <VBox spacing="15" alignment="CENTER" style="-fx-padding: 20;">
-        <Label text="Crear Pago Programado" style="-fx-font-size: 20px;"/>
+    <Label text="Crear Pago Programado" style="-fx-font-size: 18px;" />
 
-        <ComboBox fx:id="comboCuentaOrigen" promptText="Cuenta Origen" prefWidth="250"/>
-        <TextField fx:id="txtCuentaDestinoId" promptText="Cédula Destinatario" prefWidth="250"/>
-        <TextField fx:id="txtMonto" promptText="Monto" prefWidth="250"/>
-        <DatePicker fx:id="dateFechaEjecucion" prefWidth="250"/>
-        <TextField fx:id="txtHoraEjecucion" promptText="Hora (HH:mm)" prefWidth="250"/>
-        <Button text="Guardar Pago" onAction="#guardarPagoProgramado"
-                style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
-    </VBox>
-</StackPane>
+    <ComboBox fx:id="comboCuentaOrigen" promptText="Selecciona tu cuenta de origen" prefWidth="280"/>
+
+    <HBox spacing="10">
+        <ComboBox fx:id="comboTipoDestino" prefWidth="100" promptText="Tipo"/>
+        <TextField fx:id="txtCuentaDestinoId" promptText="Cédula o ID Cuenta" prefWidth="170"/>
+    </HBox>
+
+    <TextField fx:id="txtMonto" promptText="Monto" prefWidth="280"/>
+    <DatePicker fx:id="dateFechaEjecucion" promptText="Fecha de ejecución" prefWidth="280"/>
+    <TextField fx:id="txtHoraEjecucion" promptText="Hora (HH:mm)" prefWidth="280"/>
+
+    <Button text="Guardar Pago Programado"
+            onAction="#guardarPagoProgramado"
+            style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-background-radius: 5;" />
+
+</VBox>

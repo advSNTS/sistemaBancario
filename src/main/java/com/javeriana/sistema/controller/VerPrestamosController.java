@@ -2,6 +2,7 @@ package com.javeriana.sistema.controller;
 
 import com.javeriana.sistema.model.Prestamo;
 import com.javeriana.sistema.services.PrestamoService;
+import com.javeriana.sistema.util.UsuarioSesion;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -27,30 +28,35 @@ public class VerPrestamosController {
     @FXML private Button btnPagarPrestamo;
 
     private final PrestamoService prestamoService = new PrestamoService();
-    private int usuarioId;
-
-    public void setUsuarioId(int id) {
-        this.usuarioId = id;
-        cargarPrestamos(usuarioId);
-    }
+    private int usuarioId = -1;
 
     @FXML
     public void initialize() {
-        // No se hace nada hasta que se llame a setUsuarioId
+        // Si no se ha seteado manualmente, lo intenta obtener desde la sesión
+        if (usuarioId <= 0 && UsuarioSesion.getInstancia().getUsuario() != null) {
+            usuarioId = UsuarioSesion.getInstancia().getUsuario().getId();
+        }
+
+        if (usuarioId > 0) {
+            cargarPrestamos(usuarioId);
+        } else {
+            mostrarAlerta("Error", "No se pudo obtener el usuario actual.");
+        }
+    }
+
+    public void setUsuarioId(int id) {
+        this.usuarioId = id;
+        cargarPrestamos(id);
     }
 
     private void cargarPrestamos(int usuarioId) {
         List<Prestamo> prestamos = prestamoService.obtenerPrestamosDeUsuario(usuarioId);
-
         tablaPrestamos.getItems().setAll(prestamos);
+
         colId.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getId()).asObject());
         colMonto.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getMonto()).asObject());
         colSaldo.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getSaldoPendiente()).asObject());
         colFecha.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getFechaAprobacion()));
-
-        tablaPrestamos.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            btnPagarPrestamo.setDisable(newSelection == null);
-        });
 
         colEstado.setCellValueFactory(data -> {
             String estado = (data.getValue().getSaldoPendiente() == 0.0) ? "Pagado" : "Pendiente";
@@ -72,10 +78,17 @@ public class VerPrestamosController {
                 }
             }
         });
+
+        btnPagarPrestamo.setDisable(true);
+        tablaPrestamos.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, newSel) -> {
+            btnPagarPrestamo.setDisable(newSel == null);
+        });
     }
 
     public void recargarPrestamos() {
-        cargarPrestamos(usuarioId);
+        if (usuarioId > 0) {
+            cargarPrestamos(usuarioId);
+        }
     }
 
     @FXML
@@ -89,7 +102,7 @@ public class VerPrestamosController {
                 PagarPrestamoController controller = loader.getController();
                 controller.setPrestamo(prestamoSeleccionado);
                 controller.setVerPrestamosController(this);
-                controller.setUsuarioId(usuarioId); // ← IMPORTANTE para cargar cuentas
+                controller.setUsuarioId(usuarioId);
 
                 Stage stage = new Stage();
                 stage.setTitle("Pagar Préstamo");
