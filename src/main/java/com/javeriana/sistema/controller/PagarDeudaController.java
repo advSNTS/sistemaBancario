@@ -23,41 +23,43 @@ public class PagarDeudaController {
 
     public void setUsuarioId(int id) {
         this.usuarioId = id;
+
+        if (usuarioId <= 0) {
+            mostrarAlerta("Error", "ID de usuario inválido.");
+            return;
+        }
+
         cargarTarjetasConDeuda();
         cargarCuentas();
     }
 
     private void cargarTarjetasConDeuda() {
         List<Tarjeta> tarjetas = tarjetaService.obtenerTarjetasDeUsuario(usuarioId).stream()
-                .filter(t -> t.getDeuda() > 0)
+                .filter(t -> t.getDeuda() > 0 && "Crédito".equalsIgnoreCase(t.getTipo()))
                 .toList();
+
         comboTarjetas.setItems(FXCollections.observableArrayList(tarjetas));
 
         comboTarjetas.setCellFactory(list -> new ListCell<>() {
             @Override
             protected void updateItem(Tarjeta tarjeta, boolean empty) {
                 super.updateItem(tarjeta, empty);
-                if (tarjeta == null || empty) {
-                    setText(null);
-                } else {
-                    String estado = tarjeta.isBloqueada() ? "BLOQUEADA" : (tarjeta.isActiva() ? "ACTIVA" : "INACTIVA");
-                    setText(tarjeta.getTipo() + " - Deuda: $" + tarjeta.getDeuda() + " - " + estado);
-                }
+                setText((tarjeta == null || empty) ? null : tarjeta.getTipo() + " - Deuda: $" + tarjeta.getDeuda());
             }
         });
 
+        // Corrección aquí: usamos una instancia de ListCell explícita
         comboTarjetas.setButtonCell(new ListCell<>() {
             @Override
             protected void updateItem(Tarjeta tarjeta, boolean empty) {
                 super.updateItem(tarjeta, empty);
-                if (tarjeta == null || empty) {
-                    setText(null);
-                } else {
-                    String estado = tarjeta.isBloqueada() ? "BLOQUEADA" : (tarjeta.isActiva() ? "ACTIVA" : "INACTIVA");
-                    setText(tarjeta.getTipo() + " - Deuda: $" + tarjeta.getDeuda() + " - " + estado);
-                }
+                setText((tarjeta == null || empty) ? null : tarjeta.getTipo() + " - Deuda: $" + tarjeta.getDeuda());
             }
         });
+
+        if (comboTarjetas.getItems().isEmpty()) {
+            mostrarAlerta("Información", "No hay tarjetas de crédito con deuda para pagar.");
+        }
     }
 
     private void cargarCuentas() {
@@ -68,11 +70,9 @@ public class PagarDeudaController {
             @Override
             protected void updateItem(CuentaBancaria cuenta, boolean empty) {
                 super.updateItem(cuenta, empty);
-                if (cuenta == null || empty) {
-                    setText(null);
-                } else {
-                    setText(cuenta.getTipo() + " - Saldo: $" + cuenta.getSaldo());
-                }
+                setText((cuenta == null || empty)
+                        ? null
+                        : cuenta.getTipo() + " - Saldo: $" + cuenta.getSaldo());
             }
         });
 
@@ -80,13 +80,15 @@ public class PagarDeudaController {
             @Override
             protected void updateItem(CuentaBancaria cuenta, boolean empty) {
                 super.updateItem(cuenta, empty);
-                if (cuenta == null || empty) {
-                    setText(null);
-                } else {
-                    setText(cuenta.getTipo() + " - Saldo: $" + cuenta.getSaldo());
-                }
+                setText((cuenta == null || empty)
+                        ? null
+                        : cuenta.getTipo() + " - Saldo: $" + cuenta.getSaldo());
             }
         });
+
+        if (comboCuentas.getItems().isEmpty()) {
+            mostrarAlerta("Información", "No hay cuentas disponibles para pagar la deuda.");
+        }
     }
 
     @FXML
@@ -112,6 +114,7 @@ public class PagarDeudaController {
             cargarTarjetasConDeuda();
             cargarCuentas();
             txtMonto.clear();
+
         } catch (NumberFormatException e) {
             mostrarAlerta("Error", "El monto ingresado no es válido.");
         } catch (Exception e) {

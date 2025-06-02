@@ -22,9 +22,12 @@ public class TarjetaService {
         LocalDate fechaVencimiento = generarFechaVencimiento();
         String cvv = generarCVV();
 
+        double deudaInicial = "Débito".equalsIgnoreCase(tipo) ? 0.0 : 0.0;
+        double cupoDisponible = "Débito".equalsIgnoreCase(tipo) ? 0.0 : cupo;
+
         Tarjeta tarjeta = new Tarjeta(
                 0, usuarioId, tipo, estado,
-                cupo, cupo, 0.0,
+                cupo, cupoDisponible, deudaInicial,
                 true, false,
                 numero, fechaVencimiento, cvv
         );
@@ -57,6 +60,9 @@ public class TarjetaService {
         if (tarjeta == null || !tarjeta.isActiva() || tarjeta.isBloqueada()) {
             throw new Exception("Tarjeta inválida, inactiva o bloqueada.");
         }
+        if (tarjeta.getTipo().equalsIgnoreCase("Débito")) {
+            throw new Exception("Las tarjetas débito no pueden acumular deuda.");
+        }
         if (tarjeta.getCupoDisponible() < monto) {
             throw new Exception("Cupo insuficiente.");
         }
@@ -72,9 +78,15 @@ public class TarjetaService {
         if (tarjeta == null || cuenta == null) {
             throw new Exception("Tarjeta o cuenta no encontrada.");
         }
+
+        if ("Débito".equalsIgnoreCase(tarjeta.getTipo())) {
+            throw new Exception("Las tarjetas débito no acumulan deuda.");
+        }
+
         if (tarjeta.getDeuda() < monto) {
             throw new Exception("El monto excede la deuda actual.");
         }
+
         if (cuenta.getSaldo() < monto) {
             throw new Exception("Saldo insuficiente en la cuenta.");
         }
@@ -88,6 +100,16 @@ public class TarjetaService {
     }
 
     public void usarTarjeta(int tarjetaId, double monto) throws Exception {
+        Tarjeta tarjeta = tarjetaDAO.buscarPorId(tarjetaId);
+
+        if (tarjeta == null || !tarjeta.isActiva() || tarjeta.isBloqueada()) {
+            throw new Exception("Tarjeta inválida, inactiva o bloqueada.");
+        }
+
+        if ("Débito".equalsIgnoreCase(tarjeta.getTipo())) {
+            throw new Exception("Las tarjetas débito deben estar vinculadas a una cuenta.");
+        }
+
         realizarPagoConTarjeta(tarjetaId, monto);
     }
 
@@ -107,7 +129,7 @@ public class TarjetaService {
     }
 
     private LocalDate generarFechaVencimiento() {
-        return LocalDate.now().plusYears(4); // ← Devuelve LocalDate directamente
+        return LocalDate.now().plusYears(4);
     }
 
     private String generarCVV() {
