@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 public class PagoProgramado {
     private int id;
     private int cuentaOrigenId;
-    private int cuentaDestinoId;  // ✅ Cambio aquí
+    private int cuentaDestinoId;
     private double monto;
     private LocalDateTime fechaHoraEjecucion;
     private boolean ejecutado;

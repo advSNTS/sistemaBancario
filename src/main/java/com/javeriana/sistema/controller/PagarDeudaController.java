@@ -24,7 +24,6 @@ public class PagarDeudaController {
 
     @FXML
     public void initialize() {
-        // Esto asegura que los ComboBox se carguen si el usuario ya está en sesión
         if (UsuarioSesion.getInstancia().getUsuario() != null) {
             setUsuarioId(UsuarioSesion.getInstancia().getUsuario().getId());
         }
@@ -57,7 +56,6 @@ public class PagarDeudaController {
             }
         });
 
-        // Corrección aquí: usamos una instancia de ListCell explícita
         comboTarjetas.setButtonCell(new ListCell<>() {
             @Override
             protected void updateItem(Tarjeta tarjeta, boolean empty) {

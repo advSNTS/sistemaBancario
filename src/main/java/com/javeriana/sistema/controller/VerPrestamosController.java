@@ -32,7 +32,6 @@ public class VerPrestamosController {
 
     @FXML
     public void initialize() {
-        // Si no se ha seteado manualmente, lo intenta obtener desde la sesión
         if (usuarioId <= 0 && UsuarioSesion.getInstancia().getUsuario() != null) {
             usuarioId = UsuarioSesion.getInstancia().getUsuario().getId();
         }

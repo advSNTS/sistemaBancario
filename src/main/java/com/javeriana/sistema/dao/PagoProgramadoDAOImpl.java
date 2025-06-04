@@ -25,7 +25,7 @@ public class PagoProgramadoDAOImpl implements PagoProgramadoDAO {
         String sql = "INSERT INTO pagos_programados (cuenta_origen_id, cuenta_destino_id, monto, fecha_ejecucion, ejecutado) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setInt(1, pago.getCuentaOrigenId());
-            stmt.setInt(2, pago.getCuentaDestinoId()); // ✅ corregido
+            stmt.setInt(2, pago.getCuentaDestinoId());
             stmt.setDouble(3, pago.getMonto());
             stmt.setTimestamp(4, Timestamp.valueOf(pago.getFechaHoraEjecucion()));
             stmt.setBoolean(5, pago.isEjecutado());
@@ -97,7 +97,7 @@ public class PagoProgramadoDAOImpl implements PagoProgramadoDAO {
         return new PagoProgramado(
                 rs.getInt("id"),
                 rs.getInt("cuenta_origen_id"),
-                rs.getInt("cuenta_destino_id"), // ✅ corregido
+                rs.getInt("cuenta_destino_id"),
                 rs.getDouble("monto"),
                 rs.getTimestamp("fecha_ejecucion").toLocalDateTime(),
                 rs.getBoolean("ejecutado")

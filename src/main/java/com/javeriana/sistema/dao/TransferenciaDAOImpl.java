@@ -28,7 +28,7 @@ public class TransferenciaDAOImpl implements TransferenciaDAO {
             stmt.setTimestamp(4, Timestamp.valueOf(t.getFecha()));
             stmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace(); // puedes reemplazar por logger si deseas
+            e.printStackTrace();
         }
     }
 

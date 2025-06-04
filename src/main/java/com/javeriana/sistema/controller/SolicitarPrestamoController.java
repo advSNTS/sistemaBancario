@@ -26,7 +26,6 @@ public class SolicitarPrestamoController {
 
     @FXML
     public void initialize() {
-        // Intenta obtener usuario automáticamente si no se setea desde otro lado
         if (usuario == null) {
             usuario = UsuarioSesion.getInstancia().getUsuario();
         }

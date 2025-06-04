@@ -50,7 +50,6 @@ public class LoginController {
         if (usuario != null) {
             System.out.println("Inicio de sesión exitoso para: " + usuario.getNombre());
 
-            // Guardar en singleton
             UsuarioSesion.getInstancia().setUsuario(usuario);
 
             try {

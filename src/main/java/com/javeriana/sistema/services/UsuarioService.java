@@ -25,8 +25,6 @@
             }
             return null;
         }
-
-        // Obtener todos los usuarios (opcional para otras vistas)
         public List<Usuario> obtenerTodosLosUsuarios() {
             return usuarioDAO.listarTodos();
         }
