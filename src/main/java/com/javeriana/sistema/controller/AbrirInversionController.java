@@ -61,7 +61,7 @@ public class AbrirInversionController {
             Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
             confirmacion.setTitle("Confirmar Inversión");
             confirmacion.setHeaderText(null);
-            confirmacion.setContentText("¿Desea proceder con la inversión?");
+            confirmacion.setContentText("¿Desea proceder con la inversión?\nRetorno estimado: $" + String.format("%.2f", retorno));
 
             if (confirmacion.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
                 inversionService.crearInversion(cuenta.getId(), monto, plazo);

@@ -18,9 +18,27 @@ public class DashboardCuentasController {
     }
 
     @FXML
+    @FXML
     private void verCuentas() {
-        abrirVentana("/com/javeriana/sistema/ui/VerCuentasView.fxml", "Mis Cuentas");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/ui/VerCuentasView.fxml"));
+            Parent root = loader.load();
+
+            VerCuentasController controller = loader.getController();
+            controller.setUsuarioId(UsuarioSesion.getInstancia().getUsuario().getId());
+            controller.cargarCuentas();
+
+            Stage modalStage = new Stage();
+            modalStage.initModality(Modality.APPLICATION_MODAL);
+            modalStage.setTitle("Mis Cuentas");
+            modalStage.setScene(new Scene(root));
+            modalStage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
     @FXML
     private void volver() {
