@@ -13,11 +13,14 @@ public class Tarjeta {
     private boolean activa;
     private boolean bloqueada;
     private String numero;
-    private LocalDate fechaVencimiento; // CAMBIADO de String a LocalDate
+    private LocalDate fechaVencimiento;
     private String cvv;
+    private Integer cuentaAsociadaId;
+
 
     public Tarjeta(int id, int usuarioId, String tipo, String estado, double cupoTotal, double cupoDisponible,
-                   double deuda, boolean activa, boolean bloqueada, String numero, LocalDate fechaVencimiento, String cvv) {
+                   double deuda, boolean activa, boolean bloqueada, String numero,
+                   LocalDate fechaVencimiento, String cvv, Integer cuentaAsociadaId) {
         this.id = id;
         this.usuarioId = usuarioId;
         this.tipo = tipo;
@@ -30,10 +33,10 @@ public class Tarjeta {
         this.numero = numero;
         this.fechaVencimiento = fechaVencimiento;
         this.cvv = cvv;
+        this.cuentaAsociadaId = cuentaAsociadaId;
     }
 
     // Getters y setters
-
     public int getId() {
         return id;
     }
@@ -128,5 +131,13 @@ public class Tarjeta {
 
     public void setCvv(String cvv) {
         this.cvv = cvv;
+    }
+
+    public Integer getCuentaAsociadaId() {
+        return cuentaAsociadaId;
+    }
+
+    public void setCuentaAsociadaId(Integer cuentaAsociadaId) {
+        this.cuentaAsociadaId = cuentaAsociadaId;
     }
 }

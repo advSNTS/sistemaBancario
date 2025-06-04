@@ -4,6 +4,7 @@ import com.javeriana.sistema.model.CuentaBancaria;
 import com.javeriana.sistema.model.Tarjeta;
 import com.javeriana.sistema.services.CuentaBancariaService;
 import com.javeriana.sistema.services.TarjetaService;
+import com.javeriana.sistema.util.UsuarioSesion; // <-- esta línea es necesaria
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -20,6 +21,14 @@ public class PagarDeudaController {
     private final TarjetaService tarjetaService = new TarjetaService();
     private final CuentaBancariaService cuentaService = new CuentaBancariaService();
     private int usuarioId;
+
+    @FXML
+    public void initialize() {
+        // Esto asegura que los ComboBox se carguen si el usuario ya está en sesión
+        if (UsuarioSesion.getInstancia().getUsuario() != null) {
+            setUsuarioId(UsuarioSesion.getInstancia().getUsuario().getId());
+        }
+    }
 
     public void setUsuarioId(int id) {
         this.usuarioId = id;

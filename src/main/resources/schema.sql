@@ -62,8 +62,11 @@ CREATE TABLE IF NOT EXISTS tarjetas (
     deuda_actual DOUBLE NOT NULL DEFAULT 0,
     activa BOOLEAN NOT NULL DEFAULT FALSE,
     bloqueada BOOLEAN NOT NULL DEFAULT FALSE,
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+    cuenta_asociada_id INT,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
+    FOREIGN KEY (cuenta_asociada_id) REFERENCES cuentas_bancarias(id)
 );
+
 
 CREATE TABLE IF NOT EXISTS inversiones (
     id INT AUTO_INCREMENT PRIMARY KEY,

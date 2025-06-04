@@ -21,8 +21,8 @@ public class TarjetaDAOImpl implements TarjetaDAO {
 
     @Override
     public void guardar(Tarjeta tarjeta) {
-        String sql = "INSERT INTO tarjetas (usuario_id, tipo, estado, cupo_total, cupo_disponible, deuda_actual, activa, bloqueada, numero, fecha_vencimiento, cvv) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO tarjetas (usuario_id, tipo, estado, cupo_total, cupo_disponible, deuda_actual, activa, bloqueada, numero, fecha_vencimiento, cvv, cuenta_asociada_id) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setInt(1, tarjeta.getUsuarioId());
             stmt.setString(2, tarjeta.getTipo());
@@ -33,8 +33,15 @@ public class TarjetaDAOImpl implements TarjetaDAO {
             stmt.setBoolean(7, tarjeta.isActiva());
             stmt.setBoolean(8, tarjeta.isBloqueada());
             stmt.setString(9, tarjeta.getNumero());
-            stmt.setDate(10, Date.valueOf(tarjeta.getFechaVencimiento())); // LocalDate → SQL
+            stmt.setDate(10, Date.valueOf(tarjeta.getFechaVencimiento()));
             stmt.setString(11, tarjeta.getCvv());
+
+            if (tarjeta.getCuentaAsociadaId() != null) {
+                stmt.setInt(12, tarjeta.getCuentaAsociadaId());
+            } else {
+                stmt.setNull(12, Types.INTEGER);
+            }
+
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -43,7 +50,7 @@ public class TarjetaDAOImpl implements TarjetaDAO {
 
     @Override
     public void actualizar(Tarjeta tarjeta) {
-        String sql = "UPDATE tarjetas SET tipo = ?, estado = ?, cupo_total = ?, cupo_disponible = ?, deuda_actual = ?, activa = ?, bloqueada = ?, numero = ?, fecha_vencimiento = ?, cvv = ? " +
+        String sql = "UPDATE tarjetas SET tipo = ?, estado = ?, cupo_total = ?, cupo_disponible = ?, deuda_actual = ?, activa = ?, bloqueada = ?, numero = ?, fecha_vencimiento = ?, cvv = ?, cuenta_asociada_id = ? " +
                 "WHERE id = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setString(1, tarjeta.getTipo());
@@ -56,7 +63,15 @@ public class TarjetaDAOImpl implements TarjetaDAO {
             stmt.setString(8, tarjeta.getNumero());
             stmt.setDate(9, Date.valueOf(tarjeta.getFechaVencimiento()));
             stmt.setString(10, tarjeta.getCvv());
-            stmt.setInt(11, tarjeta.getId());
+
+            if (tarjeta.getCuentaAsociadaId() != null) {
+                stmt.setInt(11, tarjeta.getCuentaAsociadaId());
+            } else {
+                stmt.setNull(11, Types.INTEGER);
+            }
+
+            stmt.setInt(12, tarjeta.getId());
+
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -117,6 +132,8 @@ public class TarjetaDAOImpl implements TarjetaDAO {
     }
 
     private Tarjeta mapear(ResultSet rs) throws SQLException {
+        Integer cuentaId = (rs.getObject("cuenta_asociada_id") != null) ? rs.getInt("cuenta_asociada_id") : null;
+
         return new Tarjeta(
                 rs.getInt("id"),
                 rs.getInt("usuario_id"),
@@ -129,7 +146,8 @@ public class TarjetaDAOImpl implements TarjetaDAO {
                 rs.getBoolean("bloqueada"),
                 rs.getString("numero"),
                 rs.getDate("fecha_vencimiento").toLocalDate(),
-                rs.getString("cvv")
+                rs.getString("cvv"),
+                cuentaId
         );
     }
 }

@@ -53,7 +53,9 @@ public class DashboardTarjetasController implements UsuarioAwareController {
     @FXML
     private void volver() {
         Stage stage = (Stage) getCurrentWindow();
-        if (stage != null) stage.close();
+        if (stage != null) {
+            stage.close();
+        }
     }
 
     private void abrirModal(String fxmlPath, String titulo) {
@@ -61,10 +63,9 @@ public class DashboardTarjetasController implements UsuarioAwareController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
 
-            // Si el controlador implementa UsuarioAwareController, pasamos el usuario autenticado
             Object controller = loader.getController();
-            if (controller instanceof UsuarioAwareController) {
-                ((UsuarioAwareController) controller).setUsuarioAutenticado(usuarioAutenticado);
+            if (controller instanceof UsuarioAwareController usuarioAware) {
+                usuarioAware.setUsuarioAutenticado(usuarioAutenticado);
             }
 
             Stage modalStage = new Stage();

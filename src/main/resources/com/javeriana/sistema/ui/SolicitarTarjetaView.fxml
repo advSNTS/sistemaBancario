@@ -13,8 +13,16 @@
 
     <Label text="Solicitar Nueva Tarjeta" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
 
-    <ComboBox fx:id="comboTipoTarjeta" promptText="Tipo de Tarjeta" prefWidth="200"/>
+    <ComboBox fx:id="comboTipoTarjeta"
+              promptText="Tipo de Tarjeta"
+              prefWidth="200"
+              onAction="#onTipoSeleccionado" />
+
     <TextField fx:id="txtCupo" promptText="Cupo Solicitado" prefWidth="200"/>
+
+    <!-- Sección visible solo si es tarjeta de débito -->
+    <Label fx:id="lblCuenta" text="Cuenta Asociada:" visible="false"/>
+    <ComboBox fx:id="comboCuenta" promptText="Seleccione una cuenta" prefWidth="200" visible="false"/>
 
     <Button fx:id="btnSolicitar"
             text="Solicitar"

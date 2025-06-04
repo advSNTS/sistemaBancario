@@ -16,21 +16,36 @@ public class TarjetaService {
     private final TarjetaDAO tarjetaDAO = new TarjetaDAOImpl();
     private final CuentaBancariaDAO cuentaDAO = new CuentaBancariaDAOImpl();
 
-    public Tarjeta solicitarTarjeta(int usuarioId, String tipo, double cupo) {
+    public Tarjeta solicitarTarjeta(int usuarioId, String tipo, double cupo) throws Exception {
+        return solicitarTarjeta(usuarioId, tipo, cupo, null);
+    }
+
+    public Tarjeta solicitarTarjeta(int usuarioId, String tipo, double cupo, Integer cuentaAsociadaId) throws Exception {
         String estado = "Activa";
         String numero = generarNumeroTarjeta();
         LocalDate fechaVencimiento = generarFechaVencimiento();
         String cvv = generarCVV();
 
-        double deudaInicial = "Débito".equalsIgnoreCase(tipo) ? 0.0 : 0.0;
-        double cupoDisponible = "Débito".equalsIgnoreCase(tipo) ? 0.0 : cupo;
+        if ("Débito".equalsIgnoreCase(tipo)) {
+            if (cuentaAsociadaId == null) {
+                throw new Exception("Se debe asociar una cuenta a la tarjeta débito.");
+            }
+            CuentaBancaria cuenta = cuentaDAO.buscarPorId(cuentaAsociadaId);
+            List<String> tiposValidos = List.of("Ahorro", "Ahorros", "Cuenta de Ahorro");
+            if (cuenta == null || tiposValidos.stream().noneMatch(t -> t.equalsIgnoreCase(cuenta.getTipo()))) {
+                throw new Exception("Cuenta asociada inválida para tarjeta débito.");
+            }
+            cupo = cuenta.getSaldo(); // cupo se toma del saldo de la cuenta
+        }
 
         Tarjeta tarjeta = new Tarjeta(
                 0, usuarioId, tipo, estado,
-                cupo, cupoDisponible, deudaInicial,
+                cupo, cupo, 0.0,
                 true, false,
-                numero, fechaVencimiento, cvv
+                numero, fechaVencimiento, cvv,
+                cuentaAsociadaId
         );
+
         tarjetaDAO.guardar(tarjeta);
         return tarjeta;
     }
@@ -47,6 +62,16 @@ public class TarjetaService {
         tarjetaDAO.bloquear(tarjetaId);
     }
 
+    public void desbloquearTarjeta(int tarjetaId) {
+        Tarjeta tarjeta = tarjetaDAO.buscarPorId(tarjetaId);
+        if (tarjeta != null) {
+            tarjeta.setBloqueada(false);
+            tarjeta.setActiva(true);
+            tarjeta.setEstado("Activa");
+            tarjetaDAO.actualizar(tarjeta);
+        }
+    }
+
     public List<Tarjeta> obtenerTarjetasDeUsuario(int usuarioId) {
         return tarjetaDAO.listarPorUsuario(usuarioId);
     }
@@ -60,15 +85,29 @@ public class TarjetaService {
         if (tarjeta == null || !tarjeta.isActiva() || tarjeta.isBloqueada()) {
             throw new Exception("Tarjeta inválida, inactiva o bloqueada.");
         }
-        if (tarjeta.getTipo().equalsIgnoreCase("Débito")) {
-            throw new Exception("Las tarjetas débito no pueden acumular deuda.");
+
+        if ("Débito".equalsIgnoreCase(tarjeta.getTipo())) {
+            // Sacar dinero directamente de la cuenta asociada
+            if (tarjeta.getCuentaAsociadaId() == null) {
+                throw new Exception("La tarjeta débito no está vinculada a ninguna cuenta.");
+            }
+            CuentaBancaria cuenta = cuentaDAO.buscarPorId(tarjeta.getCuentaAsociadaId());
+            if (cuenta == null || cuenta.getSaldo() < monto) {
+                throw new Exception("Saldo insuficiente en la cuenta asociada.");
+            }
+
+            cuenta.setSaldo(cuenta.getSaldo() - monto);
+            cuentaDAO.actualizar(cuenta);
+        } else if ("Crédito".equalsIgnoreCase(tarjeta.getTipo())) {
+            if (tarjeta.getCupoDisponible() < monto) {
+                throw new Exception("Cupo insuficiente.");
+            }
+            tarjeta.setCupoDisponible(tarjeta.getCupoDisponible() - monto);
+            tarjeta.setDeuda(tarjeta.getDeuda() + monto);
+            tarjetaDAO.actualizar(tarjeta);
+        } else {
+            throw new Exception("Tipo de tarjeta no reconocido.");
         }
-        if (tarjeta.getCupoDisponible() < monto) {
-            throw new Exception("Cupo insuficiente.");
-        }
-        tarjeta.setCupoDisponible(tarjeta.getCupoDisponible() - monto);
-        tarjeta.setDeuda(tarjeta.getDeuda() + monto);
-        tarjetaDAO.actualizar(tarjeta);
     }
 
     public void pagarDeudaConCuenta(int tarjetaId, int cuentaId, double monto) throws Exception {
@@ -79,14 +118,13 @@ public class TarjetaService {
             throw new Exception("Tarjeta o cuenta no encontrada.");
         }
 
-        if ("Débito".equalsIgnoreCase(tarjeta.getTipo())) {
-            throw new Exception("Las tarjetas débito no acumulan deuda.");
+        if (!"Crédito".equalsIgnoreCase(tarjeta.getTipo())) {
+            throw new Exception("Solo se puede pagar deuda de tarjetas de crédito.");
         }
 
         if (tarjeta.getDeuda() < monto) {
             throw new Exception("El monto excede la deuda actual.");
         }
-
         if (cuenta.getSaldo() < monto) {
             throw new Exception("Saldo insuficiente en la cuenta.");
         }
@@ -100,16 +138,6 @@ public class TarjetaService {
     }
 
     public void usarTarjeta(int tarjetaId, double monto) throws Exception {
-        Tarjeta tarjeta = tarjetaDAO.buscarPorId(tarjetaId);
-
-        if (tarjeta == null || !tarjeta.isActiva() || tarjeta.isBloqueada()) {
-            throw new Exception("Tarjeta inválida, inactiva o bloqueada.");
-        }
-
-        if ("Débito".equalsIgnoreCase(tarjeta.getTipo())) {
-            throw new Exception("Las tarjetas débito deben estar vinculadas a una cuenta.");
-        }
-
         realizarPagoConTarjeta(tarjetaId, monto);
     }
 
@@ -117,7 +145,7 @@ public class TarjetaService {
         pagarDeudaConCuenta(tarjetaId, cuentaId, monto);
     }
 
-    // Generadores auxiliares
+    // Métodos auxiliares
     private String generarNumeroTarjeta() {
         Random random = new Random();
         StringBuilder sb = new StringBuilder();
@@ -135,15 +163,5 @@ public class TarjetaService {
     private String generarCVV() {
         Random random = new Random();
         return String.format("%03d", random.nextInt(1000));
-    }
-
-    public void desbloquearTarjeta(int tarjetaId) {
-        Tarjeta tarjeta = tarjetaDAO.buscarPorId(tarjetaId);
-        if (tarjeta != null) {
-            tarjeta.setBloqueada(false);
-            tarjeta.setActiva(true);
-            tarjeta.setEstado("Activa");
-            tarjetaDAO.actualizar(tarjeta);
-        }
     }
 }
