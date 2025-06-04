@@ -7,6 +7,8 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import com.javeriana.sistema.util.UsuarioSesion;
+
 
 import java.io.IOException;
 
@@ -17,7 +19,6 @@ public class DashboardCuentasController {
         abrirVentana("/com/javeriana/sistema/ui/CrearCuentaView.fxml", "Crear Nueva Cuenta");
     }
 
-    @FXML
     @FXML
     private void verCuentas() {
         try {

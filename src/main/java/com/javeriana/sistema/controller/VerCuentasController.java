@@ -41,7 +41,7 @@ public class VerCuentasController {
         cargarCuentas();
     }
 
-    private void cargarCuentas() {
+    public void cargarCuentas() {
         if (usuarioId <= 0) return;
         List<CuentaBancaria> cuentasUsuario = cuentaService.obtenerCuentasDeUsuario(usuarioId);
 
@@ -106,5 +106,24 @@ public class VerCuentasController {
         alerta.setHeaderText(null);
         alerta.setContentText(mensaje);
         alerta.showAndWait();
+    }
+
+    @FXML
+    private void abrirSimularInversiones() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/ui/SimularInversionesView.fxml"));
+            Parent root = loader.load();
+
+            SimularInversionesController controller = loader.getController();
+            controller.setVerCuentasController(this);
+
+            Stage stage = new Stage();
+            stage.setTitle("Simular Inversiones");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarAlerta("Error", "No se pudo abrir la ventana de simulación de inversiones.");
+        }
     }
 }

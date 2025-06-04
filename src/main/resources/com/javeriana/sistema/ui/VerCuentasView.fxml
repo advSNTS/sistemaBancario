@@ -19,6 +19,7 @@
             </TableView>
 
             <Button fx:id="btnOperar" text="Operar" onAction="#abrirOperacionCuenta" disable="true" />
+            <Button text="Simular Inversiones" onAction="#abrirSimularInversiones" />
         </VBox>
     </center>
 
