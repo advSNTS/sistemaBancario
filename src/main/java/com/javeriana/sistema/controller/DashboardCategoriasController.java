@@ -54,6 +54,20 @@ public class DashboardCategoriasController {
         abrirVentanaModal("Configuraciones", "/com/javeriana/sistema/ui/DashboardConfiguracionesView.fxml");
     }
 
+    @FXML
+    private void abrirTrazadorMovimientos() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/ui/VerMovimientosView.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Trazador de Movimientos");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @FXML private void abrirSoporte() {
         abrirVentanaModal("Soporte al Cliente", "/com/javeriana/sistema/ui/Soporte.fxml");
     }

@@ -42,7 +42,7 @@ public class RegistroController {
             String nombre = txtNombre.getText();
             String correo = txtCorreo.getText();
             String clave = txtClave.getText();
-            String cedula = txtCedula.getText();  // Captura de cédula
+            String cedula = txtCedula.getText();
             String pregunta = comboPreguntaSecreta.getValue();
             String respuesta = txtRespuestaSecreta.getText();
 
@@ -54,7 +54,7 @@ public class RegistroController {
             Usuario nuevoUsuario = new Usuario(id, nombre, correo, clave);
             nuevoUsuario.setPreguntaSecreta(pregunta);
             nuevoUsuario.setRespuestaSecreta(respuesta);
-            nuevoUsuario.setCedula(cedula);  // Asignación de cédula
+            nuevoUsuario.setCedula(cedula);
 
             usuarioService.registrarUsuario(nuevoUsuario);
             mostrarAlerta("Éxito", "Usuario registrado correctamente.");

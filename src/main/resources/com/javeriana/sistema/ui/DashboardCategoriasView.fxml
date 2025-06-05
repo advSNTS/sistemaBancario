@@ -31,6 +31,11 @@
             onAction="#abrirCategoriaInversiones"
             style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 30; -fx-font-size: 16px;" />
 
+    <Button text="Trazador de Movimientos"
+            onAction="#abrirTrazadorMovimientos"
+            style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 30; -fx-font-size: 16px;" />
+
+
     <Button text="Configuraciones"
             onAction="#abrirCategoriaConfiguraciones"
             style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 30; -fx-font-size: 16px;" />

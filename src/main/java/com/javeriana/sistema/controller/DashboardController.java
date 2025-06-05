@@ -257,4 +257,31 @@ public class DashboardController {
             mostrarAlerta("Error", "No se pudo abrir la configuración de límite.");
         }
     }
+
+    @FXML
+    private void abrirVerMovimientos() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/view/ui/VerMovimientosView.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Trazador de Movimientos");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Alert alerta = new Alert(Alert.AlertType.ERROR);
+            alerta.setTitle("Error al abrir movimientos");
+            alerta.setHeaderText("No se pudo cargar la vista del trazador de movimientos");
+            alerta.setContentText(e.getMessage());
+            alerta.showAndWait();
+        }
+    }
+
+    private void mostrarError(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
 }

@@ -23,7 +23,7 @@ public class SolicitarTarjetaController {
     private final TarjetaService tarjetaService = new TarjetaService();
     private final CuentaBancariaService cuentaService = new CuentaBancariaService();
 
-    private int usuarioId; // Se usa si decides pasar el ID directamente
+    private int usuarioId;
 
     public void setUsuarioId(int usuarioId) {
         this.usuarioId = usuarioId;
@@ -43,7 +43,7 @@ public class SolicitarTarjetaController {
         comboCuenta.setVisible(esDebito);
 
         if (esDebito) {
-            Usuario usuario = UsuarioSesion.getInstancia().getUsuario(); // Usando sesión global
+            Usuario usuario = UsuarioSesion.getInstancia().getUsuario();
             if (usuario != null) {
                 List<CuentaBancaria> cuentas = cuentaService.obtenerCuentasDeUsuario(usuario.getId());
                 comboCuenta.setItems(FXCollections.observableArrayList(cuentas));

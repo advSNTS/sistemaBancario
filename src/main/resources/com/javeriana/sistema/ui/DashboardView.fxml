@@ -18,55 +18,76 @@
     <VBox spacing="15" alignment="CENTER" style="-fx-padding: 10;">
         <Button text="Crear Nueva Cuenta Bancaria"
                 onAction="#abrirCrearCuenta"
-                style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;" />
+                style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold;
+                       -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;" />
 
         <Button text="Ver Mis Cuentas"
                 onAction="#verCuentas"
-                style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;" />
+                style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold;
+                       -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;" />
 
         <Button text="Ver Mis Préstamos"
                 onAction="#verPrestamos"
-                style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;" />
+                style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold;
+                       -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;" />
 
         <Button text="Solicitar Préstamo"
                 onAction="#abrirSolicitarPrestamo"
-                style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;" />
+                style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold;
+                       -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;" />
 
         <Button text="Transferir a Otro Usuario"
                 onAction="#abrirTransferenciaPersonaPersona"
-                style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;" />
+                style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold;
+                       -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;" />
 
-        <Button text="Crear Pago Programado" onAction="#abrirCrearPagoProgramado"
-                style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;" />
+        <Button text="Crear Pago Programado"
+                onAction="#abrirCrearPagoProgramado"
+                style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold;
+                       -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;" />
 
-        <Button text="Ver Pagos Programados" onAction="#abrirVerPagosProgramados"
-                style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;" />
+        <Button text="Ver Pagos Programados"
+                onAction="#abrirVerPagosProgramados"
+                style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold;
+                       -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;" />
 
-        <Button text="Historial de Transferencias" onAction="#verHistorialTransferencias"
-                style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;" />
+        <Button text="Historial de Transferencias"
+                onAction="#verHistorialTransferencias"
+                style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold;
+                       -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;" />
 
-        <Button text="Gestionar Tarjetas" onAction="#abrirGestionTarjetas"
-                style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;"/>
+        <Button text="Gestionar Tarjetas"
+                onAction="#abrirGestionTarjetas"
+                style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold;
+                       -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;" />
 
-        <Button text="Inversiones" onAction="#abrirInversiones"
-                style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;"/>
+        <Button text="Inversiones"
+                onAction="#abrirInversiones"
+                style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold;
+                       -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;" />
 
         <Button text="Configurar Límite de Transacción"
                 onAction="#abrirConfiguracionLimite"
-                style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;" />
+                style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-weight: bold;
+                       -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;" />
 
-
+        <Button text="Trazador de Movimientos"
+                onAction="#abrirVerMovimientos"
+                style="-fx-background-color: #0288D1; -fx-text-fill: white; -fx-font-weight: bold;
+                       -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;" />
 
     </VBox>
 
     <Separator />
 
-    <Button text="Soporte al Cliente" onAction="#abrirSoporte"
-            style="-fx-background-color: #43A047; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;"/>
-
+    <Button text="Soporte al Cliente"
+            onAction="#abrirSoporte"
+            style="-fx-background-color: #43A047; -fx-text-fill: white; -fx-font-weight: bold;
+                   -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;" />
 
     <Button fx:id="cerrarSesionButton" text="Cerrar Sesión"
             onAction="#cerrarSesion"
-            style="-fx-background-color: #D32F2F; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;" />
+            style="-fx-background-color: #D32F2F; -fx-text-fill: white; -fx-font-weight: bold;
+                   -fx-background-radius: 10; -fx-padding: 10 30; -fx-font-size: 16px;" />
 
 </VBox>

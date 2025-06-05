@@ -77,7 +77,7 @@ public class VerCuentasController {
                 Parent root = loader.load();
 
                 DepositarRetirarController controller = loader.getController();
-                controller.setCuenta(cuentaActualizada); // Usa la cuenta actualizada
+                controller.setCuenta(cuentaActualizada);
                 controller.setVerCuentasController(this);
 
                 Stage stage = new Stage();

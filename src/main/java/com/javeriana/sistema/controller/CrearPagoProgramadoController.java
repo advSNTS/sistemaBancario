@@ -47,7 +47,6 @@ public class CrearPagoProgramadoController {
 
         List<CuentaBancaria> cuentas = cuentaService.obtenerCuentasDeUsuario(usuarioId);
 
-        // También puedes evitar duplicados por precaución
         Set<Integer> idsUnicos = new HashSet<>();
         for (CuentaBancaria cuenta : cuentas) {
             if (idsUnicos.add(cuenta.getId())) {

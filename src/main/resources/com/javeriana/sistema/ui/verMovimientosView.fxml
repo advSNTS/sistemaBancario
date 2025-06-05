@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.javeriana.sistema.controller.VerMovimientosController"
+      spacing="10" alignment="CENTER" style="-fx-padding: 20;">
+
+    <Label text="Extracto de Movimientos" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+
+    <ComboBox fx:id="comboCuentas" promptText="Seleccione una cuenta (opcional)" prefWidth="300"/>
+
+    <Button text="Cargar Extracto" onAction="#cargarMovimientos" />
+
+    <TableView fx:id="tablaMovimientos" prefWidth="700" prefHeight="400">
+        <columns>
+            <TableColumn fx:id="colFecha" text="Fecha" prefWidth="120" />
+            <TableColumn fx:id="colTipo" text="Tipo de Movimiento" prefWidth="180" />
+            <TableColumn fx:id="colMonto" text="Monto" prefWidth="100" />
+            <TableColumn fx:id="colCuentaOrigen" text="Cuenta Origen" prefWidth="120" />
+            <TableColumn fx:id="colCuentaDestino" text="Cuenta Destino" prefWidth="120" />
+        </columns>
+    </TableView>
+</VBox>

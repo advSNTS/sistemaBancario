@@ -5,7 +5,7 @@ import java.time.LocalDate;
 public class Tarjeta {
     private int id;
     private int usuarioId;
-    private String tipo; // "Débito" o "Crédito"
+    private String tipo;
     private String estado;
     private double cupoTotal;
     private double cupoDisponible;

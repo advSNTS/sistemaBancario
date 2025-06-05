@@ -1,11 +1,11 @@
 CREATE TABLE IF NOT EXISTS usuarios (
-                          id INT AUTO_INCREMENT PRIMARY KEY,
-                          nombre VARCHAR(100),
-                          correo VARCHAR(100),
-                          clave VARCHAR(100),
-                          pregunta_secreta VARCHAR(255),
-                          respuesta_secreta VARCHAR(255),
-                          cedula VARCHAR(50)
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100),
+    correo VARCHAR(100),
+    clave VARCHAR(100),
+    pregunta_secreta VARCHAR(255),
+    respuesta_secreta VARCHAR(255),
+    cedula VARCHAR(50)
 );
 
 CREATE TABLE IF NOT EXISTS cuentas_bancarias (
@@ -18,9 +18,9 @@ CREATE TABLE IF NOT EXISTS cuentas_bancarias (
 );
 
 CREATE TABLE IF NOT EXISTS prestamos (
-   id INT AUTO_INCREMENT PRIMARY KEY,
-   usuario_id INT NOT NULL,
-   monto DECIMAL(10,2) NOT NULL CHECK (monto > 0),
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    monto DECIMAL(10,2) NOT NULL CHECK (monto > 0),
     tasa_interes DECIMAL(5,2) NOT NULL CHECK (tasa_interes > 0),
     plazo_meses INT NOT NULL CHECK (plazo_meses > 0),
     saldo_pendiente DECIMAL(10,2) NOT NULL CHECK (saldo_pendiente >= 0),
@@ -78,3 +78,16 @@ CREATE TABLE IF NOT EXISTS inversiones (
     finalizada BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (cuenta_id) REFERENCES cuentas_bancarias(id)
 );
+
+
+CREATE TABLE IF NOT EXISTS movimientos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    cuenta_id_origen INT,
+    cuenta_id_destino INT,
+    tipo VARCHAR(50) NOT NULL,
+    monto DOUBLE NOT NULL,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (cuenta_id_origen) REFERENCES cuentas_bancarias(id) ON DELETE SET NULL,
+    FOREIGN KEY (cuenta_id_destino) REFERENCES cuentas_bancarias(id) ON DELETE SET NULL
+);
+
