@@ -50,7 +50,7 @@ public class VerTarjetasController {
         colCupo.setCellValueFactory(cell -> {
             Tarjeta t = cell.getValue();
             if ("Débito".equalsIgnoreCase(t.getTipo())) {
-                CuentaBancaria cuenta = cuentaService.buscarPorId(t.getCuentaAsociadaId());
+                CuentaBancaria cuenta = cuentaService.obtenerCuentaPorId(t.getCuentaAsociadaId());
                 return new SimpleDoubleProperty(cuenta != null ? cuenta.getSaldo() : 0.0).asObject();
             } else {
                 return new SimpleDoubleProperty(t.getCupoDisponible()).asObject();

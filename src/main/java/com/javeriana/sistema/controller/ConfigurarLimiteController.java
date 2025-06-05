@@ -4,17 +4,14 @@ import com.javeriana.sistema.model.CuentaBancaria;
 import com.javeriana.sistema.services.CuentaBancariaService;
 import com.javeriana.sistema.util.UsuarioSesion;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.util.StringConverter;
 
 import java.util.List;
 
 public class ConfigurarLimiteController {
 
-    @FXML private ComboBox<CuentaBancaria> comboCuenta;
+    @FXML private ComboBox<CuentaBancaria> comboCuentas;
     @FXML private TextField txtLimite;
     @FXML private Button btnGuardar;
 
@@ -25,9 +22,14 @@ public class ConfigurarLimiteController {
         int usuarioId = UsuarioSesion.getInstancia().getUsuario().getId();
         List<CuentaBancaria> cuentas = cuentaService.obtenerCuentasDeUsuario(usuarioId);
 
-        comboCuenta.getItems().setAll(cuentas);
+        if (cuentas == null || cuentas.isEmpty()) {
+            mostrarAlerta("Aviso", "No se encontraron cuentas bancarias.");
+            return;
+        }
 
-        comboCuenta.setConverter(new StringConverter<>() {
+        comboCuentas.getItems().setAll(cuentas);
+
+        comboCuentas.setConverter(new StringConverter<>() {
             @Override
             public String toString(CuentaBancaria cuenta) {
                 return cuenta == null ? "" : "Cuenta #" + cuenta.getId() + " - " + cuenta.getTipo() + " ($" + cuenta.getSaldo() + ")";
@@ -38,11 +40,23 @@ public class ConfigurarLimiteController {
                 return null;
             }
         });
+
+        comboCuentas.setCellFactory(listView -> new ListCell<>() {
+            @Override
+            protected void updateItem(CuentaBancaria cuenta, boolean empty) {
+                super.updateItem(cuenta, empty);
+                if (empty || cuenta == null) {
+                    setText(null);
+                } else {
+                    setText("Cuenta #" + cuenta.getId() + " - " + cuenta.getTipo() + " ($" + cuenta.getSaldo() + ")");
+                }
+            }
+        });
     }
 
     @FXML
     private void guardarLimite() {
-        CuentaBancaria cuentaSeleccionada = comboCuenta.getValue();
+        CuentaBancaria cuentaSeleccionada = comboCuentas.getValue();
         String textoLimite = txtLimite.getText();
 
         if (cuentaSeleccionada == null || textoLimite.isEmpty()) {

@@ -17,7 +17,7 @@ public class DepositarRetirarController {
     private VerCuentasController verCuentasController; // Referencia para refrescar tabla
 
     public void setCuenta(CuentaBancaria cuenta) {
-        this.cuenta = cuenta;
+        this.cuenta = cuentaService.obtenerCuentaPorId(cuenta.getId());
         actualizarLabelSaldo();
     }
 

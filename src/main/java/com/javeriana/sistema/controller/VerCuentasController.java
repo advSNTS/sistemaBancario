@@ -70,11 +70,14 @@ public class VerCuentasController {
         CuentaBancaria cuentaSeleccionada = tablaCuentas.getSelectionModel().getSelectedItem();
         if (cuentaSeleccionada != null) {
             try {
+                // Refrescar desde base de datos usando su ID
+                CuentaBancaria cuentaActualizada = cuentaService.obtenerCuentaPorId(cuentaSeleccionada.getId());
+
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/ui/DepositarRetirarView.fxml"));
                 Parent root = loader.load();
 
                 DepositarRetirarController controller = loader.getController();
-                controller.setCuenta(cuentaSeleccionada);
+                controller.setCuenta(cuentaActualizada); // Usa la cuenta actualizada
                 controller.setVerCuentasController(this);
 
                 Stage stage = new Stage();

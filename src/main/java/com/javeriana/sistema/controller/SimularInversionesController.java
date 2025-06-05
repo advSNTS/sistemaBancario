@@ -6,6 +6,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import java.time.LocalDate;
+
 
 public class SimularInversionesController {
 
@@ -16,7 +18,7 @@ public class SimularInversionesController {
 
     private VerCuentasController verCuentasController;
 
-    // Método para inyectar el controlador de VerCuentas desde quien abre la vista
+    // Metodo para inyectar el controlador de VerCuentas desde quien abre la vista
     public void setVerCuentasController(VerCuentasController controller) {
         this.verCuentasController = controller;
     }
@@ -24,17 +26,18 @@ public class SimularInversionesController {
     @FXML
     private void simularInversiones() {
         try {
-            inversionService.simularFinalizacionInversiones();
-            lblResultado.setText("Simulación completada. Inversiones finalizadas correctamente.");
+            // Fecha simulada en diciembre de 2027
+            LocalDate fechaSimulada = LocalDate.of(2027, 12, 15);
+            inversionService.simularFinalizacionConFecha(fechaSimulada);
 
-            mostrarAlerta("Éxito", "Las inversiones que cumplieron su plazo fueron finalizadas y los fondos retornados.");
+            lblResultado.setText("Simulación completada con fecha: " + fechaSimulada);
 
-            // Refrescar tabla de cuentas si hay un controlador de cuentas conectado
+            mostrarAlerta("Éxito", "Las inversiones fueron finalizadas simulando el tiempo hasta " + fechaSimulada + ".");
+
             if (verCuentasController != null) {
                 verCuentasController.recargarTabla();
             }
 
-            // Cerrar ventana actual
             Stage stage = (Stage) btnSimular.getScene().getWindow();
             stage.close();
 

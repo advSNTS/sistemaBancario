@@ -110,7 +110,7 @@ public class CrearPagoProgramadoController {
             } else if ("ID Cuenta".equals(tipoDestino)) {
                 try {
                     int idCuenta = Integer.parseInt(destinoTexto);
-                    cuentaDestino = cuentaService.buscarPorId(idCuenta);
+                    cuentaDestino = cuentaService.obtenerCuentaPorId(idCuenta);
                     if (cuentaDestino == null) {
                         mostrarAlerta("Error", "No se encontró una cuenta con ese ID.");
                         return;

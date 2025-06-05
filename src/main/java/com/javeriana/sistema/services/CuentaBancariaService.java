@@ -54,8 +54,8 @@ public class CuentaBancariaService {
         cuentaDAO.actualizar(cuenta);
     }
 
-    public CuentaBancaria buscarPorId(int id) {
-        return cuentaDAO.buscarPorId(id);
+    public CuentaBancaria obtenerCuentaPorId(int id) {
+        return new CuentaBancariaDAOImpl().buscarPorId(id);
     }
 
     public Usuario buscarUsuarioPorCedula(String cedula) {

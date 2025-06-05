@@ -7,6 +7,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.scene.control.ButtonType;
+
 
 public class OperarCuentaController {
 
@@ -49,6 +51,19 @@ public class OperarCuentaController {
             if (monto <= 0 || monto > cuentaSeleccionada.getSaldo()) {
                 mostrarAlerta("Error", "Monto inválido o saldo insuficiente.");
                 return;
+            }
+
+            boolean sobrepasaLimite = cuentaSeleccionada.getLimiteAlerta() != null && monto >= cuentaSeleccionada.getLimiteAlerta();
+            boolean retiraTodo = Math.abs(monto - cuentaSeleccionada.getSaldo()) < 0.01;
+
+            if (sobrepasaLimite || retiraTodo) {
+                Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+                confirmacion.setTitle("Confirmación requerida");
+                confirmacion.setHeaderText("Operación sensible detectada");
+                confirmacion.setContentText("La operación supera el límite de alerta o retira todo el saldo. ¿Desea continuar?");
+                if (confirmacion.showAndWait().orElse(ButtonType.CANCEL) != ButtonType.OK) {
+                    return;
+                }
             }
 
             cuentaSeleccionada.setSaldo(cuentaSeleccionada.getSaldo() - monto);

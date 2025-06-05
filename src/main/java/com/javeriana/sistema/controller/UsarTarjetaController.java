@@ -43,7 +43,7 @@ public class UsarTarjetaController {
                 } else {
                     String texto;
                     if ("Débito".equalsIgnoreCase(tarjeta.getTipo()) && tarjeta.getCuentaAsociadaId() != null) {
-                        CuentaBancaria cuenta = cuentaService.buscarPorId(tarjeta.getCuentaAsociadaId());
+                        CuentaBancaria cuenta = cuentaService.obtenerCuentaPorId(tarjeta.getCuentaAsociadaId());
                         double saldo = cuenta != null ? cuenta.getSaldo() : 0.0;
                         texto = "Débito - Saldo cuenta: $" + saldo;
                     } else {

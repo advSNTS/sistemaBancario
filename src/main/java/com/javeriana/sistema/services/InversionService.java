@@ -52,14 +52,26 @@ public class InversionService {
 
         for (Inversion inv : inversiones) {
             LocalDate fechaFin = inv.getFechaInicio().plusMonths(inv.getPlazoMeses());
+
             if (!inv.isFinalizada() && !hoy.isBefore(fechaFin)) {
                 double ganancia = inv.getMonto() * (1 + inv.getInteres());
 
                 CuentaBancaria cuenta = cuentaDAO.buscarPorId(inv.getCuentaId());
-                if (cuenta != null) {
-                    cuenta.setSaldo(cuenta.getSaldo() + ganancia);
-                    cuentaDAO.actualizar(cuenta);
+
+                if (cuenta == null) {
+                    int usuarioId = obtenerUsuarioIdPorCuentaId(inv.getCuentaId());
+                    List<CuentaBancaria> cuentasDisponibles = cuentaDAO.listarPorUsuario(usuarioId);
+
+                    if (!cuentasDisponibles.isEmpty()) {
+                        cuenta = cuentasDisponibles.get(0);
+                    } else {
+                        System.out.println("No hay cuenta disponible para retornar la inversión del usuario " + usuarioId);
+                        continue;
+                    }
                 }
+
+                cuenta.setSaldo(cuenta.getSaldo() + ganancia);
+                cuentaDAO.actualizar(cuenta);
 
                 inv.setFinalizada(true);
                 inversionDAO.actualizar(inv);
@@ -74,17 +86,33 @@ public class InversionService {
             LocalDate fechaFin = inv.getFechaInicio().plusMonths(inv.getPlazoMeses());
 
             if (!inv.isFinalizada() && !fechaSimulada.isBefore(fechaFin)) {
-                double gananciaTotal = inv.getMonto() * (1 + inv.getInteres());
+                double ganancia = inv.getMonto() * (1 + inv.getInteres());
 
                 CuentaBancaria cuenta = cuentaDAO.buscarPorId(inv.getCuentaId());
-                if (cuenta != null) {
-                    cuenta.setSaldo(cuenta.getSaldo() + gananciaTotal);
-                    cuentaDAO.actualizar(cuenta);
+
+                if (cuenta == null) {
+                    int usuarioId = obtenerUsuarioIdPorCuentaId(inv.getCuentaId());
+                    List<CuentaBancaria> cuentasDisponibles = cuentaDAO.listarPorUsuario(usuarioId);
+
+                    if (!cuentasDisponibles.isEmpty()) {
+                        cuenta = cuentasDisponibles.get(0);
+                    } else {
+                        System.out.println("No hay cuenta disponible para retornar la inversión del usuario " + usuarioId);
+                        continue;
+                    }
                 }
+
+                cuenta.setSaldo(cuenta.getSaldo() + ganancia);
+                cuentaDAO.actualizar(cuenta);
 
                 inv.setFinalizada(true);
                 inversionDAO.actualizar(inv);
             }
         }
+    }
+
+    private int obtenerUsuarioIdPorCuentaId(int cuentaId) {
+        CuentaBancaria cuenta = cuentaDAO.buscarPorId(cuentaId);
+        return (cuenta != null) ? cuenta.getUsuarioId() : -1;
     }
 }

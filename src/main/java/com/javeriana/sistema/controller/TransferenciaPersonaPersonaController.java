@@ -115,7 +115,7 @@ public class TransferenciaPersonaPersonaController {
             } else {
                 try {
                     int cuentaId = Integer.parseInt(identificador);
-                    destino = cuentaService.buscarPorId(cuentaId);
+                    destino = cuentaService.obtenerCuentaPorId(cuentaId);
                 } catch (NumberFormatException e) {
                     mostrarAlerta("Error", "El ID de cuenta debe ser un número.");
                     return;
