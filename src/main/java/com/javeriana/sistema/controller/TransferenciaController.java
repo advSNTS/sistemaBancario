@@ -1,8 +1,10 @@
 package com.javeriana.sistema.controller;
 
 import com.javeriana.sistema.model.CuentaBancaria;
+import com.javeriana.sistema.model.Movimiento;
 import com.javeriana.sistema.model.Transferencia;
 import com.javeriana.sistema.services.CuentaBancariaService;
+import com.javeriana.sistema.services.MovimientoService;
 import com.javeriana.sistema.services.TransferenciaService;
 import com.javeriana.sistema.util.UsuarioSesion;
 import javafx.fxml.FXML;
@@ -21,6 +23,7 @@ public class TransferenciaController {
 
     private final CuentaBancariaService cuentaService = new CuentaBancariaService();
     private final TransferenciaService transferenciaService = new TransferenciaService();
+    private final MovimientoService movimientoService = new MovimientoService();
 
     @FXML
     private void initialize() {
@@ -58,14 +61,38 @@ public class TransferenciaController {
                 return;
             }
 
+            // Actualizar saldos
             origen.setSaldo(origen.getSaldo() - monto);
             destino.setSaldo(destino.getSaldo() + monto);
 
             cuentaService.actualizarCuenta(origen);
             cuentaService.actualizarCuenta(destino);
 
+            // Registrar transferencia
             Transferencia t = new Transferencia(0, origen.getId(), destino.getId(), monto, LocalDateTime.now());
             transferenciaService.registrar(t);
+
+            // Registrar movimientos
+            Movimiento envio = new Movimiento(
+                    0,
+                    origen.getId(),
+                    destino.getId(),
+                    "Transferencia - Envío",
+                    monto,
+                    LocalDateTime.now()
+            );
+
+            Movimiento recepcion = new Movimiento(
+                    0,
+                    origen.getId(),
+                    destino.getId(),
+                    "Transferencia - Recepción",
+                    monto,
+                    LocalDateTime.now()
+            );
+
+            movimientoService.registrarMovimiento(envio);
+            movimientoService.registrarMovimiento(recepcion);
 
             mostrarAlerta("Éxito", "Transferencia realizada correctamente.");
             ((Stage) btnTransferir.getScene().getWindow()).close();

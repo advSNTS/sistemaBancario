@@ -1,13 +1,16 @@
 package com.javeriana.sistema.controller;
 
 import com.javeriana.sistema.model.CuentaBancaria;
+import com.javeriana.sistema.model.Movimiento;
 import com.javeriana.sistema.model.Prestamo;
 import com.javeriana.sistema.services.CuentaBancariaService;
+import com.javeriana.sistema.services.MovimientoService;
 import com.javeriana.sistema.services.PrestamoService;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class PagarPrestamoController {
@@ -18,8 +21,9 @@ public class PagarPrestamoController {
 
     private Prestamo prestamo;
     private VerPrestamosController verPrestamosController;
-    private PrestamoService prestamoService = new PrestamoService();
-    private CuentaBancariaService cuentaService = new CuentaBancariaService();
+    private final PrestamoService prestamoService = new PrestamoService();
+    private final CuentaBancariaService cuentaService = new CuentaBancariaService();
+    private final MovimientoService movimientoService = new MovimientoService(); // NUEVO
     private int usuarioId;
 
     public void setPrestamo(Prestamo prestamo) {
@@ -38,26 +42,14 @@ public class PagarPrestamoController {
     private void cargarCuentas() {
         List<CuentaBancaria> cuentas = cuentaService.obtenerCuentasDeUsuario(usuarioId);
 
-        if (cuentas.isEmpty()) {
-            System.out.println("No se encontraron cuentas para el usuario ID: " + usuarioId);
-        } else {
-            System.out.println("Se encontraron " + cuentas.size() + " cuentas para el usuario ID: " + usuarioId);
-        }
-
-        // Limpiar primero por si ya tenía
         comboCuentas.getItems().clear();
         comboCuentas.getItems().addAll(cuentas);
 
-        // Mostrar bonito
         comboCuentas.setCellFactory(lv -> new ListCell<>() {
             @Override
             protected void updateItem(CuentaBancaria cuenta, boolean empty) {
                 super.updateItem(cuenta, empty);
-                if (empty || cuenta == null) {
-                    setText(null);
-                } else {
-                    setText(cuenta.getTipo() + " - $" + String.format("%.2f", cuenta.getSaldo()));
-                }
+                setText(empty || cuenta == null ? null : cuenta.getTipo() + " - $" + String.format("%.2f", cuenta.getSaldo()));
             }
         });
 
@@ -65,15 +57,10 @@ public class PagarPrestamoController {
             @Override
             protected void updateItem(CuentaBancaria cuenta, boolean empty) {
                 super.updateItem(cuenta, empty);
-                if (empty || cuenta == null) {
-                    setText(null);
-                } else {
-                    setText(cuenta.getTipo() + " - $" + String.format("%.2f", cuenta.getSaldo()));
-                }
+                setText(empty || cuenta == null ? null : cuenta.getTipo() + " - $" + String.format("%.2f", cuenta.getSaldo()));
             }
         });
     }
-
 
     @FXML
     private void pagarPrestamo() {
@@ -104,8 +91,18 @@ public class PagarPrestamoController {
             prestamo.setSaldoPendiente(nuevoSaldo);
             prestamoService.actualizarPrestamo(prestamo);
 
-            mostrarAlerta("Éxito", "Pago realizado correctamente.");
+            // Registrar movimiento
+            Movimiento movimiento = new Movimiento(
+                    0,
+                    cuentaSeleccionada.getId(),
+                    null,
+                    "Pago de Préstamo",
+                    montoPago,
+                    LocalDateTime.now()
+            );
+            movimientoService.registrarMovimiento(movimiento);
 
+            mostrarAlerta("Éxito", "Pago realizado correctamente.");
             verPrestamosController.recargarPrestamos();
 
             Stage stage = (Stage) btnConfirmarPago.getScene().getWindow();

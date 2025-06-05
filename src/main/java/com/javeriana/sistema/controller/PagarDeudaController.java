@@ -1,14 +1,17 @@
 package com.javeriana.sistema.controller;
 
 import com.javeriana.sistema.model.CuentaBancaria;
+import com.javeriana.sistema.model.Movimiento;
 import com.javeriana.sistema.model.Tarjeta;
 import com.javeriana.sistema.services.CuentaBancariaService;
+import com.javeriana.sistema.services.MovimientoService;
 import com.javeriana.sistema.services.TarjetaService;
-import com.javeriana.sistema.util.UsuarioSesion; // <-- esta línea es necesaria
+import com.javeriana.sistema.util.UsuarioSesion;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class PagarDeudaController {
@@ -20,6 +23,7 @@ public class PagarDeudaController {
 
     private final TarjetaService tarjetaService = new TarjetaService();
     private final CuentaBancariaService cuentaService = new CuentaBancariaService();
+    private final MovimientoService movimientoService = new MovimientoService();
     private int usuarioId;
 
     @FXML
@@ -117,6 +121,18 @@ public class PagarDeudaController {
             }
 
             tarjetaService.pagarDeudaDesdeCuenta(tarjeta.getId(), cuenta.getId(), monto);
+
+            // Registrar movimiento
+            Movimiento movimiento = new Movimiento(
+                    0,
+                    cuenta.getId(),
+                    null,
+                    "Pago de Tarjeta",
+                    monto,
+                    LocalDateTime.now()
+            );
+            movimientoService.registrarMovimiento(movimiento);
+
             mostrarAlerta("Éxito", "Deuda pagada correctamente.");
             cargarTarjetasConDeuda();
             cargarCuentas();

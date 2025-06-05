@@ -1,14 +1,17 @@
 package com.javeriana.sistema.controller;
 
 import com.javeriana.sistema.model.CuentaBancaria;
+import com.javeriana.sistema.model.Movimiento;
 import com.javeriana.sistema.model.Tarjeta;
 import com.javeriana.sistema.services.CuentaBancariaService;
+import com.javeriana.sistema.services.MovimientoService;
 import com.javeriana.sistema.services.TarjetaService;
 import com.javeriana.sistema.util.UsuarioSesion;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class UsarTarjetaController {
@@ -19,6 +22,7 @@ public class UsarTarjetaController {
 
     private final TarjetaService tarjetaService = new TarjetaService();
     private final CuentaBancariaService cuentaService = new CuentaBancariaService();
+    private final MovimientoService movimientoService = new MovimientoService(); // NUEVO
     private int usuarioId;
 
     @FXML
@@ -75,10 +79,27 @@ public class UsarTarjetaController {
             }
 
             tarjetaService.usarTarjeta(tarjeta.getId(), monto);
-            mostrarAlerta("Éxito", "Pago realizado exitosamente.");
 
+            Integer cuentaIdOrigen = null;
+
+            if ("Débito".equalsIgnoreCase(tarjeta.getTipo()) && tarjeta.getCuentaAsociadaId() != null) {
+                cuentaIdOrigen = tarjeta.getCuentaAsociadaId();
+            }
+
+            Movimiento movimiento = new Movimiento(
+                    0,
+                    cuentaIdOrigen,
+                    null,
+                    "Compra con Tarjeta",
+                    monto,
+                    LocalDateTime.now()
+            );
+            movimientoService.registrarMovimiento(movimiento);
+
+            mostrarAlerta("Éxito", "Pago realizado exitosamente.");
             cargarTarjetasActivas();
             txtMonto.clear();
+
         } catch (NumberFormatException e) {
             mostrarAlerta("Error", "El monto ingresado no es válido.");
         } catch (Exception e) {

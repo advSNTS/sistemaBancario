@@ -11,6 +11,7 @@ public class Movimiento {
     private double monto;
     private LocalDateTime fecha;
 
+    // Constructor completo
     public Movimiento(int id, Integer cuentaIdOrigen, Integer cuentaIdDestino, String tipo, double monto, LocalDateTime fecha) {
         this.id = id;
         this.cuentaIdOrigen = cuentaIdOrigen;
@@ -19,6 +20,8 @@ public class Movimiento {
         this.monto = monto;
         this.fecha = fecha;
     }
+
+    public Movimiento() {}
 
     public int getId() {
         return id;
@@ -42,5 +45,29 @@ public class Movimiento {
 
     public LocalDateTime getFecha() {
         return fecha;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setCuentaIdOrigen(Integer cuentaIdOrigen) {
+        this.cuentaIdOrigen = cuentaIdOrigen;
+    }
+
+    public void setCuentaIdDestino(Integer cuentaIdDestino) {
+        this.cuentaIdDestino = cuentaIdDestino;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public void setMonto(double monto) {
+        this.monto = monto;
+    }
+
+    public void setFecha(LocalDateTime fecha) {
+        this.fecha = fecha;
     }
 }

@@ -1,8 +1,10 @@
 package com.javeriana.sistema.controller;
 
 import com.javeriana.sistema.model.CuentaBancaria;
+import com.javeriana.sistema.model.Movimiento;
 import com.javeriana.sistema.model.Usuario;
 import com.javeriana.sistema.services.CuentaBancariaService;
+import com.javeriana.sistema.services.MovimientoService;
 import com.javeriana.sistema.services.PrestamoService;
 import com.javeriana.sistema.util.UsuarioSesion;
 import javafx.collections.FXCollections;
@@ -10,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class SolicitarPrestamoController {
@@ -22,6 +25,7 @@ public class SolicitarPrestamoController {
 
     private final PrestamoService prestamoService = new PrestamoService();
     private final CuentaBancariaService cuentaService = new CuentaBancariaService();
+    private final MovimientoService movimientoService = new MovimientoService(); // NUEVO
 
     @FXML
     public void initialize() {
@@ -90,6 +94,17 @@ public class SolicitarPrestamoController {
             prestamoService.solicitarPrestamo(usuario.getId(), monto, tasaInteres, plazoMeses);
             cuenta.setSaldo(cuenta.getSaldo() + monto);
             cuentaService.actualizarCuenta(cuenta);
+
+            // Registrar movimiento de desembolso
+            Movimiento movimiento = new Movimiento(
+                    0,
+                    null,
+                    cuenta.getId(),
+                    "Desembolso de Préstamo",
+                    monto,
+                    LocalDateTime.now()
+            );
+            movimientoService.registrarMovimiento(movimiento);
 
             mostrarAlerta("Éxito", "¡Préstamo solicitado y fondos transferidos a tu cuenta seleccionada!");
             Stage stage = (Stage) btnSolicitar.getScene().getWindow();

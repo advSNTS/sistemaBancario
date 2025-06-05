@@ -7,6 +7,10 @@ import com.javeriana.sistema.util.UsuarioSesion;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import com.javeriana.sistema.model.Movimiento;
+import com.javeriana.sistema.services.MovimientoService;
+import java.time.LocalDateTime;
+
 
 import java.util.List;
 
@@ -65,6 +69,18 @@ public class AbrirInversionController {
 
             if (confirmacion.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
                 inversionService.crearInversion(cuenta.getId(), monto, plazo);
+
+                // Registrar movimiento
+                Movimiento movimiento = new Movimiento(
+                        0,
+                        cuenta.getId(),
+                        null,
+                        "Inversión",
+                        monto,
+                        LocalDateTime.now()
+                );
+                new MovimientoService().registrarMovimiento(movimiento);
+
                 mostrarAlerta("Éxito", "Inversión realizada correctamente.");
                 txtMonto.clear();
                 lblResultado.setText("");

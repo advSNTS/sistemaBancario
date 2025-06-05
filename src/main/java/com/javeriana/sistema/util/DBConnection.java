@@ -7,7 +7,7 @@ import java.sql.*;
 
 public class DBConnection {
 
-    private static final String PRODUCTION_URL = "jdbc:h2:~/sistema_db;AUTO_SERVER=TRUE";
+    private static final String PRODUCTION_URL = "jdbc:h2:tcp://localhost/~/sistema_db";
     private static final String TEST_URL = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1";
 
     private static final String USER = "sa";

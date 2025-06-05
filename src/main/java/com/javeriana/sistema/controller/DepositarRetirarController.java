@@ -1,10 +1,14 @@
 package com.javeriana.sistema.controller;
 
 import com.javeriana.sistema.model.CuentaBancaria;
+import com.javeriana.sistema.model.Movimiento;
 import com.javeriana.sistema.services.CuentaBancariaService;
+import com.javeriana.sistema.services.MovimientoService;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+
+import java.time.LocalDateTime;
 
 public class DepositarRetirarController {
 
@@ -14,6 +18,7 @@ public class DepositarRetirarController {
 
     private CuentaBancaria cuenta;
     private final CuentaBancariaService cuentaService = new CuentaBancariaService();
+    private final MovimientoService movimientoService = new MovimientoService(); // ← NUEVO
     private VerCuentasController verCuentasController;
 
     public void setCuenta(CuentaBancaria cuenta) {
@@ -77,6 +82,16 @@ public class DepositarRetirarController {
             double nuevoSaldo = esDeposito ? cuenta.getSaldo() + monto : cuenta.getSaldo() - monto;
             cuenta.setSaldo(nuevoSaldo);
             cuentaService.actualizarCuenta(cuenta);
+
+
+            Movimiento movimiento = new Movimiento();
+            movimiento.setFecha(LocalDateTime.now());
+            movimiento.setTipo(esDeposito ? "Depósito" : "Retiro");
+            movimiento.setMonto(monto);
+            movimiento.setCuentaIdOrigen(esDeposito ? null : cuenta.getId());  // solo retiro tiene origen
+            movimiento.setCuentaIdDestino(esDeposito ? cuenta.getId() : null); // solo depósito tiene destino
+
+            movimientoService.registrarMovimiento(movimiento); // ← GUARDAR
 
             mostrarAlerta("Éxito", esDeposito ? "Depósito realizado correctamente." : "Retiro realizado correctamente.");
 

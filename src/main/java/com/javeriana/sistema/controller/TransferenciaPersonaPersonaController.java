@@ -1,9 +1,11 @@
 package com.javeriana.sistema.controller;
 
 import com.javeriana.sistema.model.CuentaBancaria;
+import com.javeriana.sistema.model.Movimiento;
 import com.javeriana.sistema.model.Transferencia;
 import com.javeriana.sistema.model.Usuario;
 import com.javeriana.sistema.services.CuentaBancariaService;
+import com.javeriana.sistema.services.MovimientoService;
 import com.javeriana.sistema.services.TransferenciaService;
 import com.javeriana.sistema.services.UsuarioService;
 import javafx.collections.FXCollections;
@@ -25,12 +27,12 @@ public class TransferenciaPersonaPersonaController {
     private final CuentaBancariaService cuentaService = new CuentaBancariaService();
     private final TransferenciaService transferenciaService = new TransferenciaService();
     private final UsuarioService usuarioService = new UsuarioService();
+    private final MovimientoService movimientoService = new MovimientoService();
 
     private int usuarioId;
 
     @FXML
     private void initialize() {
-        // Se inicializa tipo de búsqueda
         choiceTipoBusqueda.setItems(FXCollections.observableArrayList("Cédula", "ID Cuenta"));
         choiceTipoBusqueda.setValue("Cédula");
     }
@@ -86,13 +88,11 @@ public class TransferenciaPersonaPersonaController {
                 return;
             }
 
-            // Validación de límite de alerta
             if (origen.getLimiteAlerta() != null && monto >= origen.getLimiteAlerta()) {
                 Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
                 confirmacion.setTitle("Confirmar Transferencia");
                 confirmacion.setHeaderText("El monto supera el límite de alerta: $" + origen.getLimiteAlerta());
                 confirmacion.setContentText("¿Desea continuar con la transferencia de $" + monto + "?");
-
                 if (confirmacion.showAndWait().orElse(ButtonType.CANCEL) != ButtonType.OK) {
                     return;
                 }
@@ -111,7 +111,7 @@ public class TransferenciaPersonaPersonaController {
                     mostrarAlerta("Error", "El usuario destino no tiene cuentas registradas.");
                     return;
                 }
-                destino = cuentasDestino.get(0); // Selecciona la primera activa
+                destino = cuentasDestino.get(0);
             } else {
                 try {
                     int cuentaId = Integer.parseInt(identificador);
@@ -127,7 +127,6 @@ public class TransferenciaPersonaPersonaController {
                 return;
             }
 
-            // Ejecutar transferencia
             origen.setSaldo(origen.getSaldo() - monto);
             destino.setSaldo(destino.getSaldo() + monto);
 
@@ -136,6 +135,12 @@ public class TransferenciaPersonaPersonaController {
 
             Transferencia transferencia = new Transferencia(0, origen.getId(), destino.getId(), monto, LocalDateTime.now());
             transferenciaService.registrar(transferencia);
+
+            Movimiento envio = new Movimiento(0, origen.getId(), destino.getId(), "Transferencia P2P - Envío", monto, LocalDateTime.now());
+            Movimiento recepcion = new Movimiento(0, origen.getId(), destino.getId(), "Transferencia P2P - Recepción", monto, LocalDateTime.now());
+
+            movimientoService.registrarMovimiento(envio);
+            movimientoService.registrarMovimiento(recepcion);
 
             mostrarAlerta("Éxito", "Transferencia realizada correctamente.");
             ((Stage) btnTransferir.getScene().getWindow()).close();
