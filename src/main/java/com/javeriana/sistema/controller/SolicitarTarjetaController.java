@@ -2,6 +2,7 @@ package com.javeriana.sistema.controller;
 
 import com.javeriana.sistema.model.CuentaBancaria;
 import com.javeriana.sistema.model.Tarjeta;
+import com.javeriana.sistema.model.Usuario;
 import com.javeriana.sistema.services.CuentaBancariaService;
 import com.javeriana.sistema.services.TarjetaService;
 import com.javeriana.sistema.util.UsuarioSesion;
@@ -21,7 +22,12 @@ public class SolicitarTarjetaController {
 
     private final TarjetaService tarjetaService = new TarjetaService();
     private final CuentaBancariaService cuentaService = new CuentaBancariaService();
-    private int usuarioId = UsuarioSesion.getInstancia().getUsuario().getId();
+
+    private int usuarioId; // Se usa si decides pasar el ID directamente
+
+    public void setUsuarioId(int usuarioId) {
+        this.usuarioId = usuarioId;
+    }
 
     @FXML
     public void initialize() {
@@ -37,13 +43,25 @@ public class SolicitarTarjetaController {
         comboCuenta.setVisible(esDebito);
 
         if (esDebito) {
-            List<CuentaBancaria> cuentas = cuentaService.obtenerCuentasDeUsuario(usuarioId);
-            comboCuenta.setItems(FXCollections.observableArrayList(cuentas));
+            Usuario usuario = UsuarioSesion.getInstancia().getUsuario(); // Usando sesión global
+            if (usuario != null) {
+                List<CuentaBancaria> cuentas = cuentaService.obtenerCuentasDeUsuario(usuario.getId());
+                comboCuenta.setItems(FXCollections.observableArrayList(cuentas));
+            } else {
+                mostrarAlerta("Error", "No se ha identificado un usuario activo.");
+            }
         }
     }
 
     @FXML
     private void solicitarTarjeta() {
+        Usuario usuario = UsuarioSesion.getInstancia().getUsuario();
+
+        if (usuario == null) {
+            mostrarAlerta("Error", "No se ha identificado un usuario activo.");
+            return;
+        }
+
         String tipoSeleccionado = comboTipoTarjeta.getValue();
         String cupoStr = txtCupo.getText();
 
@@ -74,10 +92,10 @@ public class SolicitarTarjetaController {
                     return;
                 }
                 cuentaId = cuentaSeleccionada.getId();
-                cupo = 0.0; // para evitar cupo manual en débito
+                cupo = 0.0; // Cupo fijo para tarjetas débito
             }
 
-            Tarjeta tarjeta = tarjetaService.solicitarTarjeta(usuarioId, tipoSeleccionado, cupo, cuentaId);
+            Tarjeta tarjeta = tarjetaService.solicitarTarjeta(usuario.getId(), tipoSeleccionado, cupo, cuentaId);
 
             mostrarAlerta("Éxito", "Tarjeta solicitada correctamente.\n\n"
                     + "Número: " + tarjeta.getNumero() + "\n"
@@ -95,9 +113,5 @@ public class SolicitarTarjetaController {
         alerta.setHeaderText(null);
         alerta.setContentText(mensaje);
         alerta.showAndWait();
-    }
-
-    public void setUsuarioId(int id) {
-        this.usuarioId = id;
     }
 }

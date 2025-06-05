@@ -1,27 +1,23 @@
 package com.javeriana.sistema.controller;
 
-import com.javeriana.sistema.model.Usuario;
+import com.javeriana.sistema.services.CuentaBancariaService;
+import com.javeriana.sistema.util.UsuarioSesion;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+
+import com.javeriana.sistema.controller.*;
+
 import java.io.IOException;
-import com.javeriana.sistema.services.CuentaBancariaService;
-import javafx.scene.control.Alert;
-import com.javeriana.sistema.controller.CrearPagoProgramadoController;
 
 public class DashboardController {
 
     @FXML
     private Button cerrarSesionButton;
-    private Button solicitarPrestamoButton;
-    private Usuario usuarioAutenticado;
-
-    public void setUsuarioAutenticado(Usuario usuario) {
-        this.usuarioAutenticado = usuario;
-    }
 
     @FXML
     private void abrirCrearCuenta() {
@@ -29,14 +25,13 @@ public class DashboardController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/ui/CrearCuentaView.fxml"));
             Parent root = loader.load();
 
-            CrearCuentaController crearCuentaController = loader.getController();
-            crearCuentaController.setUsuarioId(usuarioAutenticado.getId());
+            CrearCuentaController controller = loader.getController();
+            controller.setUsuarioId(UsuarioSesion.getInstancia().getUsuario().getId());
 
             Stage stage = new Stage();
             stage.setTitle("Crear Nueva Cuenta");
             stage.setScene(new Scene(root));
             stage.show();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -48,8 +43,7 @@ public class DashboardController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/ui/VerCuentasView.fxml"));
             Parent root = loader.load();
 
-            VerCuentasController verCuentasController = loader.getController();
-            verCuentasController.setUsuarioId(usuarioAutenticado.getId()); // Pasamos el ID del usuario para filtrar cuentas
+            VerCuentasController controller = loader.getController();
 
             Stage stage = new Stage();
             stage.setTitle("Mis Cuentas Bancarias");
@@ -63,17 +57,16 @@ public class DashboardController {
     @FXML
     private void abrirSolicitarPrestamo() {
         try {
+            int usuarioId = UsuarioSesion.getInstancia().getUsuario().getId();
             CuentaBancariaService cuentaService = new CuentaBancariaService();
-            if (cuentaService.obtenerCuentasDeUsuario(usuarioAutenticado.getId()).isEmpty()) {
+
+            if (cuentaService.obtenerCuentasDeUsuario(usuarioId).isEmpty()) {
                 mostrarAlerta("Error", "Debes crear una cuenta bancaria antes de solicitar un préstamo.");
                 return;
             }
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/ui/SolicitarPrestamoView.fxml"));
             Parent root = loader.load();
-
-            SolicitarPrestamoController controller = loader.getController();
-            controller.setUsuario(usuarioAutenticado);
 
             Stage stage = new Stage();
             stage.setTitle("Solicitar Préstamo");
@@ -84,7 +77,6 @@ public class DashboardController {
         }
     }
 
-    // Utilidad para mostrar alertas:
     private void mostrarAlerta(String titulo, String contenido) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle(titulo);
@@ -114,7 +106,6 @@ public class DashboardController {
             Parent root = loader.load();
 
             VerPrestamosController controller = loader.getController();
-            controller.setUsuarioId(usuarioAutenticado.getId());
 
             Stage stage = new Stage();
             stage.setTitle("Mis Préstamos");
@@ -132,7 +123,7 @@ public class DashboardController {
             Parent root = loader.load();
 
             HistorialTransferenciasController controller = loader.getController();
-            controller.setUsuarioId(usuarioAutenticado.getId()); // ← CORREGIDO AQUÍ
+            controller.setUsuarioId(UsuarioSesion.getInstancia().getUsuario().getId());
 
             Stage stage = new Stage();
             stage.setTitle("Historial de Transferencias");
@@ -150,7 +141,7 @@ public class DashboardController {
             Parent root = loader.load();
 
             TransferenciaPersonaPersonaController controller = loader.getController();
-            controller.setUsuarioId(usuarioAutenticado.getId());
+            controller.setUsuarioId(UsuarioSesion.getInstancia().getUsuario().getId());
 
             Stage stage = new Stage();
             stage.setTitle("Transferir a Otra Persona");
@@ -169,7 +160,7 @@ public class DashboardController {
             Parent root = loader.load();
 
             CrearPagoProgramadoController controller = loader.getController();
-            controller.setUsuarioId(usuarioAutenticado.getId());
+            controller.setUsuarioId(UsuarioSesion.getInstancia().getUsuario().getId());
 
             Stage stage = new Stage();
             stage.setTitle("Crear Pago Programado");
@@ -188,7 +179,6 @@ public class DashboardController {
             Parent root = loader.load();
 
             VerPagosProgramadosController controller = loader.getController();
-            controller.setUsuarioId(usuarioAutenticado.getId());
 
             Stage stage = new Stage();
             stage.setTitle("Pagos Programados");
@@ -207,7 +197,7 @@ public class DashboardController {
             Parent root = loader.load();
 
             GestionarTarjetasController controller = loader.getController();
-            controller.setUsuarioId(usuarioAutenticado.getId());
+            controller.setUsuarioId(UsuarioSesion.getInstancia().getUsuario().getId());
 
             Stage stage = new Stage();
             stage.setTitle("Gestión de Tarjetas");
@@ -224,8 +214,10 @@ public class DashboardController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/ui/InversionesView.fxml"));
             Parent root = loader.load();
+
             InversionesController controller = loader.getController();
-            controller.setUsuarioId(usuarioAutenticado.getId());
+            controller.setUsuarioId(UsuarioSesion.getInstancia().getUsuario().getId());
+
             Stage stage = new Stage();
             stage.setTitle("Inversiones y Ahorros");
             stage.setScene(new Scene(root));
@@ -255,9 +247,6 @@ public class DashboardController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/ui/ConfigurarLimiteView.fxml"));
             Parent root = loader.load();
-
-            ConfigurarLimiteController controller = loader.getController();
-            controller.setUsuarioId(usuarioAutenticado.getId());
 
             Stage stage = new Stage();
             stage.setTitle("Configurar Límite de Alerta");

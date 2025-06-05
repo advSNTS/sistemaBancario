@@ -1,6 +1,5 @@
 package com.javeriana.sistema.controller;
 
-import com.javeriana.sistema.model.Usuario;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,13 +11,8 @@ import java.io.IOException;
 
 public class DashboardCategoriasController {
 
-    private Usuario usuarioAutenticado;
-
-    public void setUsuarioAutenticado(Usuario usuario) {
-        this.usuarioAutenticado = usuario;
-    }
-
-    @FXML private javafx.scene.control.Button cerrarSesionButton;
+    @FXML
+    private javafx.scene.control.Button cerrarSesionButton;
 
     private void abrirVentanaModal(String titulo, String rutaFXML) {
         try {

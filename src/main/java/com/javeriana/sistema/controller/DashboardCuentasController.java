@@ -1,5 +1,6 @@
 package com.javeriana.sistema.controller;
 
+import com.javeriana.sistema.util.UsuarioSesion;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -7,8 +8,6 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import com.javeriana.sistema.util.UsuarioSesion;
-
 
 import java.io.IOException;
 
@@ -39,7 +38,6 @@ public class DashboardCuentasController {
             e.printStackTrace();
         }
     }
-
 
     @FXML
     private void volver() {

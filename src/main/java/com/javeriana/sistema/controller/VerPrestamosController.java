@@ -1,11 +1,13 @@
 package com.javeriana.sistema.controller;
 
 import com.javeriana.sistema.model.Prestamo;
+import com.javeriana.sistema.model.Usuario;
 import com.javeriana.sistema.services.PrestamoService;
 import com.javeriana.sistema.util.UsuarioSesion;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -28,24 +30,16 @@ public class VerPrestamosController {
     @FXML private Button btnPagarPrestamo;
 
     private final PrestamoService prestamoService = new PrestamoService();
-    private int usuarioId = -1;
 
     @FXML
     public void initialize() {
-        if (usuarioId <= 0 && UsuarioSesion.getInstancia().getUsuario() != null) {
-            usuarioId = UsuarioSesion.getInstancia().getUsuario().getId();
-        }
+        Usuario usuario = UsuarioSesion.getInstancia().getUsuario();
 
-        if (usuarioId > 0) {
-            cargarPrestamos(usuarioId);
+        if (usuario != null) {
+            cargarPrestamos(usuario.getId());
         } else {
             mostrarAlerta("Error", "No se pudo obtener el usuario actual.");
         }
-    }
-
-    public void setUsuarioId(int id) {
-        this.usuarioId = id;
-        cargarPrestamos(id);
     }
 
     private void cargarPrestamos(int usuarioId) {
@@ -59,7 +53,7 @@ public class VerPrestamosController {
 
         colEstado.setCellValueFactory(data -> {
             String estado = (data.getValue().getSaldoPendiente() == 0.0) ? "Pagado" : "Pendiente";
-            return new javafx.beans.property.SimpleStringProperty(estado);
+            return new SimpleStringProperty(estado);
         });
 
         colEstado.setCellFactory(column -> new TableCell<>() {
@@ -85,15 +79,18 @@ public class VerPrestamosController {
     }
 
     public void recargarPrestamos() {
-        if (usuarioId > 0) {
-            cargarPrestamos(usuarioId);
+        Usuario usuario = UsuarioSesion.getInstancia().getUsuario();
+        if (usuario != null) {
+            cargarPrestamos(usuario.getId());
         }
     }
 
     @FXML
     private void abrirPagarPrestamo() {
         Prestamo prestamoSeleccionado = tablaPrestamos.getSelectionModel().getSelectedItem();
-        if (prestamoSeleccionado != null) {
+        Usuario usuario = UsuarioSesion.getInstancia().getUsuario();
+
+        if (prestamoSeleccionado != null && usuario != null) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/ui/PagarPrestamoView.fxml"));
                 Parent root = loader.load();
@@ -101,7 +98,7 @@ public class VerPrestamosController {
                 PagarPrestamoController controller = loader.getController();
                 controller.setPrestamo(prestamoSeleccionado);
                 controller.setVerPrestamosController(this);
-                controller.setUsuarioId(usuarioId);
+                // No necesitas pasar el usuario
 
                 Stage stage = new Stage();
                 stage.setTitle("Pagar Préstamo");

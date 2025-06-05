@@ -1,6 +1,5 @@
 package com.javeriana.sistema.controller;
 
-import com.javeriana.sistema.model.Usuario;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,14 +10,7 @@ import javafx.stage.Window;
 
 import java.io.IOException;
 
-public class DashboardTarjetasController implements UsuarioAwareController {
-
-    private Usuario usuarioAutenticado;
-
-    @Override
-    public void setUsuarioAutenticado(Usuario usuario) {
-        this.usuarioAutenticado = usuario;
-    }
+public class DashboardTarjetasController {
 
     @FXML
     private void abrirSolicitarTarjeta() {
@@ -62,11 +54,6 @@ public class DashboardTarjetasController implements UsuarioAwareController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
-
-            Object controller = loader.getController();
-            if (controller instanceof UsuarioAwareController usuarioAware) {
-                usuarioAware.setUsuarioAutenticado(usuarioAutenticado);
-            }
 
             Stage modalStage = new Stage();
             modalStage.initModality(Modality.APPLICATION_MODAL);

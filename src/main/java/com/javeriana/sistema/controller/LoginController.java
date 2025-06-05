@@ -50,7 +50,7 @@ public class LoginController {
         if (usuario != null) {
             System.out.println("Inicio de sesión exitoso para: " + usuario.getNombre());
 
-            UsuarioSesion.getInstancia().setUsuario(usuario);
+            UsuarioSesion.setUsuarioActual(usuario);
 
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/javeriana/sistema/ui/DashboardCategoriasView.fxml"));

@@ -2,7 +2,6 @@ package com.javeriana.sistema.controller;
 
 import com.javeriana.sistema.model.CuentaBancaria;
 import com.javeriana.sistema.services.CuentaBancariaService;
-import com.javeriana.sistema.util.UsuarioSesion;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -22,30 +21,24 @@ public class VerCuentasController {
     @FXML private Button btnOperar;
 
     private final CuentaBancariaService cuentaService = new CuentaBancariaService();
-    private int usuarioId = -1;
+
+    private int usuarioId;
+
+    public void setUsuarioId(int usuarioId) {
+        this.usuarioId = usuarioId;
+    }
 
     @FXML
     public void initialize() {
-        if (usuarioId <= 0 && UsuarioSesion.getInstancia().getUsuario() != null) {
-            this.usuarioId = UsuarioSesion.getInstancia().getUsuario().getId();
-        }
-        cargarCuentas();
-
         tablaCuentas.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             btnOperar.setDisable(newSelection == null);
         });
     }
 
-    public void setUsuarioId(int id) {
-        this.usuarioId = id;
-        cargarCuentas();
-    }
-
     public void cargarCuentas() {
-        if (usuarioId <= 0) return;
         List<CuentaBancaria> cuentasUsuario = cuentaService.obtenerCuentasDeUsuario(usuarioId);
-
         tablaCuentas.getItems().setAll(cuentasUsuario);
+
         colId.setCellValueFactory(cellData -> new javafx.beans.property.SimpleIntegerProperty(cellData.getValue().getId()).asObject());
         colTipo.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getTipo()));
         colSaldo.setCellValueFactory(cellData -> new javafx.beans.property.SimpleDoubleProperty(cellData.getValue().getSaldo()).asObject());
@@ -82,7 +75,7 @@ public class VerCuentasController {
 
                 DepositarRetirarController controller = loader.getController();
                 controller.setCuenta(cuentaSeleccionada);
-                controller.setVerCuentasController(this); // Para recargar luego
+                controller.setVerCuentasController(this);
 
                 Stage stage = new Stage();
                 stage.setTitle("Operaciones de Cuenta");

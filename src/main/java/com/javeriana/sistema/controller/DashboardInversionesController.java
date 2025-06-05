@@ -1,6 +1,5 @@
 package com.javeriana.sistema.controller;
 
-import com.javeriana.sistema.model.Usuario;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,14 +10,7 @@ import javafx.stage.Window;
 
 import java.io.IOException;
 
-public class DashboardInversionesController implements UsuarioAwareController {
-
-    private Usuario usuarioAutenticado;
-
-    @Override
-    public void setUsuarioAutenticado(Usuario usuario) {
-        this.usuarioAutenticado = usuario;
-    }
+public class DashboardInversionesController {
 
     @FXML
     private void abrirAbrirInversion() {
@@ -41,12 +33,7 @@ public class DashboardInversionesController implements UsuarioAwareController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
 
-            // Pasar usuario autenticado si aplica
-            Object controller = loader.getController();
-            if (controller instanceof UsuarioAwareController) {
-                ((UsuarioAwareController) controller).setUsuarioAutenticado(usuarioAutenticado);
-            }
-
+            // Ya no es necesario pasar el usuario manualmente
             Stage modalStage = new Stage();
             modalStage.initModality(Modality.APPLICATION_MODAL);
             modalStage.setTitle(titulo);

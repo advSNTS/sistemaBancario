@@ -8,6 +8,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
+import com.javeriana.sistema.util.UsuarioSesion;
+
+
 import java.io.IOException;
 
 public class DashboardConfiguracionesController {
@@ -27,6 +30,11 @@ public class DashboardConfiguracionesController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
+
+            Object controller = loader.getController();
+            if (controller instanceof UsuarioAwareController usuarioAware) {
+                usuarioAware.setUsuarioAutenticado(UsuarioSesion.getInstancia().getUsuario());
+            }
 
             Stage modalStage = new Stage();
             modalStage.initModality(Modality.APPLICATION_MODAL);

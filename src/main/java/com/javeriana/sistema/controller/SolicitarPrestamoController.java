@@ -22,23 +22,16 @@ public class SolicitarPrestamoController {
 
     private final PrestamoService prestamoService = new PrestamoService();
     private final CuentaBancariaService cuentaService = new CuentaBancariaService();
-    private Usuario usuario;
 
     @FXML
     public void initialize() {
-        if (usuario == null) {
-            usuario = UsuarioSesion.getInstancia().getUsuario();
-        }
+        Usuario usuario = UsuarioSesion.getInstancia().getUsuario();
+
         if (usuario != null) {
             cargarCuentas(usuario.getId());
         } else {
             mostrarAlerta("Error", "No se ha identificado un usuario activo.");
         }
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-        cargarCuentas(usuario.getId());
     }
 
     private void cargarCuentas(int usuarioId) {
@@ -71,6 +64,8 @@ public class SolicitarPrestamoController {
 
     @FXML
     private void solicitarPrestamo() {
+        Usuario usuario = UsuarioSesion.getInstancia().getUsuario();
+
         if (usuario == null) {
             mostrarAlerta("Error", "No se ha identificado un usuario activo.");
             return;

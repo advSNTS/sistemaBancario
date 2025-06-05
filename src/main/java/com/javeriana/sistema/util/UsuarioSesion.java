@@ -26,4 +26,12 @@ public class UsuarioSesion {
     public void limpiar() {
         usuario = null;
     }
+
+    public static Usuario getUsuarioActual() {
+        return getInstancia().getUsuario();
+    }
+
+    public static void setUsuarioActual(Usuario usuario) {
+        getInstancia().setUsuario(usuario);
+    }
 }

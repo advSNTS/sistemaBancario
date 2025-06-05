@@ -22,15 +22,23 @@ public class VerPagosProgramadosController {
     @FXML private TableColumn<PagoProgramado, Boolean> colEjecutado;
 
     private final PagoProgramadoService pagoService = new PagoProgramadoService();
+
     private int usuarioId;
+
+    public void setUsuarioId(int usuarioId) {
+        this.usuarioId = usuarioId;
+        cargarPagos(usuarioId);
+    }
 
     @FXML
     public void initialize() {
-        usuarioId = UsuarioSesion.getInstancia().getUsuario().getId();
-        cargarPagos();
+        var usuario = UsuarioSesion.getInstancia().getUsuario();
+        if (usuario != null) {
+            setUsuarioId(usuario.getId()); // opcional si no lo pasan desde fuera
+        }
     }
 
-    private void cargarPagos() {
+    private void cargarPagos(int usuarioId) {
         tablaPagos.setItems(FXCollections.observableArrayList(
                 pagoService.obtenerPagosPorUsuario(usuarioId)
         ));
@@ -55,8 +63,11 @@ public class VerPagosProgramadosController {
         );
     }
 
-    public void setUsuarioId(int id) {
-        this.usuarioId = id;
-        cargarPagos();
+    private void mostrarAlerta(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 }
