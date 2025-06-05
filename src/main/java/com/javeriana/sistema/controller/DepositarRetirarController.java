@@ -18,7 +18,7 @@ public class DepositarRetirarController {
 
     private CuentaBancaria cuenta;
     private final CuentaBancariaService cuentaService = new CuentaBancariaService();
-    private final MovimientoService movimientoService = new MovimientoService(); // ← NUEVO
+    private final MovimientoService movimientoService = new MovimientoService();
     private VerCuentasController verCuentasController;
 
     public void setCuenta(CuentaBancaria cuenta) {
@@ -83,15 +83,16 @@ public class DepositarRetirarController {
             cuenta.setSaldo(nuevoSaldo);
             cuentaService.actualizarCuenta(cuenta);
 
+            Movimiento movimiento = new Movimiento(
+                    0,
+                    esDeposito ? null : cuenta.getId(),
+                    esDeposito ? cuenta.getId() : null,
+                    esDeposito ? "Depósito" : "Retiro",
+                    monto,
+                    LocalDateTime.now()
+            );
 
-            Movimiento movimiento = new Movimiento();
-            movimiento.setFecha(LocalDateTime.now());
-            movimiento.setTipo(esDeposito ? "Depósito" : "Retiro");
-            movimiento.setMonto(monto);
-            movimiento.setCuentaIdOrigen(esDeposito ? null : cuenta.getId());  // solo retiro tiene origen
-            movimiento.setCuentaIdDestino(esDeposito ? cuenta.getId() : null); // solo depósito tiene destino
-
-            movimientoService.registrarMovimiento(movimiento); // ← GUARDAR
+            movimientoService.registrarMovimiento(movimiento);
 
             mostrarAlerta("Éxito", esDeposito ? "Depósito realizado correctamente." : "Retiro realizado correctamente.");
 
