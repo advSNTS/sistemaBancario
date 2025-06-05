@@ -11,6 +11,13 @@ public class MovimientoService {
     private final MovimientoDAO movimientoDAO = new MovimientoDAOImpl();
 
     public void registrarMovimiento(Movimiento movimiento) {
+
+        System.out.println("Registrando movimiento: " + movimiento.getTipo() +
+                " | Monto: $" + movimiento.getMonto() +
+                " | Origen: " + movimiento.getCuentaIdOrigen() +
+                " | Destino: " + movimiento.getCuentaIdDestino() +
+                " | Fecha: " + movimiento.getFecha());
+
         movimientoDAO.guardar(movimiento);
     }
 

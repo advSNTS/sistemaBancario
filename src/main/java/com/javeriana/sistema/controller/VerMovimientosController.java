@@ -6,7 +6,6 @@ import com.javeriana.sistema.services.CuentaBancariaService;
 import com.javeriana.sistema.services.MovimientoService;
 import com.javeriana.sistema.util.UsuarioSesion;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -21,8 +20,8 @@ public class VerMovimientosController {
     @FXML private TableColumn<Movimiento, String> colFecha;
     @FXML private TableColumn<Movimiento, String> colTipo;
     @FXML private TableColumn<Movimiento, Double> colMonto;
-    @FXML private TableColumn<Movimiento, Integer> colCuentaOrigen;
-    @FXML private TableColumn<Movimiento, Integer> colCuentaDestino;
+    @FXML private TableColumn<Movimiento, String> colCuentaOrigen;
+    @FXML private TableColumn<Movimiento, String> colCuentaDestino;
 
     private final MovimientoService movimientoService = new MovimientoService();
     private final CuentaBancariaService cuentaService = new CuentaBancariaService();
@@ -36,8 +35,16 @@ public class VerMovimientosController {
         colFecha.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getFecha().toString()));
         colTipo.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getTipo()));
         colMonto.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getMonto()).asObject());
-        colCuentaOrigen.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getCuentaIdOrigen()).asObject());
-        colCuentaDestino.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getCuentaIdDestino()).asObject());
+
+        colCuentaOrigen.setCellValueFactory(data -> {
+            Integer cuentaOrigen = data.getValue().getCuentaIdOrigen();
+            return new SimpleStringProperty(cuentaOrigen != null ? String.valueOf(cuentaOrigen) : "—");
+        });
+
+        colCuentaDestino.setCellValueFactory(data -> {
+            Integer cuentaDestino = data.getValue().getCuentaIdDestino();
+            return new SimpleStringProperty(cuentaDestino != null ? String.valueOf(cuentaDestino) : "—");
+        });
     }
 
     @FXML
