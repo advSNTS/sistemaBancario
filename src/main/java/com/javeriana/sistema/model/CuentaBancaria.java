@@ -74,6 +74,13 @@ public class CuentaBancaria {
 
     @Override
     public String toString() {
-        return tipo + " - $" + String.format("%.2f", saldo);
+        return "CuentaBancaria{" +
+                "id=" + id +
+                ", usuarioId=" + usuarioId +
+                ", tipo='" + tipo + '\'' +
+                ", saldo=" + saldo +
+                ", activa=" + activa +
+                ", limiteAlerta=" + limiteAlerta +
+                '}';
     }
 }
